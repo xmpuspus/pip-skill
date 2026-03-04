@@ -1,0 +1,78 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pip-skill"
+dynamic = ["version"]
+description = "Convert installed pip packages into Claude Code plugins"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    { name = "Xavier", email = "xavier@example.com" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = ["claude", "claude-code", "mcp", "skill", "plugin", "code-generation"]
+
+dependencies = [
+    "jinja2>=3.0",
+    "docstring-parser>=0.16",
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.0"]
+llm = ["anthropic>=0.40"]
+all = ["pip-skill[mcp,llm]"]
+dev = [
+    "pytest>=8.0",
+    "pytest-tmp-files>=0.0.2",
+    "ruff>=0.8",
+    "pyright>=1.1",
+]
+
+[project.scripts]
+pip-skill = "pip_skill.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/xavierperez/pip-skill"
+Documentation = "https://github.com/xavierperez/pip-skill#readme"
+Repository = "https://github.com/xavierperez/pip-skill"
+Changelog = "https://github.com/xavierperez/pip-skill/blob/main/CHANGELOG.md"
+"Bug Tracker" = "https://github.com/xavierperez/pip-skill/issues"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pip_skill"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "C4", "SIM", "I", "UP", "N"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pip_skill"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.pyright]
+pythonVersion = "3.11"
+pythonPlatform = "All"
+typeCheckingMode = "basic"
