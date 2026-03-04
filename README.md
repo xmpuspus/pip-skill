@@ -4,11 +4,9 @@
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/pip-skill/"><img src="https://img.shields.io/pypi/v/pip-skill.svg" alt="PyPI version"></a>
-  <a href="https://pypi.org/project/pip-skill/"><img src="https://img.shields.io/pypi/dm/pip-skill.svg" alt="Downloads"></a>
-  <a href="https://pypi.org/project/pip-skill/"><img src="https://img.shields.io/pypi/pyversions/pip-skill.svg" alt="Python"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
-  <a href="https://github.com/xavierperez/pip-skill/actions/workflows/ci.yml"><img src="https://github.com/xavierperez/pip-skill/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+  <img src="https://img.shields.io/badge/status-pre--release-orange.svg" alt="Pre-release">
 </p>
 
 pip-skill introspects installed Python packages and generates Claude Code plugins — complete with skill instructions, API reference, and optional MCP server. No manual wrapping required.
