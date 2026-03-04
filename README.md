@@ -172,9 +172,190 @@ pip-skill works with any installed Python package. It handles:
 - Dataclasses: auto-detected, fields extracted from `dataclasses.fields()`
 - Lazy imports: detected via `__getattr__`, logged as warning
 
-## Examples
+## What You Can Unlock
 
-See the [`examples/`](examples/) directory for sample generated plugins.
+These are real packages, one command each, that give Claude capabilities it simply doesn't have by default.
+
+---
+
+### 1. `Pillow` — Image editing without Photoshop
+
+```bash
+pip install Pillow && pip-skill convert Pillow
+```
+
+Claude can now resize, crop, rotate, watermark, convert formats, apply filters, and composite images — all from a single prompt.
+
+```
+"Resize all JPEGs in this folder to 1200px wide, convert to WebP, and add a 'CONFIDENTIAL' watermark"
+```
+
+---
+
+### 2. `openpyxl` — Read and write real Excel files
+
+```bash
+pip install openpyxl && pip-skill convert openpyxl
+```
+
+Not CSV export — actual `.xlsx` with formulas, merged cells, charts, conditional formatting, and named ranges.
+
+```
+"Take this sales data and build an Excel report with a pivot-style summary sheet,
+ SUM formulas in the totals row, and alternating row colors"
+```
+
+---
+
+### 3. `boto3` — Full AWS control
+
+```bash
+pip install boto3 && pip-skill convert boto3 --select
+```
+
+S3 uploads, Lambda invocations, EC2 management, CloudWatch logs, SQS queues, DynamoDB queries — with `--select` Claude picks the functions relevant to your actual AWS usage.
+
+```
+"List all S3 buckets with their sizes, find objects older than 90 days in the archive bucket,
+ and move them to Glacier storage class"
+```
+
+---
+
+### 4. `pytesseract` — Extract text from images
+
+```bash
+pip install pytesseract && pip-skill convert pytesseract
+```
+
+OCR on screenshots, scanned documents, photos of whiteboards, receipts, business cards. Claude can finally read images as text.
+
+```
+"Extract all the line items and totals from these receipt photos and put them in a spreadsheet"
+```
+
+---
+
+### 5. `paramiko` — SSH and SFTP without leaving Claude
+
+```bash
+pip install paramiko && pip-skill convert paramiko
+```
+
+Connect to remote servers, run commands, transfer files, manage known_hosts. Claude becomes a remote ops assistant.
+
+```
+"SSH into each server in this list, check disk usage, and alert me to any partition above 80%"
+```
+
+---
+
+### 6. `pdfplumber` — Extract structured data from PDFs
+
+```bash
+pip install pdfplumber && pip-skill convert pdfplumber
+```
+
+Not just text — tables, bounding boxes, character-level positions. The difference between useless blobs and actual structured data from PDFs.
+
+```
+"Pull the invoice table from each PDF in this folder, parse the line items,
+ and consolidate into one spreadsheet with the source filename as a column"
+```
+
+---
+
+### 7. `stripe` — Payment operations via chat
+
+```bash
+pip install stripe && pip-skill convert stripe --select
+```
+
+Create customers, list subscriptions, issue refunds, generate invoices, manage products and prices — the whole Stripe API from a conversation.
+
+```
+"Find all subscriptions that have been paused for more than 30 days,
+ send each customer a reactivation coupon for 20% off, and log the results"
+```
+
+---
+
+### 8. `cryptography` — Real encryption, not base64
+
+```bash
+pip install cryptography && pip-skill convert cryptography --select
+```
+
+Fernet symmetric encryption, RSA key generation, X.509 certificate parsing, HMAC signing, password hashing with proper key derivation.
+
+```
+"Encrypt all .env files in this repo with a passphrase, write the encrypted versions
+ to .env.enc, and delete the originals"
+```
+
+---
+
+### 9. `pydub` — Audio processing
+
+```bash
+pip install pydub && pip-skill convert pydub
+```
+
+Slice audio, adjust volume, convert formats, overlay tracks, strip silence, normalize levels. Works on anything ffmpeg can read.
+
+```
+"Split this podcast recording on silence longer than 2 seconds,
+ normalize each segment to -14 LUFS, and export as individual MP3s"
+```
+
+---
+
+### 10. `twilio` — Send SMS and WhatsApp
+
+```bash
+pip install twilio && pip-skill convert twilio --select
+```
+
+Outbound SMS, WhatsApp messages, voice calls, phone number lookup, messaging services. No API documentation required.
+
+```
+"Text everyone on this list that their appointment is confirmed tomorrow at 10am,
+ and log any failed deliveries"
+```
+
+---
+
+### 11. `reportlab` — Generate PDFs from scratch
+
+```bash
+pip install reportlab && pip-skill convert reportlab --select
+```
+
+Programmatic PDF creation with tables, charts, headers, footers, embedded images, and custom fonts. Contracts, invoices, reports — fully generated.
+
+```
+"Take this JSON invoice data and produce a professional PDF with our logo,
+ itemized table, tax calculations, and payment terms footer"
+```
+
+---
+
+### 12. `pyarrow` — Work with massive datasets
+
+```bash
+pip install pyarrow && pip-skill convert pyarrow --select
+```
+
+Read Parquet files, convert between Arrow/Pandas/CSV, query columnar data, handle datasets too large for pandas to load at once.
+
+```
+"Read this 4GB Parquet file, filter rows where revenue > 10000 and region = 'APAC',
+ export to CSV, show me the top 20 rows"
+```
+
+---
+
+> **Tip:** For complex packages with hundreds of functions (`boto3`, `stripe`), use `--select` to have Claude curate the most relevant tools for your use case.
 
 ## Contributing
 
