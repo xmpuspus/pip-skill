@@ -1,4 +1,5 @@
 """CLI entry point for pip-skill."""
+
 import argparse
 import sys
 from pathlib import Path
@@ -50,10 +51,10 @@ def main(argv: list[str] | None = None) -> int:
 
 def cmd_convert(args) -> int:
     """Generate a Claude Code plugin from an installed package."""
-    from pip_skill.introspect import introspect_package
-    from pip_skill.selector import select_functions
-    from pip_skill.schema import build_tool_schemas
     from pip_skill.generator import render_templates
+    from pip_skill.introspect import introspect_package
+    from pip_skill.schema import build_tool_schemas
+    from pip_skill.selector import select_functions
     from pip_skill.utils import normalize_skill_name
 
     # Phase 1: Introspect

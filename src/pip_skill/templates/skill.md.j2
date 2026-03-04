@@ -1,0 +1,68 @@
+---
+name: {{ skill_name }}
+description: >-
+  Use the {{ package.name }} Python package (v{{ package.version }}).
+  {{ package.description | truncate(200) }}
+---
+
+# {{ package.name }}
+
+{{ package.description }}
+
+## Quick Start
+
+```python
+import {{ package.import_name }}
+{% if tools and tools[0].example %}
+
+{{ tools[0].example }}
+{% endif %}
+```
+
+## Available Functions
+
+{% for tool in tools %}
+### `{{ tool.qualname }}()`
+
+{{ tool.description }}
+
+{% if tool.parameters %}
+**Parameters:**
+{% for param in tool.parameters %}
+- `{{ param.name }}`{% if param.type_str and param.type_str != 'any' %} ({{ param.type_str }}){% endif %}{% if not param.required %}, optional{% endif %}{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}{% if param.description %} — {{ param.description }}{% endif %}
+
+{% endfor %}
+{% endif %}
+{% if tool.output_hint and tool.output_hint != 'unknown' %}
+**Returns:** {{ tool.output_hint }}
+{% endif %}
+
+{% if tool.example %}
+```python
+{{ tool.example }}
+```
+{% endif %}
+
+{% endfor %}
+
+## Usage Pattern
+
+To use {{ package.name }}, write inline Python and execute via the Bash tool:
+
+```python
+python3 -c "
+import {{ package.import_name }}
+# your code here
+"
+```
+
+{% if package.dependencies %}
+## Dependencies
+
+{{ package.name }} requires: {{ package.dependencies | join(', ') }}
+{% endif %}
+
+## Full API Reference
+
+For detailed API documentation including all parameters, types, and examples,
+read the file `references/api-reference.md` in this skill directory.
