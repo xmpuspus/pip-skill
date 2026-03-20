@@ -66,7 +66,7 @@ def test_full_pipeline(pip_name, tmp_path):
     assert len(schemas) > 0
 
     written = render_templates(pkg, schemas, {}, tmp_path)
-    assert len(written) >= 3
+    assert len(written) >= 4
 
     plugin_json = tmp_path / ".claude-plugin" / "plugin.json"
     assert plugin_json.exists()

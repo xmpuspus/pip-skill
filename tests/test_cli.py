@@ -143,3 +143,177 @@ def test_cli_convert_force_flag(tmp_path, fake_package_on_path):
         result = main(["convert", "fake-package", "--output", str(tmp_path), "--force"])
 
     assert result == 0
+
+
+# --- batch command ---
+
+
+def test_cli_batch_packages(tmp_path, fake_package_on_path):
+    """Test batch command with explicit package names."""
+    from unittest.mock import MagicMock
+
+    mock_pkg_info = MagicMock()
+    mock_pkg_info.name = "fake-package"
+    mock_pkg_info.import_name = "fake_package"
+    mock_pkg_info.version = "1.0.0"
+    mock_pkg_info.description = "A fake package"
+    mock_pkg_info.modules = []
+    mock_pkg_info.tier = 1
+    mock_pkg_info.annotation_coverage = 1.0
+    mock_pkg_info.dependencies = []
+    mock_pkg_info.homepage = None
+
+    mock_fn = MagicMock()
+    mock_fn.name = "fetch"
+
+    with (
+        patch("pip_skill.introspect.introspect_package", return_value=mock_pkg_info),
+        patch("pip_skill.selector.select_functions", return_value=[(mock_fn, 80)]),
+        patch("pip_skill.schema.build_tool_schemas", return_value=[MagicMock()]),
+        patch("pip_skill.generator.render_templates", return_value=[]),
+    ):
+        result = main(["batch", "fake-package", "--output-dir", str(tmp_path), "--force"])
+
+    assert result == 0
+
+
+def test_cli_batch_requirements_file(tmp_path, fake_package_on_path):
+    """Test batch command with a requirements.txt file."""
+    req_file = tmp_path / "requirements.txt"
+    req_file.write_text("fake-package>=1.0\n# a comment\n-e some-editable\nother-pkg\n")
+
+    from pip_skill.cli import _parse_requirements
+
+    packages = _parse_requirements(req_file)
+    assert "fake-package" in packages
+    assert "other-pkg" in packages
+    assert len(packages) == 2
+
+
+def test_cli_batch_no_packages():
+    """Test batch command with no packages shows error."""
+    result = main(["batch"])
+    assert result == 1
+
+
+# --- format flag ---
+
+
+def test_cli_convert_format_cursor(tmp_path, fake_package_on_path):
+    """Test --format cursor is accepted."""
+    from unittest.mock import MagicMock
+
+    mock_pkg_info = MagicMock()
+    mock_pkg_info.name = "fake-package"
+    mock_pkg_info.import_name = "fake_package"
+    mock_pkg_info.version = "1.0.0"
+    mock_pkg_info.description = "A fake package"
+    mock_pkg_info.modules = []
+    mock_pkg_info.tier = 1
+    mock_pkg_info.annotation_coverage = 1.0
+    mock_pkg_info.dependencies = []
+    mock_pkg_info.homepage = None
+
+    mock_fn = MagicMock()
+    mock_fn.name = "fetch"
+
+    out = tmp_path / "cursor-out"
+    with (
+        patch("pip_skill.introspect.introspect_package", return_value=mock_pkg_info),
+        patch("pip_skill.selector.select_functions", return_value=[(mock_fn, 80)]),
+        patch("pip_skill.schema.build_tool_schemas", return_value=[MagicMock()]),
+        patch(
+            "pip_skill.generator.render_templates",
+            return_value=[out / ".cursorrules"],
+        ),
+    ):
+        result = main(
+            [
+                "convert",
+                "fake-package",
+                "--output",
+                str(out),
+                "--format",
+                "cursor",
+            ]
+        )
+
+    assert result == 0
+
+
+# --- diff command ---
+
+
+def test_cli_diff_no_changes(tmp_path, fake_package_on_path):
+    """Test diff command when no API changes."""
+    import json
+
+    (tmp_path / ".claude-plugin").mkdir(parents=True)
+    (tmp_path / ".claude-plugin" / "plugin.json").write_text(
+        json.dumps(
+            {
+                "name": "fake-package",
+                "version": "1.0.0",
+                "sourcePackage": "fake-package",
+                "toolCount": 20,
+            }
+        )
+    )
+
+    ref_dir = tmp_path / "skills" / "fake-package" / "references"
+    ref_dir.mkdir(parents=True)
+    (ref_dir / "api-reference.md").write_text("## `fake_package.api.fetch`\n\nSome docs\n")
+
+    with patch("pip_skill.introspect.introspect_package") as mock_introspect:
+        from tests.conftest import _build_fake_package_info
+
+        mock_introspect.return_value = _build_fake_package_info()
+        result = main(["diff", str(tmp_path)])
+
+    assert result == 0
+
+
+# --- info command ---
+
+
+def test_cli_info(capsys, fake_package_on_path):
+    """Test info command shows package summary."""
+    from unittest.mock import MagicMock
+
+    mock_pkg_info = MagicMock()
+    mock_pkg_info.name = "fake-package"
+    mock_pkg_info.import_name = "fake_package"
+    mock_pkg_info.version = "1.0.0"
+    mock_pkg_info.description = "A fake package"
+    mock_pkg_info.modules = []
+    mock_pkg_info.tier = 1
+    mock_pkg_info.annotation_coverage = 0.75
+
+    with patch("pip_skill.introspect.introspect_package", return_value=mock_pkg_info):
+        result = main(["info", "fake-package"])
+
+    assert result == 0
+    captured = capsys.readouterr()
+    assert "fake-package" in captured.out
+    assert "1.0.0" in captured.out
+
+
+# --- search/install commands ---
+
+
+def test_cli_search_empty(capsys):
+    """Test search command when registry is unreachable."""
+    with patch("pip_skill.registry.search_registry", return_value=[]):
+        result = main(["search"])
+
+    assert result == 0
+    captured = capsys.readouterr()
+    assert "empty" in captured.out.lower() or "no skills" in captured.out.lower()
+
+
+def test_cli_install_not_found():
+    """Test install command when skill not in registry."""
+    with patch("pip_skill.registry.install_skill", side_effect=ValueError("not found")):
+        result = main(["install", "nonexistent-pkg"])
+
+    assert result == 1

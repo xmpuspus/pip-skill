@@ -188,3 +188,105 @@ def test_schema_via_docstring_fallback():
     schema = schema_via_docstring(info)
     assert "x" in schema["properties"]
     assert "y" in schema["properties"]
+
+
+def test_destructive_detection(fake_package_on_path):
+    from pip_skill.introspect import CallableInfo, ParamInfo
+
+    info = CallableInfo(
+        name="delete_record",
+        qualname="pkg.delete_record",
+        module="pkg",
+        signature="(record_id: str)",
+        parameters=[
+            ParamInfo(
+                name="record_id",
+                annotation="str",
+                default=None,
+                has_default=False,
+                kind="positional_or_keyword",
+            )
+        ],
+        return_type="bool",
+        docstring="Delete a record.",
+        is_async=False,
+        is_method=False,
+        is_classmethod=False,
+        is_staticmethod=False,
+        is_property=False,
+        has_varargs=False,
+        has_varkw=False,
+        decorators=[],
+        source_available=True,
+    )
+    tool = build_tool_schema(info)
+    assert tool.is_destructive is True
+    assert tool.is_write is False
+
+
+def test_write_detection(fake_package_on_path):
+    from pip_skill.introspect import CallableInfo, ParamInfo
+
+    info = CallableInfo(
+        name="send_message",
+        qualname="pkg.send_message",
+        module="pkg",
+        signature="(msg: str)",
+        parameters=[
+            ParamInfo(
+                name="msg",
+                annotation="str",
+                default=None,
+                has_default=False,
+                kind="positional_or_keyword",
+            )
+        ],
+        return_type="bool",
+        docstring="Send a message.",
+        is_async=False,
+        is_method=False,
+        is_classmethod=False,
+        is_staticmethod=False,
+        is_property=False,
+        has_varargs=False,
+        has_varkw=False,
+        decorators=[],
+        source_available=True,
+    )
+    tool = build_tool_schema(info)
+    assert tool.is_destructive is False
+    assert tool.is_write is True
+
+
+def test_read_operation_not_flagged(fake_package_on_path):
+    from pip_skill.introspect import CallableInfo, ParamInfo
+
+    info = CallableInfo(
+        name="get_data",
+        qualname="pkg.get_data",
+        module="pkg",
+        signature="(key: str)",
+        parameters=[
+            ParamInfo(
+                name="key",
+                annotation="str",
+                default=None,
+                has_default=False,
+                kind="positional_or_keyword",
+            )
+        ],
+        return_type="dict",
+        docstring="Get data.",
+        is_async=False,
+        is_method=False,
+        is_classmethod=False,
+        is_staticmethod=False,
+        is_property=False,
+        has_varargs=False,
+        has_varkw=False,
+        decorators=[],
+        source_available=True,
+    )
+    tool = build_tool_schema(info)
+    assert tool.is_destructive is False
+    assert tool.is_write is False

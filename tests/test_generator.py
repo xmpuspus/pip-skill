@@ -27,6 +27,12 @@ def test_render_plugin_json(tmp_path, fake_package_info, fake_package_on_path):
     assert pj.exists()
     data = json.loads(pj.read_text())
     assert data["name"] == "fake-package"
+    assert data["version"] == "1.0.0"
+    assert data["sourcePackage"] == "fake-package"
+    assert data["importName"] == "fake_package"
+    assert data["toolCount"] == 1
+    assert "generatedBy" in data
+    assert "generatedAt" in data
 
 
 def test_render_skill_md(tmp_path, fake_package_info, fake_package_on_path):
@@ -50,6 +56,9 @@ def test_render_skill_md_frontmatter(tmp_path, fake_package_info, fake_package_o
     assert lines[0] == "---"
     assert any("name:" in line for line in lines)
     assert any("description:" in line for line in lines)
+    assert any("version:" in line for line in lines)
+    assert any("requires:" in line for line in lines)
+    assert any("toolCount:" in line for line in lines)
 
 
 def test_render_api_reference(tmp_path, fake_package_info, fake_package_on_path):
@@ -89,7 +98,7 @@ def test_render_returns_paths(tmp_path, fake_package_info, fake_package_on_path)
     tool = _fetch_tool(fake_package_on_path)
     written = render_templates(fake_package_info, [tool], {"mcp": False}, tmp_path)
 
-    assert len(written) == 3
+    assert len(written) == 4
     for p in written:
         assert p.exists()
 
@@ -192,3 +201,94 @@ def test_tool_call_args():
     )
     args = tool_call_args(tool)
     assert args == "x=x, y=y"
+
+
+def test_render_context_md(tmp_path, fake_package_info, fake_package_on_path):
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(fake_package_info, [tool], {"mcp": False}, tmp_path)
+
+    ctx = tmp_path / "skills" / "fake-package" / "CONTEXT.md"
+    assert ctx.exists()
+    content = ctx.read_text()
+    assert "Agent Guidelines" in content
+    assert "fake_package" in content
+    assert "Context Window" in content
+
+
+def test_render_skill_md_has_prerequisites(tmp_path, fake_package_info, fake_package_on_path):
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(fake_package_info, [tool], {"mcp": False}, tmp_path)
+
+    content = (tmp_path / "skills" / "fake-package" / "SKILL.md").read_text()
+    assert "## Prerequisites" in content
+    assert "pip install" in content
+
+
+def test_render_skill_md_has_safety(tmp_path, fake_package_info, fake_package_on_path):
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(fake_package_info, [tool], {"mcp": False}, tmp_path)
+
+    content = (tmp_path / "skills" / "fake-package" / "SKILL.md").read_text()
+    assert "## Safety Guidelines" in content
+    assert "API keys" in content
+
+
+def test_render_mcp_server_has_error_handling(tmp_path, fake_package_info, fake_package_on_path):
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(fake_package_info, [tool], {"mcp": True}, tmp_path)
+
+    content = (tmp_path / "scripts" / "mcp-server.py").read_text()
+    assert "import json" in content
+    assert "except Exception" in content
+    assert "json.dumps" in content
+
+
+# --- multi-format output ---
+
+
+def test_render_cursor_format(tmp_path, fake_package_info, fake_package_on_path):
+    tool = _fetch_tool(fake_package_on_path)
+    written = render_templates(fake_package_info, [tool], {"format": "cursor"}, tmp_path)
+
+    assert len(written) == 1
+    cursorrules = tmp_path / ".cursorrules"
+    assert cursorrules.exists()
+    content = cursorrules.read_text()
+    assert "fake-package" in content
+    assert "fetch" in content
+    assert "pip install" in content
+
+
+def test_render_windsurf_format(tmp_path, fake_package_info, fake_package_on_path):
+    tool = _fetch_tool(fake_package_on_path)
+    written = render_templates(fake_package_info, [tool], {"format": "windsurf"}, tmp_path)
+
+    assert len(written) == 1
+    windsurfrules = tmp_path / ".windsurfrules"
+    assert windsurfrules.exists()
+    content = windsurfrules.read_text()
+    assert "fake-package" in content
+    assert "fetch" in content
+
+
+def test_render_opencode_format(tmp_path, fake_package_info, fake_package_on_path):
+    tool = _fetch_tool(fake_package_on_path)
+    written = render_templates(fake_package_info, [tool], {"format": "opencode"}, tmp_path)
+
+    assert len(written) == 1
+    agents_md = tmp_path / "AGENTS.md"
+    assert agents_md.exists()
+    content = agents_md.read_text()
+    assert "fake-package" in content
+    assert "fetch" in content
+    assert "Parameter" in content
+
+
+def test_render_claude_format_is_default(tmp_path, fake_package_info, fake_package_on_path):
+    """Default format (no format key or format=claude) produces Claude skill layout."""
+    tool = _fetch_tool(fake_package_on_path)
+    written = render_templates(fake_package_info, [tool], {"mcp": False}, tmp_path)
+
+    assert len(written) == 4
+    assert (tmp_path / ".claude-plugin" / "plugin.json").exists()
+    assert (tmp_path / "skills" / "fake-package" / "SKILL.md").exists()
