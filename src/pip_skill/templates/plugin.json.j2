@@ -1,3 +1,13 @@
 {
-  "name": "{{ skill_name }}"
+  "name": "{{ skill_name }}",
+  "version": "{{ package.version }}",
+  "description": "{{ package.description | truncate(200) }}",
+  "author": "{{ package.author or '' }}",
+  "homepage": "{{ package.homepage or '' }}",
+  "license": "{{ package.license or '' }}",
+  "generatedBy": "pip-skill v{{ pip_skill_version }}",
+  "generatedAt": "{{ timestamp }}",
+  "sourcePackage": "{{ package.name }}",
+  "importName": "{{ package.import_name }}",
+  "toolCount": {{ tools | length }}
 }

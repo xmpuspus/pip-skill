@@ -1,0 +1,61 @@
+# {{ package.name }}
+
+{{ package.description }}
+
+Version: {{ package.version }}
+Import: `{{ package.import_name }}`
+
+## Prerequisites
+
+```bash
+pip install {{ package.name }}
+```
+
+## Available Functions
+
+{% for tool in tools %}
+### `{{ tool.qualname }}{{ tool | tools_signature }}`
+
+{% if tool.is_destructive %}
+**CAUTION:** Destructive operation — confirm with user before calling.
+
+{% elif tool.is_write %}
+**NOTE:** Write operation — verify parameters before calling.
+
+{% endif %}
+{{ tool.description }}
+
+{% if tool.parameters %}
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+{% for param in tool.parameters %}
+| `{{ param.name }}` | `{{ param.type_str or 'any' }}` | {{ 'Yes' if param.required else 'No' }} | {{ param.default or '—' }} | {{ param.description or '—' }} |
+{% endfor %}
+
+{% endif %}
+{% if tool.output_hint and tool.output_hint != 'unknown' %}
+**Returns:** `{{ tool.output_hint }}`
+{% endif %}
+
+{% endfor %}
+
+## Usage
+
+```python
+import {{ package.import_name }}
+```
+
+## Safety
+
+- Never output API keys, tokens, or credentials
+- Confirm file paths before writing
+- Describe side effects before executing state-modifying functions
+{% if package.homepage %}
+
+## Documentation
+
+- Homepage: {{ package.homepage }}
+{% if package.docs_url and package.docs_url != package.homepage %}
+- Docs: {{ package.docs_url }}
+{% endif %}
+{% endif %}

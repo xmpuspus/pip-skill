@@ -1,13 +1,31 @@
 ---
 name: {{ skill_name }}
+version: {{ package.version }}
 description: >-
   Use the {{ package.name }} Python package (v{{ package.version }}).
   {{ package.description | truncate(200) }}
+requires:
+  bins: [python3, pip]
+  packages: [{{ package.name }}]
+{% if package.homepage %}
+homepage: {{ package.homepage }}
+{% endif %}
+toolCount: {{ tools | length }}
 ---
 
 # {{ package.name }}
 
 {{ package.description }}
+
+## Prerequisites
+
+```bash
+pip install {{ package.name }}
+```
+
+{% if package.dependencies %}
+This package requires: {{ package.dependencies | join(', ') }}
+{% endif %}
 
 ## Quick Start
 
@@ -24,6 +42,13 @@ import {{ package.import_name }}
 {% for tool in tools %}
 ### `{{ tool.qualname }}()`
 
+{% if tool.is_destructive %}
+> [CAUTION] This function modifies or deletes data. Confirm with the user before calling.
+
+{% elif tool.is_write %}
+> [NOTE] This function writes or sends data. Verify parameters before calling.
+
+{% endif %}
 {{ tool.description }}
 
 {% if tool.parameters %}
@@ -56,13 +81,22 @@ import {{ package.import_name }}
 "
 ```
 
-{% if package.dependencies %}
-## Dependencies
+## Safety Guidelines
 
-{{ package.name }} requires: {{ package.dependencies | join(', ') }}
-{% endif %}
+- Never output API keys, tokens, or credentials in responses
+- When writing files, confirm the path with the user first
+- If a function modifies external state (writes files, sends requests, deletes data), describe the action before executing
 
 ## Full API Reference
 
 For detailed API documentation including all parameters, types, and examples,
 read the file `references/api-reference.md` in this skill directory.
+
+{% if package.homepage %}
+## External Documentation
+
+Official docs: {{ package.homepage }}
+{% if package.docs_url and package.docs_url != package.homepage %}
+Documentation: {{ package.docs_url }}
+{% endif %}
+{% endif %}

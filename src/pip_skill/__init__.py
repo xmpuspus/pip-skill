@@ -1,4 +1,4 @@
-"""pip-skill: Convert pip packages to Claude Code plugins."""
+"""pip-skill: Convert pip packages into AI coding assistant skills."""
 
 try:
     from importlib.metadata import version

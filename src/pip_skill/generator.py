@@ -91,38 +91,47 @@ def _make_env() -> jinja2.Environment:
     return env
 
 
-def render_templates(
+def render_skill_md_string(
     package_info: PackageInfo,
     tool_schemas: list[ToolSchema],
-    options: dict,
-    output_dir: Path,
-) -> list[Path]:
-    """Render all templates and write to the output directory.
+    options: dict | None = None,
+) -> str:
+    """Render SKILL.md content as a string without writing to disk.
+
+    Used by the TUI builder for live preview.
 
     Args:
         package_info: The introspected package info.
         tool_schemas: Selected tools with schemas.
-        options: CLI options dict (e.g., {'mcp': True}).
-        output_dir: Directory to write output into.
+        options: Optional CLI options dict.
 
     Returns:
-        List of Path objects for all files written.
+        Rendered SKILL.md content as a string.
     """
     env = _make_env()
     skill_name = normalize_skill_name(package_info.name)
-
     context = {
         "package": package_info,
         "tools": tool_schemas,
-        "options": options,
+        "options": options or {},
         "skill_name": skill_name,
         "timestamp": datetime.now(UTC).isoformat(),
         "pip_skill_version": __version__,
     }
+    return env.get_template("skill.md.j2").render(context)
 
+
+def _render_claude(
+    env: jinja2.Environment,
+    context: dict,
+    output_dir: Path,
+    options: dict,
+) -> list[Path]:
+    """Render Claude Code skill format (default)."""
+    skill_name = context["skill_name"]
     written: list[Path] = []
 
-    # Always: .claude-plugin/plugin.json
+    # .claude-plugin/plugin.json
     plugin_dir = output_dir / ".claude-plugin"
     plugin_dir.mkdir(parents=True, exist_ok=True)
     content = env.get_template("plugin.json.j2").render(context)
@@ -130,7 +139,7 @@ def render_templates(
     p.write_text(content)
     written.append(p)
 
-    # Always: skills/{name}/SKILL.md
+    # skills/{name}/SKILL.md
     skill_dir = output_dir / "skills" / skill_name
     skill_dir.mkdir(parents=True, exist_ok=True)
     content = env.get_template("skill.md.j2").render(context)
@@ -138,7 +147,13 @@ def render_templates(
     p.write_text(content)
     written.append(p)
 
-    # Always: skills/{name}/references/api-reference.md
+    # skills/{name}/CONTEXT.md
+    content = env.get_template("context.md.j2").render(context)
+    p = skill_dir / "CONTEXT.md"
+    p.write_text(content)
+    written.append(p)
+
+    # skills/{name}/references/api-reference.md
     ref_dir = skill_dir / "references"
     ref_dir.mkdir(parents=True, exist_ok=True)
     content = env.get_template("api-reference.md.j2").render(context)
@@ -161,3 +176,83 @@ def render_templates(
         written.append(p)
 
     return written
+
+
+def _render_cursor(
+    env: jinja2.Environment,
+    context: dict,
+    output_dir: Path,
+) -> list[Path]:
+    """Render Cursor .cursorrules format."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    content = env.get_template("cursorrules.j2").render(context)
+    p = output_dir / ".cursorrules"
+    p.write_text(content)
+    return [p]
+
+
+def _render_windsurf(
+    env: jinja2.Environment,
+    context: dict,
+    output_dir: Path,
+) -> list[Path]:
+    """Render Windsurf .windsurfrules format."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    content = env.get_template("windsurfrules.j2").render(context)
+    p = output_dir / ".windsurfrules"
+    p.write_text(content)
+    return [p]
+
+
+def _render_opencode(
+    env: jinja2.Environment,
+    context: dict,
+    output_dir: Path,
+) -> list[Path]:
+    """Render OpenCode AGENTS.md format."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    content = env.get_template("agents-md.j2").render(context)
+    p = output_dir / "AGENTS.md"
+    p.write_text(content)
+    return [p]
+
+
+def render_templates(
+    package_info: PackageInfo,
+    tool_schemas: list[ToolSchema],
+    options: dict,
+    output_dir: Path,
+) -> list[Path]:
+    """Render all templates and write to the output directory.
+
+    Args:
+        package_info: The introspected package info.
+        tool_schemas: Selected tools with schemas.
+        options: CLI options dict (e.g., {'mcp': True, 'format': 'claude'}).
+        output_dir: Directory to write output into.
+
+    Returns:
+        List of Path objects for all files written.
+    """
+    env = _make_env()
+    skill_name = normalize_skill_name(package_info.name)
+
+    context = {
+        "package": package_info,
+        "tools": tool_schemas,
+        "options": options,
+        "skill_name": skill_name,
+        "timestamp": datetime.now(UTC).isoformat(),
+        "pip_skill_version": __version__,
+    }
+
+    fmt = options.get("format", "claude")
+
+    if fmt == "cursor":
+        return _render_cursor(env, context, output_dir)
+    elif fmt == "windsurf":
+        return _render_windsurf(env, context, output_dir)
+    elif fmt == "opencode":
+        return _render_opencode(env, context, output_dir)
+    else:
+        return _render_claude(env, context, output_dir, options)

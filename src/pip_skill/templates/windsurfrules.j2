@@ -1,0 +1,53 @@
+# {{ package.name }} v{{ package.version }}
+
+{{ package.description }}
+
+## Setup
+
+```bash
+pip install {{ package.name }}
+```
+
+## Functions
+
+{% for tool in tools %}
+### {{ tool.qualname }}{{ tool | tools_signature }}
+
+{% if tool.is_destructive %}
+> CAUTION: Destructive operation — confirm before calling.
+
+{% elif tool.is_write %}
+> NOTE: Write operation — verify parameters first.
+
+{% endif %}
+{{ tool.description }}
+
+{% if tool.parameters %}
+{% for param in tool.parameters %}
+- `{{ param.name }}`{% if param.type_str and param.type_str != 'any' %} ({{ param.type_str }}){% endif %}{% if not param.required %}, optional{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}{% endif %}{% if param.description %} — {{ param.description }}{% endif %}
+
+{% endfor %}
+{% endif %}
+{% if tool.output_hint and tool.output_hint != 'unknown' %}
+Returns: {{ tool.output_hint }}
+{% endif %}
+
+{% endfor %}
+
+## Usage Pattern
+
+```python
+import {{ package.import_name }}
+```
+
+## Safety Guidelines
+
+- Never expose API keys, tokens, or credentials in responses
+- Confirm paths before writing files
+- Describe side effects before executing
+{% if package.homepage %}
+
+## Documentation
+
+{{ package.homepage }}
+{% endif %}

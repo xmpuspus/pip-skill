@@ -1,0 +1,60 @@
+# {{ package.name }} v{{ package.version }}
+
+{{ package.description }}
+
+## Setup
+
+```bash
+pip install {{ package.name }}
+```
+
+## Available Functions
+
+{% for tool in tools %}
+### {{ tool.qualname }}{{ tool | tools_signature }}
+
+{% if tool.is_destructive %}
+> CAUTION: This function modifies or deletes data. Confirm with the user before calling.
+
+{% elif tool.is_write %}
+> NOTE: This function writes or sends data. Verify parameters before calling.
+
+{% endif %}
+{{ tool.description }}
+
+{% if tool.parameters %}
+Parameters:
+{% for param in tool.parameters %}
+- {{ param.name }}{% if param.type_str and param.type_str != 'any' %}: {{ param.type_str }}{% endif %}{% if not param.required %} (optional{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}){% endif %}{% if param.description %} — {{ param.description }}{% endif %}
+
+{% endfor %}
+{% endif %}
+{% if tool.output_hint and tool.output_hint != 'unknown' %}
+Returns: {{ tool.output_hint }}
+{% endif %}
+
+{% endfor %}
+
+## Usage
+
+Use inline Python to call {{ package.name }} functions:
+
+```python
+import {{ package.import_name }}
+# your code here
+```
+
+## Safety
+
+- Never output API keys, tokens, or credentials
+- Confirm file paths with the user before writing
+- Describe actions before executing functions that modify external state
+{% if package.homepage %}
+
+## Docs
+
+{{ package.homepage }}
+{% if package.docs_url and package.docs_url != package.homepage %}
+{{ package.docs_url }}
+{% endif %}
+{% endif %}

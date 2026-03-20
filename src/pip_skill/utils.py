@@ -1,5 +1,6 @@
 """Utility helpers for pip-skill."""
 
+import importlib
 import re
 
 
@@ -43,6 +44,25 @@ def _format_type(annotation) -> str:
         return annotation.__name__
     # Handle typing generics (e.g., List[str], Optional[int])
     return str(annotation).replace("typing.", "")
+
+
+def _resolve_callable(callable_info):
+    """Resolve a CallableInfo to its live Python object.
+
+    Args:
+        callable_info: The callable to resolve.
+
+    Returns:
+        The callable object, or None.
+    """
+    try:
+        mod = importlib.import_module(callable_info.module)
+        obj = getattr(mod, callable_info.name, None)
+        if callable(obj):
+            return obj
+    except Exception:
+        pass
+    return None
 
 
 def split_type_args(type_str: str) -> list[str]:

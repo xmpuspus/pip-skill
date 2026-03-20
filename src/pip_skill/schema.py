@@ -41,10 +41,15 @@ class ToolSchema:
     output_hint: str  # return type description
     example: str | None  # usage example
     parameters: list[ToolParam]
+    is_destructive: bool = False
+    is_write: bool = False
 
 
 SKIP_TYPES = {"Callable", "callable", "function", "Generator", "Iterator", "Coroutine"}
 PATH_TYPES = {"Path", "PurePath", "PosixPath", "WindowsPath", "PathLike"}
+
+DESTRUCTIVE_VERBS = {"delete", "remove", "drop", "destroy", "purge", "truncate", "clear", "reset"}
+WRITE_VERBS = {"write", "send", "post", "put", "patch", "upload", "create", "update", "execute"}
 
 
 def annotation_to_json_type(annotation_str: str) -> dict:
@@ -500,6 +505,11 @@ def build_tool_schema(callable_info: CallableInfo) -> ToolSchema:
 
     tool_name = callable_info.name.replace("_", "-")
 
+    # Detect destructive/write operations from the first word of the function name
+    first_word = callable_info.name.split("_")[0].lower()
+    is_destructive = first_word in DESTRUCTIVE_VERBS
+    is_write = (not is_destructive) and first_word in WRITE_VERBS
+
     return ToolSchema(
         name=tool_name,
         function_name=callable_info.name,
@@ -510,6 +520,8 @@ def build_tool_schema(callable_info: CallableInfo) -> ToolSchema:
         output_hint=callable_info.return_type or "unknown",
         example=example,
         parameters=tool_params,
+        is_destructive=is_destructive,
+        is_write=is_write,
     )
 
 
