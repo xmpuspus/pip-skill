@@ -13,7 +13,7 @@ Thanks for your interest in contributing.
 ## Development Setup
 
 ```bash
-git clone https://github.com/xavierperez/pip-skill.git
+git clone https://github.com/xmpuspus/pip-skill.git
 cd pip-skill
 uv sync --all-extras --dev
 pre-commit install

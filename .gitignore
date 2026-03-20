@@ -28,6 +28,13 @@ coverage.xml
 .direnv/
 .envrc
 .claude-wt/
+.claude/
+CLAUDE.md
+make_demo_gif.py
+make_example_gifs.py
+make_validate_gif.py
+make_feature_demos.py
+make_new_feature_demos.py
 /PLAN.md
 /TODO.md
 /STATUS.md

@@ -1,9 +1,9 @@
-<p align="center">
-  <strong>pip-skill</strong><br>
-  Turn any pip package into a Claude Code plugin
-</p>
+<h1 align="center">pip-skill</h1>
+<p align="center"><strong>One command. Any pip package becomes an AI coding assistant skill.</strong></p>
+<p align="center">Works with Claude Code, Cursor, Windsurf, and OpenCode - offline, no API keys needed.</p>
 
 <p align="center">
+  <a href="https://github.com/xmpuspus/pip-skill/stargazers"><img src="https://img.shields.io/github/stars/xmpuspus/pip-skill" alt="GitHub stars"></a>
   <img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python 3.11+">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
   <img src="https://img.shields.io/badge/status-pre--release-orange.svg" alt="Pre-release">
@@ -67,6 +67,14 @@ pip-skill convert httpx --dry-run --verbose
 /plugin install ./httpx
 ```
 
+### Check version
+
+```bash
+pip-skill --version
+```
+
+<img src="demos/version.gif" alt="pip-skill --version" width="640">
+
 ### Explore a package
 
 ```bash
@@ -98,6 +106,18 @@ Each discovered function gets scored on 10 signals (module depth, docstring qual
 
 ## Features
 
+### Why pip-skill?
+
+| | pip-skill | Write skills manually | Paste docs into context |
+|---|---|---|---|
+| Time per package | ~3 seconds | 1-2 hours | 10 minutes |
+| Correct type hints | Yes (from runtime) | Maybe | No |
+| JSON schemas | Auto-generated | Manual | No |
+| Safety callouts | Auto-detected | Manual | No |
+| Multi-format output | 4 formats | 1 format | N/A |
+| Stays in sync | `pip-skill diff` | Manual tracking | Re-paste every update |
+| Works offline | Yes | N/A | Needs docs URL |
+
 ### Skill-Only Mode (default)
 
 Generates a SKILL.md that teaches Claude how to use the package via inline Python:
@@ -116,12 +136,44 @@ Claude Code starts MCP server → tools available via MCP protocol →
 Claude calls tools directly → structured JSON responses
 ```
 
+### Multi-Format Output
+
+Generate skills for any major AI coding assistant:
+
+| Format | Flag | Output |
+|--------|------|--------|
+| Claude Code | `--format claude` (default) | `SKILL.md` + `plugin.json` + `CONTEXT.md` + `api-reference.md` |
+| Cursor | `--format cursor` | `.cursorrules` |
+| Windsurf | `--format windsurf` | `.windsurfrules` |
+| OpenCode | `--format opencode` | `AGENTS.md` |
+
+<img src="demos/format.gif" alt="pip-skill multi-format output" width="640">
+
+### Batch Mode
+
+Convert multiple packages at once with parallel processing:
+
+```bash
+pip-skill batch requirements.txt --format claude --workers 4
+```
+
+<img src="demos/batch.gif" alt="pip-skill batch conversion" width="640">
+
+### Version Tracking
+
+Detect API changes when packages update:
+
+```bash
+pip-skill diff requests
+```
+
+<img src="demos/diff.gif" alt="pip-skill diff output" width="640">
+
 ### Smart Function Selection
 
 - 10-signal scoring algorithm (0-100 per function)
 - Prioritizes top-level, well-documented, well-typed functions
 - Deduplicates near-identical variants
-- Optional LLM curation via `--select` for complex packages
 
 ### Package Tier Detection
 
@@ -142,7 +194,6 @@ Generate a Claude Code plugin from an installed package.
 ```
 Options:
   --mcp                Generate MCP server alongside SKILL.md
-  --select             Use LLM to curate function selection (needs ANTHROPIC_API_KEY)
   --output DIR         Output directory (default: ./{package-name})
   --max-tools N        Maximum functions to include (default: 20)
   --include PATTERN    Include functions matching glob pattern
@@ -172,7 +223,7 @@ pip-skill works with any installed Python package. It handles:
 - Dataclasses: auto-detected, fields extracted from `dataclasses.fields()`
 - Lazy imports: detected via `__getattr__`, logged as warning
 
-## What You Can Unlock
+## Real-World Examples
 
 These are real packages, one command each, that give Claude capabilities it simply doesn't have by default.
 
@@ -210,10 +261,10 @@ Not CSV export — actual `.xlsx` with formulas, merged cells, charts, condition
 ### 3. `boto3` — Full AWS control
 
 ```bash
-pip install boto3 && pip-skill convert boto3 --select
+pip install boto3 && pip-skill convert boto3
 ```
 
-S3 uploads, Lambda invocations, EC2 management, CloudWatch logs, SQS queues, DynamoDB queries — with `--select` Claude picks the functions relevant to your actual AWS usage.
+S3 uploads, Lambda invocations, EC2 management, CloudWatch logs, SQS queues, DynamoDB queries — with correct types and schemas generated from the installed API.
 
 ```
 "List all S3 buckets with their sizes, find objects older than 90 days in the archive bucket,
@@ -268,7 +319,7 @@ Not just text — tables, bounding boxes, character-level positions. The differe
 ### 7. `stripe` — Payment operations via chat
 
 ```bash
-pip install stripe && pip-skill convert stripe --select
+pip install stripe && pip-skill convert stripe
 ```
 
 Create customers, list subscriptions, issue refunds, generate invoices, manage products and prices — the whole Stripe API from a conversation.
@@ -283,7 +334,7 @@ Create customers, list subscriptions, issue refunds, generate invoices, manage p
 ### 8. `cryptography` — Real encryption, not base64
 
 ```bash
-pip install cryptography && pip-skill convert cryptography --select
+pip install cryptography && pip-skill convert cryptography
 ```
 
 Fernet symmetric encryption, RSA key generation, X.509 certificate parsing, HMAC signing, password hashing with proper key derivation.
@@ -313,7 +364,7 @@ Slice audio, adjust volume, convert formats, overlay tracks, strip silence, norm
 ### 10. `twilio` — Send SMS and WhatsApp
 
 ```bash
-pip install twilio && pip-skill convert twilio --select
+pip install twilio && pip-skill convert twilio
 ```
 
 Outbound SMS, WhatsApp messages, voice calls, phone number lookup, messaging services. No API documentation required.
@@ -328,7 +379,7 @@ Outbound SMS, WhatsApp messages, voice calls, phone number lookup, messaging ser
 ### 11. `reportlab` — Generate PDFs from scratch
 
 ```bash
-pip install reportlab && pip-skill convert reportlab --select
+pip install reportlab && pip-skill convert reportlab
 ```
 
 Programmatic PDF creation with tables, charts, headers, footers, embedded images, and custom fonts. Contracts, invoices, reports — fully generated.
@@ -343,7 +394,7 @@ Programmatic PDF creation with tables, charts, headers, footers, embedded images
 ### 12. `pyarrow` — Work with massive datasets
 
 ```bash
-pip install pyarrow && pip-skill convert pyarrow --select
+pip install pyarrow && pip-skill convert pyarrow
 ```
 
 Read Parquet files, convert between Arrow/Pandas/CSV, query columnar data, handle datasets too large for pandas to load at once.
@@ -355,7 +406,19 @@ Read Parquet files, convert between Arrow/Pandas/CSV, query columnar data, handl
 
 ---
 
-> **Tip:** For complex packages with hundreds of functions (`boto3`, `stripe`), use `--select` to have Claude curate the most relevant tools for your use case.
+## FAQ
+
+**Why not just paste the docs into context?**
+Token limits. The boto3 docs are 50MB+. pip-skill selects the top 20 functions by usefulness score and fits everything in ~4,000 tokens with correct types and schemas.
+
+**Why not rely on the LLM's built-in knowledge?**
+It works for popular packages like `requests`. It fails for anything updated after training data cutoff, niche packages, or complex signatures. pip-skill reads the actual installed API at runtime - no hallucination possible.
+
+**Why not just use MCP servers?**
+pip-skill generates those too (`--mcp`). But skill-only mode is lighter - no server process, no port, no config. The AI reads the SKILL.md and writes correct Python directly.
+
+**What about packages with C extensions?**
+Works with numpy, pandas, etc. Signature info is limited for C-level functions, but pip-skill falls back to docstring parsing and marks the skill as Tier 3 so the AI knows to be cautious.
 
 ## Contributing
 
@@ -363,4 +426,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
 ## License
 
-MIT License — see [LICENSE](LICENSE).
+MIT License - see [LICENSE](LICENSE).
+
+---
+
+<p align="center">Built by <a href="https://github.com/xmpuspus">Xavier Puspus</a></p>

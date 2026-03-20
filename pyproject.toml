@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "pip-skill"
 dynamic = ["version"]
-description = "Convert installed pip packages into Claude Code plugins"
+description = "Convert any pip package into an AI coding assistant skill (Claude Code, Cursor, Windsurf, OpenCode)"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
@@ -22,8 +22,10 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Code Generators",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Environment :: Console",
+    "Typing :: Typed",
 ]
-keywords = ["claude", "claude-code", "mcp", "skill", "plugin", "code-generation"]
+keywords = ["ai", "ai-coding", "claude", "claude-code", "cursor", "windsurf", "opencode", "mcp", "skill", "plugin", "code-generation", "llm", "developer-tools", "python-tools", "copilot"]
 
 dependencies = [
     "jinja2>=3.0",
