@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/pendulum-after-v0.3",
+  "eval_path": "examples/eval/pendulum-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 10,
+    "skill": 10
+  },
+  "per_condition_rate": {
+    "no-skill": 1.0,
+    "skill": 1.0
+  },
+  "per_item": [
+    {
+      "task": "Get the current local time as a pendulum DateTime",
+      "expected": "pendulum.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Get a pendulum DateTime for the current moment in 'Asia/Tokyo' timezone",
+      "expected": "pendulum.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Parse the ISO 8601 string '2024-03-15T14:30:00+09:00' into a pendulum DateTime",
+      "expected": "pendulum.parse",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "Using pendulum, parse a date string like '2024-12-25' into a DateTime",
+      "expected": "pendulum.parse",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "Create a pendulum date object for January 1, 2024",
+      "expected": "pendulum.date",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.date'"
+    },
+    {
+      "task": "Construct a pendulum time-of-day object for 09:30:00",
+      "expected": "pendulum.time",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.time'"
+    },
+    {
+      "task": "Get today's date as a pendulum DateTime at the start of the day",
+      "expected": "pendulum.today",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.today'"
+    },
+    {
+      "task": "Get yesterday's date as a pendulum DateTime",
+      "expected": "pendulum.yesterday",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.yesterday'"
+    },
+    {
+      "task": "Get tomorrow's date as a pendulum DateTime",
+      "expected": "pendulum.tomorrow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.tomorrow'"
+    },
+    {
+      "task": "Construct a pendulum Timezone object for 'America/New_York'",
+      "expected": "pendulum.timezone",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.timezone'"
+    },
+    {
+      "task": "Get the current local time as a pendulum DateTime",
+      "expected": "pendulum.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Get a pendulum DateTime for the current moment in 'Asia/Tokyo' timezone",
+      "expected": "pendulum.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Parse the ISO 8601 string '2024-03-15T14:30:00+09:00' into a pendulum DateTime",
+      "expected": "pendulum.parse",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "Using pendulum, parse a date string like '2024-12-25' into a DateTime",
+      "expected": "pendulum.parse",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "Create a pendulum date object for January 1, 2024",
+      "expected": "pendulum.date",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.date'"
+    },
+    {
+      "task": "Construct a pendulum time-of-day object for 09:30:00",
+      "expected": "pendulum.time",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.time'"
+    },
+    {
+      "task": "Get today's date as a pendulum DateTime at the start of the day",
+      "expected": "pendulum.today",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.today'"
+    },
+    {
+      "task": "Get yesterday's date as a pendulum DateTime",
+      "expected": "pendulum.yesterday",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.yesterday'"
+    },
+    {
+      "task": "Get tomorrow's date as a pendulum DateTime",
+      "expected": "pendulum.tomorrow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.tomorrow'"
+    },
+    {
+      "task": "Construct a pendulum Timezone object for 'America/New_York'",
+      "expected": "pendulum.timezone",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.timezone'"
+    }
+  ]
+}

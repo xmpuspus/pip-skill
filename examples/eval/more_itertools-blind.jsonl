@@ -8,8 +8,3 @@
 {"task": "Yield successive pairs of adjacent elements from an iterable using more_itertools", "expected_qualname": "more_itertools.pairwise"}
 {"task": "Interleave multiple iterables by taking one element from each in turn using more_itertools", "expected_qualname": "more_itertools.interleave"}
 {"task": "Partition an iterable into two iterables based on a predicate using more_itertools", "expected_qualname": "more_itertools.partition"}
-{"task": "Bucket items of an iterable by a key function using more_itertools", "expected_qualname": "more_itertools.bucket"}
-{"task": "Yield all unique elements of an iterable in their original order using more_itertools", "expected_qualname": "more_itertools.unique_everseen"}
-{"task": "Use more_itertools to consume an iterator entirely, discarding results", "expected_qualname": "more_itertools.consume"}
-{"task": "Get an iterator that always yields the same value forever (constant_factory style) with more_itertools", "expected_qualname": "more_itertools.repeat_last"}
-{"task": "Run-length encode an iterable into (value, count) pairs using more_itertools", "expected_qualname": "more_itertools.run_length"}

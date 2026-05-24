@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/returns-after-v0.3",
+  "eval_path": "examples/eval/returns-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 3,
+    "skill": 9
+  },
+  "per_condition_rate": {
+    "no-skill": 0.3,
+    "skill": 0.9
+  },
+  "per_item": [
+    {
+      "task": "Using the returns library, check whether a Result is the success variant",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected one of ['returns.pipeline.is_successful', 'returns.converters.is_successful', 'returns.result.is_successful']"
+    },
+    {
+      "task": "With returns, define an identity function that returns its input unchanged",
+      "expected": "returns.functions.identity",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'returns.identity', expected one of ['returns.functions.identity', 'returns.converters.identity']"
+    },
+    {
+      "task": "Using returns.curry, transform a function so it can be called one argument at a time",
+      "expected": "returns.curry.curry",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.curry.curry'"
+    },
+    {
+      "task": "Compose two functions f and g so calling compose(f, g)(x) is equivalent to f(g(x)) using the returns library",
+      "expected": "returns.functions.compose",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'returns.compose', expected 'returns.functions.compose'"
+    },
+    {
+      "task": "Apply returns.curry.partial to bind the first argument of a function ahead of time",
+      "expected": "returns.curry.partial",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.curry.partial'"
+    },
+    {
+      "task": "Use the returns library to convert a Maybe value into a Result",
+      "expected": "returns.converters.maybe_to_result",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'returns.converters.maybe_to_result'"
+    },
+    {
+      "task": "Convert a Result type back into a Maybe using the returns library",
+      "expected": "returns.converters.result_to_maybe",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'returns.converters.result_to_maybe'"
+    },
+    {
+      "task": "Flatten a nested IOResult[IOResult[T]] into IOResult[T] using returns",
+      "expected": "returns.converters.flatten",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'returns.converters.flatten'"
+    },
+    {
+      "task": "Using the returns library, define a tap function that performs a side effect and returns its input unchanged",
+      "expected": "returns.functions.tap",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.tap'"
+    },
+    {
+      "task": "Wrap a callable so it raises a given exception when invoked, using returns.functions",
+      "expected": "returns.functions.raise_exception",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'returns.functions.raise_', expected 'returns.functions.raise_exception'"
+    },
+    {
+      "task": "Using the returns library, check whether a Result is the success variant",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.is_successful'"
+    },
+    {
+      "task": "With returns, define an identity function that returns its input unchanged",
+      "expected": "returns.functions.identity",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got None, expected one of ['returns.functions.identity', 'returns.converters.identity']"
+    },
+    {
+      "task": "Using returns.curry, transform a function so it can be called one argument at a time",
+      "expected": "returns.curry.curry",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.curry.curry'"
+    },
+    {
+      "task": "Compose two functions f and g so calling compose(f, g)(x) is equivalent to f(g(x)) using the returns library",
+      "expected": "returns.functions.compose",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.compose'"
+    },
+    {
+      "task": "Apply returns.curry.partial to bind the first argument of a function ahead of time",
+      "expected": "returns.curry.partial",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.curry.partial'"
+    },
+    {
+      "task": "Use the returns library to convert a Maybe value into a Result",
+      "expected": "returns.converters.maybe_to_result",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.maybe_to_result'"
+    },
+    {
+      "task": "Convert a Result type back into a Maybe using the returns library",
+      "expected": "returns.converters.result_to_maybe",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.result_to_maybe'"
+    },
+    {
+      "task": "Flatten a nested IOResult[IOResult[T]] into IOResult[T] using returns",
+      "expected": "returns.converters.flatten",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.flatten'"
+    },
+    {
+      "task": "Using the returns library, define a tap function that performs a side effect and returns its input unchanged",
+      "expected": "returns.functions.tap",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.tap'"
+    },
+    {
+      "task": "Wrap a callable so it raises a given exception when invoked, using returns.functions",
+      "expected": "returns.functions.raise_exception",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.raise_exception'"
+    }
+  ]
+}

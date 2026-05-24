@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey.svg" alt="Linux | macOS | Windows">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
   <img src="https://img.shields.io/badge/offline-yes-success.svg" alt="Offline by default">
-  <img src="https://img.shields.io/badge/eval-%2B22pp%20Sonnet%20%2F%20%2B24pp%20Haiku-brightgreen.svg" alt="Eval: +22pp Sonnet / +24pp Haiku across 8 packages">
+  <img src="https://img.shields.io/badge/eval-%2B20pp%20Sonnet%20%2F%20%2B22pp%20Haiku%20(blind%2C%209%20pkgs)-brightgreen.svg" alt="Eval: +20pp Sonnet / +22pp Haiku across 9 packages (blind)">
 </p>
 
 <p align="center"><img src="pip-skill-demo.gif" alt="pip-skill demo: one command turns requests into a Claude skill" width="900"></p>
@@ -34,24 +34,34 @@ Prefer a permanent install? `pip install pip-skill` and use the
 We measured it. See [`RESEARCH.md`](RESEARCH.md) for methodology and
 the per-package breakdown.
 
-### v0.2 corpus (8 new packages, May 2026)
+### v0.3 corpus (9 packages, blind authoring, May 2026)
+
+Items re-authored from each package's docs/README **without
+consulting the generated SKILL.md**. The v0.2 corpus was authored
+*against* the manifest, so coverage was 100% by construction — the
++22pp/+24pp headline reported here previously was an upper bound. The
+v0.3 numbers measure what an end-user actually sees on a freshly
+generated skill they did not help shape.
 
 | Model | Packages | Items | no-skill | **skill** | Lift |
 |---|---|---|---|---|---|
-| Sonnet 4.5 | 8 | 123 | 82/123 (66.7%) | **109/123 (88.6%)** | **+22.0pp** |
-| Haiku 4.5  | 8 | 123 | 87/123 (70.7%) | **117/123 (95.1%)** | **+24.4pp** |
+| Sonnet 4.5 | 9 | 90 | 61/90 (67.8%) | **79/90 (87.8%)** | **+20.0pp** |
+| Haiku 4.5  | 9 | 90 | 62/90 (68.9%) | **82/90 (91.1%)** | **+22.2pp** |
 
-Per-package on Sonnet: mcp `+80pp`, fastmcp `+44pp`, more_itertools
-`+33pp`, returns / msgspec `+13pp` each, pendulum / h3 at ceiling
-(no room to lift), arrow `-13pp` (selector ranks `arrow.factory`
-over `arrow.ArrowFactory`, a real bug to fix). Same shape on Haiku
-with h3 `+56pp` and more_itertools `+60pp` (smaller model knew the
-4.x renames and niche helpers less well). Full per-package and
-per-model table in [`eval-results/REPORT.md`](eval-results/REPORT.md).
+Per-package on Sonnet (blind): mcp `+80pp`, returns / fastmcp `+60pp`
+each, msgspec / pendulum `+10pp`, h3 / toolz at ceiling, arrow /
+more_itertools `-20pp` (skill surfaces low-level alternatives —
+`arrow.parser.DateTimeParser.parse_iso` over `arrow.get`,
+`more_itertools.Stats` over `chunked` — and the model picks the
+specific one over the canonical). Coverage gap is the bigger story:
+blind authoring shows `h3` 1/10 and `more_itertools` 1/10 in the
+manifest because the selector's annotation-bias rewards obscure
+well-typed helpers over Cython bindings and README-canonical names.
+Full per-package and per-model table in [`eval-results/blind/REPORT.md`](eval-results/blind/REPORT.md).
 
-**Cross-model headline:** Haiku + skill (95.1%) beats Sonnet alone
-(66.7%) by 28pp. The smaller model with the skill outperforms the
-larger model without.
+**Cross-model headline:** Haiku + skill (82/90, 91.1%) beats
+Sonnet alone (61/90, 67.8%) by 23pp. The smaller model with
+the skill outperforms the larger model without.
 
 ### v0.1 baseline (3 packages, May 2026)
 

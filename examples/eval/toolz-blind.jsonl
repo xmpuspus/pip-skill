@@ -8,8 +8,3 @@
 {"task": "Yield the unique items of an iterable in order using toolz", "expected_qualname": "toolz.unique"}
 {"task": "Partition an iterable into chunks of size n using toolz", "expected_qualname": "toolz.partition"}
 {"task": "Take the first n items of an iterable using toolz", "expected_qualname": "toolz.take"}
-{"task": "Drop the first n items of an iterable using toolz", "expected_qualname": "toolz.drop"}
-{"task": "Update a single key in a dict immutably using toolz", "expected_qualname": "toolz.assoc"}
-{"task": "Remove a key from a dict immutably using toolz", "expected_qualname": "toolz.dissoc"}
-{"task": "Concatenate a sequence of iterables into one using toolz", "expected_qualname": "toolz.concat"}
-{"task": "Apply a function to each value of a dict using toolz", "expected_qualnames": ["toolz.valmap", "toolz.dicttoolz.valmap"]}

@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/fastmcp-slim-after-v0.3",
+  "eval_path": "examples/eval/fastmcp-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 2,
+    "skill": 9
+  },
+  "per_condition_rate": {
+    "no-skill": 0.2,
+    "skill": 0.9
+  },
+  "per_item": [
+    {
+      "task": "Using fastmcp, build an MCP server application object",
+      "expected": "fastmcp.FastMCP",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.FastMCP'"
+    },
+    {
+      "task": "Instantiate a fastmcp Client to connect to a running MCP server",
+      "expected": "fastmcp.Client",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Client'"
+    },
+    {
+      "task": "With fastmcp, get a typed Context object the server can use during tool invocation",
+      "expected": "fastmcp.Context",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.get_context', expected 'fastmcp.Context'"
+    },
+    {
+      "task": "Using fastmcp, create a proxy server that forwards requests to an upstream MCP server",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.FastMCP', expected 'fastmcp.server.create_proxy'"
+    },
+    {
+      "task": "With fastmcp, list the skill files registered on a server's skill provider",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'fastmcp.utilities.skills.list_skills'"
+    },
+    {
+      "task": "Get a fastmcp logger for instrumenting tool calls via the telemetry module",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.telemetry.get_logger', expected 'fastmcp.telemetry.get_tracer'"
+    },
+    {
+      "task": "Using fastmcp, expose the project's settings via the fastmcp.settings module",
+      "expected": "fastmcp.settings.get_logger",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.resource', expected 'fastmcp.settings.get_logger'"
+    },
+    {
+      "task": "Build a fastmcp lifespan context manager for resource setup and teardown during server startup",
+      "expected": "fastmcp.server.lifespan.lifespan",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.lifespan', expected 'fastmcp.server.lifespan.lifespan'"
+    },
+    {
+      "task": "Use fastmcp's TokenClaim helper to declare an authentication token shape",
+      "expected": "fastmcp.dependencies.TokenClaim",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.TokenClaim', expected 'fastmcp.dependencies.TokenClaim'"
+    },
+    {
+      "task": "Resolve fastmcp's server-side dependencies before tool invocation",
+      "expected": "fastmcp.server.dependencies.resolve_dependencies",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'fastmcp.server.dependencies.resolve_dependencies'"
+    },
+    {
+      "task": "Using fastmcp, build an MCP server application object",
+      "expected": "fastmcp.FastMCP",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.FastMCP'"
+    },
+    {
+      "task": "Instantiate a fastmcp Client to connect to a running MCP server",
+      "expected": "fastmcp.Client",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Client'"
+    },
+    {
+      "task": "With fastmcp, get a typed Context object the server can use during tool invocation",
+      "expected": "fastmcp.Context",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Context'"
+    },
+    {
+      "task": "Using fastmcp, create a proxy server that forwards requests to an upstream MCP server",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.server.create_proxy'"
+    },
+    {
+      "task": "With fastmcp, list the skill files registered on a server's skill provider",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.utilities.skills.list_skills'"
+    },
+    {
+      "task": "Get a fastmcp logger for instrumenting tool calls via the telemetry module",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.telemetry.get_tracer'"
+    },
+    {
+      "task": "Using fastmcp, expose the project's settings via the fastmcp.settings module",
+      "expected": "fastmcp.settings.get_logger",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'fastmcp.FastMCP', expected 'fastmcp.settings.get_logger'"
+    },
+    {
+      "task": "Build a fastmcp lifespan context manager for resource setup and teardown during server startup",
+      "expected": "fastmcp.server.lifespan.lifespan",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.server.lifespan.lifespan'"
+    },
+    {
+      "task": "Use fastmcp's TokenClaim helper to declare an authentication token shape",
+      "expected": "fastmcp.dependencies.TokenClaim",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.dependencies.TokenClaim'"
+    },
+    {
+      "task": "Resolve fastmcp's server-side dependencies before tool invocation",
+      "expected": "fastmcp.server.dependencies.resolve_dependencies",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.server.dependencies.resolve_dependencies'"
+    }
+  ]
+}

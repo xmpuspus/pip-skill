@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/h3-after-v0.3",
+  "eval_path": "examples/eval/h3-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 7,
+    "skill": 9
+  },
+  "per_condition_rate": {
+    "no-skill": 0.7,
+    "skill": 0.9
+  },
+  "per_item": [
+    {
+      "task": "Convert latitude 37.7749 and longitude -122.4194 to an H3 cell at resolution 9",
+      "expected": "h3.latlng_to_cell",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.latlng_to_cell'"
+    },
+    {
+      "task": "Given coordinates 40.7128, -74.0060, find the H3 cell address at resolution 7",
+      "expected": "h3.latlng_to_cell",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.latlng_to_cell'"
+    },
+    {
+      "task": "Convert the H3 cell '8928308280fffff' back to its center latitude and longitude",
+      "expected": "h3.cell_to_latlng",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.h3_to_geo', expected 'h3.cell_to_latlng'"
+    },
+    {
+      "task": "Get the (lat, lng) center of an H3 cell index",
+      "expected": "h3.cell_to_latlng",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.cell_to_latlng'"
+    },
+    {
+      "task": "Return the boundary polygon vertices of an H3 cell as a list of (lat, lng) tuples",
+      "expected": "h3.cell_to_boundary",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.cell_to_boundary'"
+    },
+    {
+      "task": "Find all H3 cells within grid distance 2 of the cell '8928308280fffff'",
+      "expected": "h3.grid_disk",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.grid_disk'"
+    },
+    {
+      "task": "Get the k-ring of neighbors around an H3 cell within radius 3",
+      "expected": "h3.grid_disk",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.k_ring', expected 'h3.grid_disk'"
+    },
+    {
+      "task": "Compute the grid-graph distance between two H3 cells at the same resolution",
+      "expected": "h3.grid_distance",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.grid_distance'"
+    },
+    {
+      "task": "Get the parent cell (one resolution coarser) of the H3 cell '8928308280fffff'",
+      "expected": "h3.cell_to_parent",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.cell_to_parent'"
+    },
+    {
+      "task": "List all the child cells of an H3 cell at resolution 10",
+      "expected": "h3.cell_to_children",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.children', expected 'h3.cell_to_children'"
+    },
+    {
+      "task": "Convert latitude 37.7749 and longitude -122.4194 to an H3 cell at resolution 9",
+      "expected": "h3.latlng_to_cell",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.latlng_to_cell'"
+    },
+    {
+      "task": "Given coordinates 40.7128, -74.0060, find the H3 cell address at resolution 7",
+      "expected": "h3.latlng_to_cell",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.latlng_to_cell'"
+    },
+    {
+      "task": "Convert the H3 cell '8928308280fffff' back to its center latitude and longitude",
+      "expected": "h3.cell_to_latlng",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.cell_to_latlng'"
+    },
+    {
+      "task": "Get the (lat, lng) center of an H3 cell index",
+      "expected": "h3.cell_to_latlng",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.cell_to_latlng'"
+    },
+    {
+      "task": "Return the boundary polygon vertices of an H3 cell as a list of (lat, lng) tuples",
+      "expected": "h3.cell_to_boundary",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.cell_to_boundary'"
+    },
+    {
+      "task": "Find all H3 cells within grid distance 2 of the cell '8928308280fffff'",
+      "expected": "h3.grid_disk",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.grid_disk'"
+    },
+    {
+      "task": "Get the k-ring of neighbors around an H3 cell within radius 3",
+      "expected": "h3.grid_disk",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.grid_disk'"
+    },
+    {
+      "task": "Compute the grid-graph distance between two H3 cells at the same resolution",
+      "expected": "h3.grid_distance",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.grid_distance'"
+    },
+    {
+      "task": "Get the parent cell (one resolution coarser) of the H3 cell '8928308280fffff'",
+      "expected": "h3.cell_to_parent",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.cell_to_parent'"
+    },
+    {
+      "task": "List all the child cells of an H3 cell at resolution 10",
+      "expected": "h3.cell_to_children",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'h3.children', expected 'h3.cell_to_children'"
+    }
+  ]
+}

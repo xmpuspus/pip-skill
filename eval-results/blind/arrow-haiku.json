@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/arrow-after-v0.3",
+  "eval_path": "examples/eval/arrow-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 8,
+    "skill": 9
+  },
+  "per_condition_rate": {
+    "no-skill": 0.8,
+    "skill": 0.9
+  },
+  "per_item": [
+    {
+      "task": "Get the current local time as an Arrow datetime using the arrow library",
+      "expected": "arrow.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "With arrow, get the current time in the 'Asia/Tokyo' timezone",
+      "expected": "arrow.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "Get the current time in UTC as an Arrow datetime",
+      "expected": "arrow.utcnow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.utcnow'"
+    },
+    {
+      "task": "Parse an ISO 8601 timestamp string into an Arrow object using the arrow library",
+      "expected": "arrow.get",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Convert the Unix epoch timestamp 1700000000 into an Arrow datetime",
+      "expected": "arrow.get",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Parse the string '2024-01-15 09:30' against the format 'YYYY-MM-DD HH:mm' using arrow",
+      "expected": "arrow.get",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Construct an Arrow datetime from explicit year, month, day, hour, minute, second parts",
+      "expected": "arrow.Arrow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Directly instantiate the arrow library's Arrow class for January 1 2027 at midnight UTC",
+      "expected": "arrow.Arrow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Build a factory object that produces Arrow datetimes from arbitrary inputs",
+      "expected": "arrow.ArrowFactory",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'arrow.get', expected 'arrow.ArrowFactory'"
+    },
+    {
+      "task": "Configure a custom Arrow subclass and create a factory bound to it",
+      "expected": "arrow.ArrowFactory",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'arrow.factory.ArrowFactory', expected 'arrow.ArrowFactory'"
+    },
+    {
+      "task": "Get the current local time as an Arrow datetime using the arrow library",
+      "expected": "arrow.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "With arrow, get the current time in the 'Asia/Tokyo' timezone",
+      "expected": "arrow.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "Get the current time in UTC as an Arrow datetime",
+      "expected": "arrow.utcnow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.utcnow'"
+    },
+    {
+      "task": "Parse an ISO 8601 timestamp string into an Arrow object using the arrow library",
+      "expected": "arrow.get",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Convert the Unix epoch timestamp 1700000000 into an Arrow datetime",
+      "expected": "arrow.get",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Parse the string '2024-01-15 09:30' against the format 'YYYY-MM-DD HH:mm' using arrow",
+      "expected": "arrow.get",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'arrow.parser.DateTimeParser.parse', expected 'arrow.get'"
+    },
+    {
+      "task": "Construct an Arrow datetime from explicit year, month, day, hour, minute, second parts",
+      "expected": "arrow.Arrow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Directly instantiate the arrow library's Arrow class for January 1 2027 at midnight UTC",
+      "expected": "arrow.Arrow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Build a factory object that produces Arrow datetimes from arbitrary inputs",
+      "expected": "arrow.ArrowFactory",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.ArrowFactory'"
+    },
+    {
+      "task": "Configure a custom Arrow subclass and create a factory bound to it",
+      "expected": "arrow.ArrowFactory",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.ArrowFactory'"
+    }
+  ]
+}

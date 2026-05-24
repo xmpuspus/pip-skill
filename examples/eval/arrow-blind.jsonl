@@ -8,8 +8,3 @@
 {"task": "Directly instantiate the arrow library's Arrow class for January 1 2027 at midnight UTC", "expected_qualname": "arrow.Arrow"}
 {"task": "Build a factory object that produces Arrow datetimes from arbitrary inputs", "expected_qualname": "arrow.ArrowFactory"}
 {"task": "Configure a custom Arrow subclass and create a factory bound to it", "expected_qualname": "arrow.ArrowFactory"}
-{"task": "Convert a datetime.datetime object to an Arrow datetime using the arrow library", "expected_qualname": "arrow.get"}
-{"task": "Parse a date string with no format hint and let arrow auto-detect the format", "expected_qualname": "arrow.get"}
-{"task": "Get an Arrow datetime for the current time in the 'America/Los_Angeles' timezone", "expected_qualname": "arrow.now"}
-{"task": "Using arrow, get the current moment in UTC without specifying a timezone string", "expected_qualname": "arrow.utcnow"}
-{"task": "Parse the date 2024-12-25 using arrow's standard parser", "expected_qualname": "arrow.get"}

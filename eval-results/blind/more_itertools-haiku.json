@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/more_itertools-after-v0.3",
+  "eval_path": "examples/eval/more_itertools-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 8,
+    "skill": 8
+  },
+  "per_condition_rate": {
+    "no-skill": 0.8,
+    "skill": 0.8
+  },
+  "per_item": [
+    {
+      "task": "Split an iterable into chunks of size 3 using more_itertools",
+      "expected": "more_itertools.chunked",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.chunked'"
+    },
+    {
+      "task": "Group consecutive items in an iterable into fixed-size windows using more_itertools",
+      "expected": "more_itertools.windowed",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.grouper', expected 'more_itertools.windowed'"
+    },
+    {
+      "task": "Use more_itertools to flatten a list of lists into a single iterable",
+      "expected": "more_itertools.flatten",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.flatten'"
+    },
+    {
+      "task": "Get the first item of an iterable, with a default for empty input, using more_itertools",
+      "expected": "more_itertools.first",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.first'"
+    },
+    {
+      "task": "Take the last item of an iterable, returning a default if it's empty, using more_itertools",
+      "expected": "more_itertools.last",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.last'"
+    },
+    {
+      "task": "Get the only element of an iterable, raising if there is not exactly one, using more_itertools",
+      "expected": "more_itertools.one",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.only', expected 'more_itertools.one'"
+    },
+    {
+      "task": "Use more_itertools to take exactly N items from an iterator",
+      "expected": "more_itertools.take",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.take'"
+    },
+    {
+      "task": "Yield successive pairs of adjacent elements from an iterable using more_itertools",
+      "expected": "more_itertools.pairwise",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.pairwise'"
+    },
+    {
+      "task": "Interleave multiple iterables by taking one element from each in turn using more_itertools",
+      "expected": "more_itertools.interleave",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.interleave'"
+    },
+    {
+      "task": "Partition an iterable into two iterables based on a predicate using more_itertools",
+      "expected": "more_itertools.partition",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.partition'"
+    },
+    {
+      "task": "Split an iterable into chunks of size 3 using more_itertools",
+      "expected": "more_itertools.chunked",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.chunked'"
+    },
+    {
+      "task": "Group consecutive items in an iterable into fixed-size windows using more_itertools",
+      "expected": "more_itertools.windowed",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.chunked', expected 'more_itertools.windowed'"
+    },
+    {
+      "task": "Use more_itertools to flatten a list of lists into a single iterable",
+      "expected": "more_itertools.flatten",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.flatten'"
+    },
+    {
+      "task": "Get the first item of an iterable, with a default for empty input, using more_itertools",
+      "expected": "more_itertools.first",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.first'"
+    },
+    {
+      "task": "Take the last item of an iterable, returning a default if it's empty, using more_itertools",
+      "expected": "more_itertools.last",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.last'"
+    },
+    {
+      "task": "Get the only element of an iterable, raising if there is not exactly one, using more_itertools",
+      "expected": "more_itertools.one",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.one'"
+    },
+    {
+      "task": "Use more_itertools to take exactly N items from an iterator",
+      "expected": "more_itertools.take",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.islice_extended', expected 'more_itertools.take'"
+    },
+    {
+      "task": "Yield successive pairs of adjacent elements from an iterable using more_itertools",
+      "expected": "more_itertools.pairwise",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.pairwise'"
+    },
+    {
+      "task": "Interleave multiple iterables by taking one element from each in turn using more_itertools",
+      "expected": "more_itertools.interleave",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.interleave'"
+    },
+    {
+      "task": "Partition an iterable into two iterables based on a predicate using more_itertools",
+      "expected": "more_itertools.partition",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.partition'"
+    }
+  ]
+}

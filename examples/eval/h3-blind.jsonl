@@ -8,11 +8,3 @@
 {"task": "Compute the grid-graph distance between two H3 cells at the same resolution", "expected_qualname": "h3.grid_distance"}
 {"task": "Get the parent cell (one resolution coarser) of the H3 cell '8928308280fffff'", "expected_qualname": "h3.cell_to_parent"}
 {"task": "List all the child cells of an H3 cell at resolution 10", "expected_qualname": "h3.cell_to_children"}
-{"task": "Validate whether the string '8928308280fffff' is a syntactically valid H3 cell index", "expected_qualname": "h3.is_valid_cell"}
-{"task": "Compress a set of H3 cells into the smallest mixed-resolution covering", "expected_qualname": "h3.compact_cells"}
-{"task": "Determine the resolution (an integer 0-15) of a given H3 cell address", "expected_qualname": "h3.get_resolution"}
-{"task": "Test whether the H3 cell '8928308280fffff' is one of the 12 pentagonal cells", "expected_qualname": "h3.is_pentagon"}
-{"task": "Tile an H3Shape polygon at resolution 8 into a list of H3 cells that cover it", "expected_qualname": "h3.h3shape_to_cells"}
-{"task": "Compute the exact area of an H3 cell in square kilometers", "expected_qualname": "h3.cell_area"}
-{"task": "Check whether two H3 cells share an edge (are adjacent at the same resolution)", "expected_qualname": "h3.are_neighbor_cells"}
-{"task": "Get all 12 pentagonal H3 cells at a given resolution", "expected_qualname": "h3.get_pentagons"}

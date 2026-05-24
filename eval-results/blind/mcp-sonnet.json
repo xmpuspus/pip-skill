@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/mcp-after-v0.3",
+  "eval_path": "examples/eval/mcp-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 2,
+    "skill": 10
+  },
+  "per_condition_rate": {
+    "no-skill": 0.2,
+    "skill": 1.0
+  },
+  "per_item": [
+    {
+      "task": "Using the mcp library, build a StdioServerParameters config to launch an MCP server with the command 'python' and args ['server.py']",
+      "expected": "mcp.StdioServerParameters",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'mcp.client.stdio.StdioServerParameters', expected 'mcp.StdioServerParameters'"
+    },
+    {
+      "task": "Construct StdioServerParameters using mcp pointing at 'node' with args ['index.js']",
+      "expected": "mcp.StdioServerParameters",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'mcp.StdioServerParameters'"
+    },
+    {
+      "task": "Build an mcp Implementation describing this peer as name 'demo-server' and version '1.0.0'",
+      "expected": "mcp.Implementation",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'mcp.server.fastmcp.FastMCP', expected 'mcp.Implementation'"
+    },
+    {
+      "task": "Using mcp, create an ErrorData payload with code -32600 and message 'Invalid Request'",
+      "expected": "mcp.ErrorData",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'mcp.types.ErrorData', expected 'mcp.ErrorData'"
+    },
+    {
+      "task": "With mcp, build a default ClientCapabilities object",
+      "expected": "mcp.ClientCapabilities",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'mcp.types.ClientCapabilities', expected 'mcp.ClientCapabilities'"
+    },
+    {
+      "task": "Construct a JSONRPCError response from the mcp library wrapping an inner ErrorData",
+      "expected": "mcp.JSONRPCError",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'mcp.types.JSONRPCError', expected 'mcp.JSONRPCError'"
+    },
+    {
+      "task": "Using mcp, open a stdio MCP client session connected to a given StdioServerParameters config",
+      "expected": "mcp.client.stdio.stdio_client",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'mcp.client.stdio.stdio_client'"
+    },
+    {
+      "task": "With mcp, build a CallToolRequest naming the tool to invoke and its arguments",
+      "expected": "mcp.CallToolRequest",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'mcp.types.CallToolRequest', expected 'mcp.CallToolRequest'"
+    },
+    {
+      "task": "Using mcp, construct a CompleteRequest for argument completion suggestions during prompt authoring",
+      "expected": "mcp.CompleteRequest",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'mcp.types.CompleteRequest', expected 'mcp.CompleteRequest'"
+    },
+    {
+      "task": "Build an mcp GetPromptRequest naming the prompt template to fetch",
+      "expected": "mcp.GetPromptRequest",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'mcp.types.GetPromptRequest', expected 'mcp.GetPromptRequest'"
+    },
+    {
+      "task": "Using the mcp library, build a StdioServerParameters config to launch an MCP server with the command 'python' and args ['server.py']",
+      "expected": "mcp.StdioServerParameters",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.StdioServerParameters'"
+    },
+    {
+      "task": "Construct StdioServerParameters using mcp pointing at 'node' with args ['index.js']",
+      "expected": "mcp.StdioServerParameters",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.StdioServerParameters'"
+    },
+    {
+      "task": "Build an mcp Implementation describing this peer as name 'demo-server' and version '1.0.0'",
+      "expected": "mcp.Implementation",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.Implementation'"
+    },
+    {
+      "task": "Using mcp, create an ErrorData payload with code -32600 and message 'Invalid Request'",
+      "expected": "mcp.ErrorData",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.ErrorData'"
+    },
+    {
+      "task": "With mcp, build a default ClientCapabilities object",
+      "expected": "mcp.ClientCapabilities",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.ClientCapabilities'"
+    },
+    {
+      "task": "Construct a JSONRPCError response from the mcp library wrapping an inner ErrorData",
+      "expected": "mcp.JSONRPCError",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.JSONRPCError'"
+    },
+    {
+      "task": "Using mcp, open a stdio MCP client session connected to a given StdioServerParameters config",
+      "expected": "mcp.client.stdio.stdio_client",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.stdio_client'"
+    },
+    {
+      "task": "With mcp, build a CallToolRequest naming the tool to invoke and its arguments",
+      "expected": "mcp.CallToolRequest",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.CallToolRequest'"
+    },
+    {
+      "task": "Using mcp, construct a CompleteRequest for argument completion suggestions during prompt authoring",
+      "expected": "mcp.CompleteRequest",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.CompleteRequest'"
+    },
+    {
+      "task": "Build an mcp GetPromptRequest naming the prompt template to fetch",
+      "expected": "mcp.GetPromptRequest",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'mcp.GetPromptRequest'"
+    }
+  ]
+}

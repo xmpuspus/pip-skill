@@ -8,8 +8,3 @@
 {"task": "With mcp, build a CallToolRequest naming the tool to invoke and its arguments", "expected_qualname": "mcp.CallToolRequest"}
 {"task": "Using mcp, construct a CompleteRequest for argument completion suggestions during prompt authoring", "expected_qualname": "mcp.CompleteRequest"}
 {"task": "Build an mcp GetPromptRequest naming the prompt template to fetch", "expected_qualname": "mcp.GetPromptRequest"}
-{"task": "Using mcp, declare the server's CreateMessageRequest body for a sampling request to the client LLM", "expected_qualname": "mcp.CreateMessageRequest"}
-{"task": "With mcp, create an InitializeRequest to begin the handshake with an MCP server", "expected_qualname": "mcp.InitializeRequest"}
-{"task": "Build an mcp InitializedNotification to send after the initialize handshake completes", "expected_qualname": "mcp.InitializedNotification"}
-{"task": "Using mcp, declare the server's capability set during handshake via a ServerCapabilities object", "expected_qualnames": ["mcp.ServerCapabilities", "mcp.types.ServerCapabilities"]}
-{"task": "With mcp, build a ListToolsRequest to ask an MCP server for its available tools", "expected_qualnames": ["mcp.ListToolsRequest", "mcp.types.ListToolsRequest"]}

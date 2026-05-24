@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/msgspec-after-v0.3",
+  "eval_path": "examples/eval/msgspec-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 8,
+    "skill": 9
+  },
+  "per_condition_rate": {
+    "no-skill": 0.8,
+    "skill": 0.9
+  },
+  "per_item": [
+    {
+      "task": "Using msgspec, decode a JSON byte string into a typed Person struct subclass",
+      "expected": "msgspec.json.decode",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.json.decode'"
+    },
+    {
+      "task": "Encode a msgspec Struct instance to JSON bytes using the json submodule",
+      "expected": "msgspec.json.encode",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.json.encode'"
+    },
+    {
+      "task": "Serialize a typed msgspec Struct to a compact JSON byte string",
+      "expected": "msgspec.json.encode",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.json.encode'"
+    },
+    {
+      "task": "Parse JSON bytes into a typed structure with msgspec's high-performance JSON decoder",
+      "expected": "msgspec.json.decode",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.json.decode'"
+    },
+    {
+      "task": "Convert an instance of a msgspec Struct subclass into a plain dict of Python builtins",
+      "expected": "msgspec.to_builtins",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.to_builtins'"
+    },
+    {
+      "task": "With msgspec, coerce an already-parsed dict into a typed Struct subclass using the convert helper",
+      "expected": "msgspec.convert",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.convert'"
+    },
+    {
+      "task": "Dynamically build a Struct subclass named 'User' with fields ('id', int) and ('name', str) using msgspec",
+      "expected": "msgspec.defstruct",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'msgspec.defstruct'"
+    },
+    {
+      "task": "Declare per-field validation constraints (gt=0, le=100) using msgspec's Meta annotation",
+      "expected": "msgspec.Meta",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Meta'"
+    },
+    {
+      "task": "Wrap precomputed JSON bytes in msgspec's container so they're spliced into output without re-encoding",
+      "expected": "msgspec.Raw",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Raw'"
+    },
+    {
+      "task": "Define a typed structure base class for use with msgspec's encoders and decoders",
+      "expected": "msgspec.Struct",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'msgspec.Struct'"
+    },
+    {
+      "task": "Using msgspec, decode a JSON byte string into a typed Person struct subclass",
+      "expected": "msgspec.json.decode",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.json.decode'"
+    },
+    {
+      "task": "Encode a msgspec Struct instance to JSON bytes using the json submodule",
+      "expected": "msgspec.json.encode",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.json.encode'"
+    },
+    {
+      "task": "Serialize a typed msgspec Struct to a compact JSON byte string",
+      "expected": "msgspec.json.encode",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.json.encode'"
+    },
+    {
+      "task": "Parse JSON bytes into a typed structure with msgspec's high-performance JSON decoder",
+      "expected": "msgspec.json.decode",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.json.decode'"
+    },
+    {
+      "task": "Convert an instance of a msgspec Struct subclass into a plain dict of Python builtins",
+      "expected": "msgspec.to_builtins",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.to_builtins'"
+    },
+    {
+      "task": "With msgspec, coerce an already-parsed dict into a typed Struct subclass using the convert helper",
+      "expected": "msgspec.convert",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.convert'"
+    },
+    {
+      "task": "Dynamically build a Struct subclass named 'User' with fields ('id', int) and ('name', str) using msgspec",
+      "expected": "msgspec.defstruct",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.defstruct'"
+    },
+    {
+      "task": "Declare per-field validation constraints (gt=0, le=100) using msgspec's Meta annotation",
+      "expected": "msgspec.Meta",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Meta'"
+    },
+    {
+      "task": "Wrap precomputed JSON bytes in msgspec's container so they're spliced into output without re-encoding",
+      "expected": "msgspec.Raw",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Raw'"
+    },
+    {
+      "task": "Define a typed structure base class for use with msgspec's encoders and decoders",
+      "expected": "msgspec.Struct",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got None, expected 'msgspec.Struct'"
+    }
+  ]
+}

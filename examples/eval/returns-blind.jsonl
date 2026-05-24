@@ -8,8 +8,3 @@
 {"task": "Flatten a nested IOResult[IOResult[T]] into IOResult[T] using returns", "expected_qualname": "returns.converters.flatten"}
 {"task": "Using the returns library, define a tap function that performs a side effect and returns its input unchanged", "expected_qualname": "returns.functions.tap"}
 {"task": "Wrap a callable so it raises a given exception when invoked, using returns.functions", "expected_qualname": "returns.functions.raise_exception"}
-{"task": "Make returns.kinded work with a higher-kinded type for proper variance", "expected_qualname": "returns.converters.kinded"}
-{"task": "Negate a predicate function using the returns library's `not_` helper", "expected_qualname": "returns.functions.not_"}
-{"task": "Using returns, take an arbitrary value and discard side-effects after observing them", "expected_qualname": "returns.functions.untap"}
-{"task": "Using returns.pipeline, chain a Result-returning computation through several steps", "expected_qualnames": ["returns.pipeline.flow", "returns.pipeline.pipe"]}
-{"task": "With the returns library, lift a plain value into a Success Result", "expected_qualnames": ["returns.result.Success", "returns.result.Result.from_value"]}

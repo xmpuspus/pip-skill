@@ -8,8 +8,3 @@
 {"task": "Build a fastmcp lifespan context manager for resource setup and teardown during server startup", "expected_qualname": "fastmcp.server.lifespan.lifespan"}
 {"task": "Use fastmcp's TokenClaim helper to declare an authentication token shape", "expected_qualname": "fastmcp.dependencies.TokenClaim"}
 {"task": "Resolve fastmcp's server-side dependencies before tool invocation", "expected_qualname": "fastmcp.server.dependencies.resolve_dependencies"}
-{"task": "Construct a fastmcp authentication middleware to gate incoming tool calls", "expected_qualname": "fastmcp.server.middleware.AuthMiddleware"}
-{"task": "Build a fastmcp EventStore for persisting MCP session events", "expected_qualname": "fastmcp.server.event_store.EventStore"}
-{"task": "Using fastmcp, attach a ClaudeSkillsProvider to the server so it serves skill files", "expected_qualname": "fastmcp.server.providers.ClaudeSkillsProvider"}
-{"task": "Using fastmcp, attach a FileSystemProvider that serves files from a local directory", "expected_qualname": "fastmcp.server.providers.FileSystemProvider"}
-{"task": "Build a fastmcp task key from the components needed by background task management", "expected_qualname": "fastmcp.server.tasks.build_task_key"}

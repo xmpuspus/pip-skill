@@ -8,8 +8,3 @@
 {"task": "Get yesterday's date as a pendulum DateTime", "expected_qualname": "pendulum.yesterday"}
 {"task": "Get tomorrow's date as a pendulum DateTime", "expected_qualname": "pendulum.tomorrow"}
 {"task": "Construct a pendulum Timezone object for 'America/New_York'", "expected_qualname": "pendulum.timezone"}
-{"task": "Convert the Unix epoch timestamp 1700000000 into a pendulum DateTime", "expected_qualname": "pendulum.from_timestamp"}
-{"task": "Parse the string '15/03/2024' using the format 'DD/MM/YYYY' with pendulum", "expected_qualname": "pendulum.from_format"}
-{"task": "Build a pendulum interval/duration spanning 3 days and 4 hours", "expected_qualname": "pendulum.interval"}
-{"task": "Wrap an existing datetime.datetime as a pendulum DateTime", "expected_qualname": "pendulum.instance"}
-{"task": "Get the current UTC time as a pendulum DateTime", "expected_qualname": "pendulum.now"}

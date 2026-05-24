@@ -1,0 +1,160 @@
+{
+  "plugin_dir": "/tmp/toolz-after-v0.3",
+  "eval_path": "examples/eval/toolz-blind.jsonl",
+  "conditions": [
+    "no-skill",
+    "skill"
+  ],
+  "items": 10,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "no-skill": 9,
+    "skill": 9
+  },
+  "per_condition_rate": {
+    "no-skill": 0.9,
+    "skill": 0.9
+  },
+  "per_item": [
+    {
+      "task": "Merge two dicts into one using the toolz library",
+      "expected": "toolz.merge",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.merge'"
+    },
+    {
+      "task": "Using toolz, transform a regular function into a curried version that can be called argument-by-argument",
+      "expected": "toolz.curry",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.curry'"
+    },
+    {
+      "task": "Apply a sequence of single-argument functions to a value, left-to-right, using toolz",
+      "expected": "toolz.pipe",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.pipe'"
+    },
+    {
+      "task": "With toolz, compose multiple functions into one (g composed with f)",
+      "expected": "toolz.compose",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.compose'"
+    },
+    {
+      "task": "Group elements of an iterable by a key function using toolz",
+      "expected": "toolz.groupby",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.groupby'"
+    },
+    {
+      "task": "Count occurrences of items in an iterable using toolz",
+      "expected": "toolz.frequencies",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.frequencies'"
+    },
+    {
+      "task": "Extract a value from a nested dict given a sequence of keys, with toolz",
+      "expected": "toolz.get_in",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.get_in'"
+    },
+    {
+      "task": "Yield the unique items of an iterable in order using toolz",
+      "expected": "toolz.unique",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.unique'"
+    },
+    {
+      "task": "Partition an iterable into chunks of size n using toolz",
+      "expected": "toolz.partition",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'toolz.partition'"
+    },
+    {
+      "task": "Take the first n items of an iterable using toolz",
+      "expected": "toolz.take",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'toolz.itertoolz.take', expected 'toolz.take'"
+    },
+    {
+      "task": "Merge two dicts into one using the toolz library",
+      "expected": "toolz.merge",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.merge'"
+    },
+    {
+      "task": "Using toolz, transform a regular function into a curried version that can be called argument-by-argument",
+      "expected": "toolz.curry",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.curry'"
+    },
+    {
+      "task": "Apply a sequence of single-argument functions to a value, left-to-right, using toolz",
+      "expected": "toolz.pipe",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'toolz.compose_left', expected 'toolz.pipe'"
+    },
+    {
+      "task": "With toolz, compose multiple functions into one (g composed with f)",
+      "expected": "toolz.compose",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.compose'"
+    },
+    {
+      "task": "Group elements of an iterable by a key function using toolz",
+      "expected": "toolz.groupby",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.groupby'"
+    },
+    {
+      "task": "Count occurrences of items in an iterable using toolz",
+      "expected": "toolz.frequencies",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.frequencies'"
+    },
+    {
+      "task": "Extract a value from a nested dict given a sequence of keys, with toolz",
+      "expected": "toolz.get_in",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.get_in'"
+    },
+    {
+      "task": "Yield the unique items of an iterable in order using toolz",
+      "expected": "toolz.unique",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.unique'"
+    },
+    {
+      "task": "Partition an iterable into chunks of size n using toolz",
+      "expected": "toolz.partition",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.partition'"
+    },
+    {
+      "task": "Take the first n items of an iterable using toolz",
+      "expected": "toolz.take",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'toolz.take'"
+    }
+  ]
+}
