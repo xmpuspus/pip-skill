@@ -5,6 +5,7 @@ from __future__ import annotations
 import contextlib
 import importlib
 import inspect
+import logging
 import re
 import warnings
 from dataclasses import dataclass
@@ -14,6 +15,8 @@ from docstring_parser import parse as parse_docstring
 
 from pip_skill.introspect import CallableInfo
 from pip_skill.utils import eval_default_safely, eval_literal_values, split_type_args
+
+logger = logging.getLogger("pip_skill.schema")
 
 
 @dataclass
@@ -48,7 +51,26 @@ class ToolSchema:
 SKIP_TYPES = {"Callable", "callable", "function", "Generator", "Iterator", "Coroutine"}
 PATH_TYPES = {"Path", "PurePath", "PosixPath", "WindowsPath", "PathLike"}
 
-DESTRUCTIVE_VERBS = {"delete", "remove", "drop", "destroy", "purge", "truncate", "clear", "reset"}
+DESTRUCTIVE_VERBS = {
+    "delete",
+    "remove",
+    "drop",
+    "destroy",
+    "purge",
+    "truncate",
+    "clear",
+    "reset",
+    "terminate",
+    "kill",
+    "revoke",
+    "cancel",
+    "unlink",
+    "shutdown",
+    "wipe",
+    "uninstall",
+    "deregister",
+    "expire",
+}
 WRITE_VERBS = {"write", "send", "post", "put", "patch", "upload", "create", "update", "execute"}
 
 
@@ -287,6 +309,10 @@ def schema_via_signature(callable_info: CallableInfo) -> dict:
     """Build JSON Schema manually from CallableInfo (strategy 2).
 
     Works when signature is available but annotations are incomplete.
+    If the original signature had *args or **kwargs, two synthetic
+    properties (`args`, `kwargs`) are added so the LLM is aware that
+    additional positional/keyword arguments are accepted (these are
+    common in boto3, requests, stripe).
 
     Args:
         callable_info: The callable to generate schema for.
@@ -310,9 +336,13 @@ def schema_via_signature(callable_info: CallableInfo) -> dict:
         else:
             prop.update(infer_type_from_default(param.default))
 
-        doc_desc = get_param_description(callable_info.docstring, param.name)
-        if doc_desc:
-            prop["description"] = doc_desc
+        # Annotated[..., Field(description=...)] takes precedence over docstring
+        if getattr(param, "description", None):
+            prop["description"] = param.description
+        else:
+            doc_desc = get_param_description(callable_info.docstring, param.name)
+            if doc_desc:
+                prop["description"] = doc_desc
 
         if param.has_default and param.default is not None and param.default != "None":
             with contextlib.suppress(ValueError, Exception):
@@ -322,6 +352,23 @@ def schema_via_signature(callable_info: CallableInfo) -> dict:
 
         if not param.has_default:
             required.append(param.name)
+
+    # Preserve *args / **kwargs as synthetic properties so callers know
+    # additional arguments are accepted. Without this, `requests.request`,
+    # boto3 service calls, and stripe wrappers look like fixed-signature
+    # functions to the LLM.
+    if callable_info.has_varargs:
+        properties["args"] = {
+            "type": "array",
+            "description": "Additional positional arguments (*args)",
+            "items": {},
+        }
+    if callable_info.has_varkw:
+        properties["kwargs"] = {
+            "type": "object",
+            "description": "Additional keyword arguments (**kwargs)",
+            "additionalProperties": True,
+        }
 
     schema: dict = {"type": "object", "properties": properties}
     if required:
@@ -541,5 +588,6 @@ def build_tool_schemas(callables: list[CallableInfo]) -> list[ToolSchema]:
         try:
             result.append(build_tool_schema(ci))
         except Exception as e:
+            logger.debug("Schema generation skipped %s: %s", ci.qualname, e)
             warnings.warn(f"Skipping {ci.qualname}: {e}", stacklevel=2)
     return result

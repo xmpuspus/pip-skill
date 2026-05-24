@@ -4,9 +4,12 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import logging
 from difflib import SequenceMatcher
 
 from pip_skill.introspect import CallableInfo, PackageInfo
+
+logger = logging.getLogger("pip_skill.selector")
 
 VERB_PREFIXES = {
     "get",
@@ -277,7 +280,9 @@ def select_functions(
     except ImportError:
         top_module = None
 
-    # Collect all candidates from all modules
+    logger.info("Selecting functions from %s (max %d)", package_info.name, max_tools)
+
+    # Collect all candidates from all modules (functions + class constructors)
     candidates: list[CallableInfo] = []
     for mod in package_info.modules:
         for fn_info in mod.callables:
@@ -288,6 +293,85 @@ def select_functions(
             if exclude_patterns and any(fnmatch.fnmatch(fn_info.name, p) for p in exclude_patterns):
                 continue
             candidates.append(fn_info)
+
+        # Include class constructors as candidates
+        for cls_info in mod.classes:
+            if cls_info.name.startswith("_"):
+                continue
+            if include_patterns and not any(
+                fnmatch.fnmatch(cls_info.name, p) for p in include_patterns
+            ):
+                continue
+            if exclude_patterns and any(
+                fnmatch.fnmatch(cls_info.name, p) for p in exclude_patterns
+            ):
+                continue
+            # Convert class __init__ to a CallableInfo pseudo-entry
+            init_params = [p for p in cls_info.init_params if p.name != "self"]
+            param_strs = []
+            for p in init_params:
+                s = p.name
+                if p.annotation:
+                    s += f": {p.annotation}"
+                if p.has_default and p.default is not None:
+                    s += f" = {p.default}"
+                param_strs.append(s)
+            sig = f"({', '.join(param_strs)})"
+            cls_callable = CallableInfo(
+                name=cls_info.name,
+                qualname=f"{mod.name}.{cls_info.name}",
+                module=mod.name,
+                signature=sig,
+                parameters=init_params,
+                return_type=cls_info.name,
+                docstring=cls_info.docstring,
+                is_async=False,
+                is_method=False,
+                is_classmethod=False,
+                is_staticmethod=False,
+                is_property=False,
+                has_varargs=any(p.kind == "var_positional" for p in init_params),
+                has_varkw=any(p.kind == "var_keyword" for p in init_params),
+                decorators=[],
+                source_available=False,
+            )
+            candidates.append(cls_callable)
+
+            # Surface the class's instance methods so the canonical
+            # `requests.Session().get()` and `boto3.client('s3').list_buckets()`
+            # patterns are scored alongside top-level functions.
+            for method in cls_info.methods:
+                if method.name.startswith("_"):
+                    continue
+                if include_patterns and not any(
+                    fnmatch.fnmatch(method.name, p) for p in include_patterns
+                ):
+                    continue
+                if exclude_patterns and any(
+                    fnmatch.fnmatch(method.name, p) for p in exclude_patterns
+                ):
+                    continue
+                # Construct a method-flavoured CallableInfo. Skip params named `self`.
+                method_params = [p for p in method.parameters if p.name != "self"]
+                method_callable = CallableInfo(
+                    name=method.name,
+                    qualname=f"{mod.name}.{cls_info.name}.{method.name}",
+                    module=mod.name,
+                    signature=method.signature,
+                    parameters=method_params,
+                    return_type=method.return_type,
+                    docstring=method.docstring,
+                    is_async=method.is_async,
+                    is_method=True,
+                    is_classmethod=method.is_classmethod,
+                    is_staticmethod=method.is_staticmethod,
+                    is_property=method.is_property,
+                    has_varargs=method.has_varargs,
+                    has_varkw=method.has_varkw,
+                    decorators=method.decorators,
+                    source_available=method.source_available,
+                )
+                candidates.append(method_callable)
 
     # Score each candidate (except uniqueness, which needs ordering)
     scored: list[tuple[CallableInfo, int]] = []
@@ -319,17 +403,19 @@ def select_functions(
         )
 
         if verbose:
-            print(f"Scoring: {fn_info.qualname}")
-            print(f"  module_depth:    {depth_score:2d}")
-            print(f"  all_membership:  {all_score:2d}")
-            print(f"  docstring:       {doc_score:2d}")
-            print(f"  annotations:     {ann_score:2d}")
-            print(f"  name_quality:    {name_score:2d}")
-            print(f"  param_count:     {param_score:2d}")
-            print(f"  return_type:     {return_score:2d}")
-            print(f"  not_deprecated:  {dep_score:2d}")
-            print(f"  reexport:        {reexport_score:2d}")
-            print(f"  BASE:            {base_score}")
+            import sys
+
+            print(f"Scoring: {fn_info.qualname}", file=sys.stderr)
+            print(f"  module_depth:    {depth_score:2d}", file=sys.stderr)
+            print(f"  all_membership:  {all_score:2d}", file=sys.stderr)
+            print(f"  docstring:       {doc_score:2d}", file=sys.stderr)
+            print(f"  annotations:     {ann_score:2d}", file=sys.stderr)
+            print(f"  name_quality:    {name_score:2d}", file=sys.stderr)
+            print(f"  param_count:     {param_score:2d}", file=sys.stderr)
+            print(f"  return_type:     {return_score:2d}", file=sys.stderr)
+            print(f"  not_deprecated:  {dep_score:2d}", file=sys.stderr)
+            print(f"  reexport:        {reexport_score:2d}", file=sys.stderr)
+            print(f"  BASE:            {base_score}", file=sys.stderr)
 
         scored.append((fn_info, base_score))
 
@@ -346,7 +432,9 @@ def select_functions(
             uniqueness = score_uniqueness(fn_info, selected)
             total = base_score + uniqueness
             if verbose:
-                print(f"  uniqueness:      {uniqueness:2d}  -> TOTAL: {total}")
+                import sys
+
+                print(f"  uniqueness:      {uniqueness:2d}  -> TOTAL: {total}", file=sys.stderr)
             # uniqueness == 0 means very similar name to already-selected function — skip
             if uniqueness == 0 and selected:
                 continue
@@ -375,6 +463,7 @@ def llm_curate(
     package_info: PackageInfo,
     max_tools: int,
     api_key: str,
+    deterministic: bool = False,
 ) -> list[CallableInfo]:
     """Use Claude to curate function selection.
 
@@ -383,6 +472,9 @@ def llm_curate(
         package_info: Package metadata.
         max_tools: Max tools to return.
         api_key: Anthropic API key.
+        deterministic: When True, force `temperature=0` so the same
+            input produces the same ranking across runs (still subject
+            to provider-side model drift).
 
     Returns:
         List of selected CallableInfo objects in LLM-ranked order.
@@ -423,11 +515,20 @@ def llm_curate(
     )
 
     client = anthropic.Anthropic(api_key=api_key)
-    response = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=1024,
-        messages=[{"role": "user", "content": prompt}],
-    )
+    # Model is overridable via env so users can opt into newer models without
+    # waiting for a release. Default tracks the latest GA Sonnet at the time
+    # of the last release.
+    import os
+
+    model = os.environ.get("PIP_SKILL_MODEL", "claude-sonnet-4-5")
+    create_kwargs = {
+        "model": model,
+        "max_tokens": 1024,
+        "messages": [{"role": "user", "content": prompt}],
+    }
+    if deterministic:
+        create_kwargs["temperature"] = 0
+    response = client.messages.create(**create_kwargs)
 
     text = response.content[0].text
     # Extract JSON array from response

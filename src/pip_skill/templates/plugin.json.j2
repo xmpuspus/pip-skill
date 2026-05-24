@@ -1,13 +1,37 @@
 {
-  "name": "{{ skill_name }}",
-  "version": "{{ package.version }}",
-  "description": "{{ package.description | truncate(200) }}",
-  "author": "{{ package.author or '' }}",
-  "homepage": "{{ package.homepage or '' }}",
-  "license": "{{ package.license or '' }}",
-  "generatedBy": "pip-skill v{{ pip_skill_version }}",
-  "generatedAt": "{{ timestamp }}",
-  "sourcePackage": "{{ package.name }}",
-  "importName": "{{ package.import_name }}",
-  "toolCount": {{ tools | length }}
+  "name": {{ skill_name | tojson }},
+  "version": {{ package.version | tojson }},
+  "description": {{ (package.description | sanitize)[:200] | tojson }},
+  "author": {{ (package.author or "") | sanitize | tojson }},
+  "homepage": {{ (package.homepage or "") | tojson }},
+  "license": {{ (package.license or "") | tojson }},
+  "generatedBy": {{ ("pip-skill v" ~ pip_skill_version) | tojson }},
+  "generatedAt": {{ timestamp | tojson }},
+  "sourcePackage": {{ package.name | tojson }},
+  "sourceVersion": {{ package.version | tojson }},
+  "importName": {{ package.import_name | tojson }},
+  "toolCount": {{ tools | length }},
+  "tools": [
+{% for tool in tools %}
+    {
+      "name": {{ tool.name | tojson }},
+      "functionName": {{ tool.function_name | tojson }},
+      "qualname": {{ tool.qualname | tojson }},
+      "module": {{ (tool.qualname.rsplit('.', 1)[0]) | tojson }},
+      "isDestructive": {{ tool.is_destructive | tojson }},
+      "isWrite": {{ tool.is_write | tojson }},
+      "parameters": [
+{% for param in tool.parameters %}
+        {
+          "name": {{ param.name | tojson }},
+          "required": {{ param.required | tojson }},
+          "type": {{ (param.type_str or "any") | tojson }}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+      ]
+    }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+  ]
 }

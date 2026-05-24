@@ -1,21 +1,24 @@
 ---
 name: {{ skill_name }}
-version: {{ package.version }}
 description: >-
-  Use the {{ package.name }} Python package (v{{ package.version }}).
-  {{ package.description | truncate(200) }}
-requires:
-  bins: [python3, pip]
-  packages: [{{ package.name }}]
-{% if package.homepage %}
-homepage: {{ package.homepage }}
+  {{ package.description | sanitize | truncate(400) }}
+  Use when working with the {{ package.name }} Python package.
+{% if package.license %}
+license: {{ package.license | sanitize }}
 {% endif %}
-toolCount: {{ tools | length }}
+compatibility: Requires python3 and pip. Install with: pip install {{ package.name }}
+metadata:
+  version: "{{ package.version }}"
+  tool-count: "{{ tools | length }}"
+  generated-by: pip-skill
+{% if package.homepage %}
+  homepage: "{{ package.homepage }}"
+{% endif %}
 ---
 
 # {{ package.name }}
 
-{{ package.description }}
+{{ package.description | sanitize }}
 
 ## Prerequisites
 
@@ -40,7 +43,7 @@ import {{ package.import_name }}
 ## Available Functions
 
 {% for tool in tools %}
-### `{{ tool.qualname }}()`
+### `{{ tool.qualname }}`
 
 {% if tool.is_destructive %}
 > [CAUTION] This function modifies or deletes data. Confirm with the user before calling.
@@ -49,12 +52,12 @@ import {{ package.import_name }}
 > [NOTE] This function writes or sends data. Verify parameters before calling.
 
 {% endif %}
-{{ tool.description }}
+{{ tool.description | sanitize }}
 
 {% if tool.parameters %}
 **Parameters:**
 {% for param in tool.parameters %}
-- `{{ param.name }}`{% if param.type_str and param.type_str != 'any' %} ({{ param.type_str }}){% endif %}{% if not param.required %}, optional{% endif %}{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}{% if param.description %} — {{ param.description }}{% endif %}
+- `{{ param.name }}`{% if param.type_str and param.type_str != 'any' %} ({{ param.type_str }}){% endif %}{% if not param.required %}, optional{% endif %}{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}{% if param.description %} — {{ param.description | sanitize }}{% endif %}
 
 {% endfor %}
 {% endif %}

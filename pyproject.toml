@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 authors = [
-    { name = "Xavier", email = "xavier@example.com" },
+    { name = "Xavier Puspus", email = "xpuspus@gmail.com" },
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -25,7 +25,7 @@ classifiers = [
     "Environment :: Console",
     "Typing :: Typed",
 ]
-keywords = ["ai", "ai-coding", "claude", "claude-code", "cursor", "windsurf", "opencode", "mcp", "skill", "plugin", "code-generation", "llm", "developer-tools", "python-tools", "copilot"]
+keywords = ["ai", "ai-coding", "agent-skills", "claude", "claude-code", "cursor", "windsurf", "opencode", "copilot", "codex", "gemini", "mcp", "skill", "plugin", "code-generation", "llm", "developer-tools", "python-tools"]
 
 dependencies = [
     "jinja2>=3.0",
@@ -47,11 +47,10 @@ dev = [
 pip-skill = "pip_skill.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/xavierperez/pip-skill"
-Documentation = "https://github.com/xavierperez/pip-skill#readme"
-Repository = "https://github.com/xavierperez/pip-skill"
-Changelog = "https://github.com/xavierperez/pip-skill/blob/main/CHANGELOG.md"
-"Bug Tracker" = "https://github.com/xavierperez/pip-skill/issues"
+Homepage = "https://github.com/xmpuspus/pip-skill"
+Documentation = "https://github.com/xmpuspus/pip-skill#readme"
+Repository = "https://github.com/xmpuspus/pip-skill"
+"Bug Tracker" = "https://github.com/xmpuspus/pip-skill/issues"
 
 [tool.hatch.version]
 source = "vcs"
@@ -73,6 +72,7 @@ known-first-party = ["pip_skill"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+markers = ["integration: tests against real installed packages"]
 
 [tool.pyright]
 pythonVersion = "3.11"

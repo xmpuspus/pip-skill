@@ -65,6 +65,7 @@ def _build_fake_package_info():
         description="A fake package for testing",
         author="Test Author",
         homepage=None,
+        docs_url=None,
         license="MIT",
         dependencies=[],
         modules=modules,

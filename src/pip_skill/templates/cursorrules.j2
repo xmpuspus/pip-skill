@@ -1,6 +1,6 @@
 # {{ package.name }} v{{ package.version }}
 
-{{ package.description }}
+{{ package.description | sanitize }}
 
 ## Setup
 
@@ -20,12 +20,12 @@ pip install {{ package.name }}
 > NOTE: This function writes or sends data. Verify parameters before calling.
 
 {% endif %}
-{{ tool.description }}
+{{ tool.description | sanitize }}
 
 {% if tool.parameters %}
 Parameters:
 {% for param in tool.parameters %}
-- {{ param.name }}{% if param.type_str and param.type_str != 'any' %}: {{ param.type_str }}{% endif %}{% if not param.required %} (optional{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}){% endif %}{% if param.description %} — {{ param.description }}{% endif %}
+- {{ param.name }}{% if param.type_str and param.type_str != 'any' %}: {{ param.type_str }}{% endif %}{% if not param.required %} (optional{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}){% endif %}{% if param.description %} — {{ param.description | sanitize }}{% endif %}
 
 {% endfor %}
 {% endif %}

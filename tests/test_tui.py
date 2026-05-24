@@ -83,6 +83,7 @@ def sample_package_info():
         description="HTTP for Humans",
         author="Kenneth Reitz",
         homepage="https://requests.readthedocs.io",
+        docs_url="https://requests.readthedocs.io",
         license="Apache-2.0",
         dependencies=["urllib3", "certifi"],
         modules=[

@@ -1,0 +1,24 @@
+- id: pip-skill-sync
+  name: Regenerate AI skills from pinned dependencies
+  description: |
+    On every commit that changes requirements.txt / pyproject.toml,
+    regenerate the AI assistant skills under ./skills/ from the currently
+    installed package versions. Skills are committed alongside the
+    dependency change so reviewers see exactly what the AI will see.
+  entry: pip-skill batch
+  language: python
+  additional_dependencies: [pip-skill]
+  files: '(requirements.*\.txt|pyproject\.toml)$'
+  args: [--force, --output-dir, skills]
+  pass_filenames: false
+
+- id: pip-skill-test
+  name: Verify generated skills are still in sync
+  description: |
+    Run pip-skill test on every plugin directory under ./skills/ to
+    detect skills that have drifted from the installed package version.
+  entry: bash -c 'for d in skills/*/; do pip-skill test "$d"; done'
+  language: python
+  additional_dependencies: [pip-skill]
+  files: '(requirements.*\.txt|pyproject\.toml|skills/.*)$'
+  pass_filenames: false

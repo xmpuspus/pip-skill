@@ -4,13 +4,13 @@ Real packages, one command each. Each entry shows what your AI assistant generat
 
 ---
 
-### `google-cloud-bigquery` — Query BigQuery from a prompt
+### `google-cloud-bigquery`: Query BigQuery from a prompt
 
 ```bash
 pip install google-cloud-bigquery && pip-skill convert google-cloud-bigquery
 ```
 
-Run SQL, load results into DataFrames, create tables, export to GCS — all without touching the console.
+Run SQL, load results into DataFrames, create tables, export to GCS, all without touching the console.
 
 > *"show me the top 10 users by revenue in our analytics table today"*
 
@@ -38,13 +38,13 @@ u_7718           203 events   $  650.00
 
 ---
 
-### `databricks-sdk` — Manage Databricks workspaces
+### `databricks-sdk`: Manage Databricks workspaces
 
 ```bash
 pip install databricks-sdk && pip-skill convert databricks-sdk
 ```
 
-List clusters, submit jobs, read Delta tables, manage secrets, browse the Unity Catalog — all from conversation.
+List clusters, submit jobs, read Delta tables, manage secrets, browse the Unity Catalog, all from conversation.
 
 > *"which clusters are running and burning money right now?"*
 
@@ -68,13 +68,13 @@ analytics-dev                2 workers   ~16 DBU/hr
 
 ---
 
-### `anthropic` — Use the Claude API from Claude Code
+### `anthropic`: Use the Claude API from Claude Code
 
 ```bash
 pip install anthropic && pip-skill convert anthropic
 ```
 
-177 functions, 1115 classes, 100% annotated — the entire Anthropic SDK available as a skill. Build Claude-powered workflows directly from the chat.
+177 functions, 1115 classes, 100% annotated, the entire Anthropic SDK available as a skill. Build Claude-powered workflows directly from the chat.
 
 > *"batch summarize these 50 support tickets into one-line descriptions"*
 
@@ -103,7 +103,7 @@ for ticket in tickets:
 
 ---
 
-### `cryptography` — Real encryption, not base64
+### `cryptography`: Real encryption, not base64
 
 ```bash
 pip install cryptography && pip-skill convert cryptography --select
@@ -142,7 +142,7 @@ encrypted: services/worker/.env
 
 ---
 
-### `paramiko` — SSH and SFTP without leaving the chat
+### `paramiko`: SSH and SFTP without leaving the chat
 
 ```bash
 pip install paramiko && pip-skill convert paramiko
@@ -181,13 +181,13 @@ worker-02      55%
 
 ---
 
-### `Pillow` — Image processing at scale
+### `Pillow`: Image processing at scale
 
 ```bash
 pip install Pillow && pip-skill convert Pillow
 ```
 
-Resize, crop, rotate, watermark, convert formats, apply filters, composite — any image operation from a single prompt.
+Resize, crop, rotate, watermark, convert formats, apply filters, composite, any image operation from a single prompt.
 
 > *"resize all JPEGs to 1200px wide, convert to WebP, stamp CONFIDENTIAL"*
 
@@ -219,13 +219,13 @@ photo_003.jpg -> photo_003.webp
 
 ---
 
-### `openpyxl` — Real Excel, not CSV
+### `openpyxl`: Real Excel, not CSV
 
 ```bash
 pip install openpyxl && pip-skill convert openpyxl
 ```
 
-Formulas, merged cells, charts, conditional formatting, named ranges — actual `.xlsx` files, not flat exports.
+Formulas, merged cells, charts, conditional formatting, named ranges, actual `.xlsx` files, not flat exports.
 
 > *"build a sales report with a summary sheet and SUM formulas in the totals row"*
 
@@ -262,7 +262,7 @@ saved sales_report.xlsx -- 4 regions, 16 rows, formulas applied
 
 ---
 
-### `pytesseract` — Read text from images
+### `pytesseract`: Read text from images
 
 ```bash
 pip install pytesseract && pip-skill convert pytesseract
@@ -296,7 +296,7 @@ receipts.csv written -- 6 files, 43 line items extracted
 
 ---
 
-### `pydub` — Audio processing
+### `pydub`: Audio processing
 
 ```bash
 pip install pydub && pip-skill convert pydub
@@ -333,13 +333,13 @@ segment_003.mp3   91.2s
 
 ---
 
-### `twilio` — SMS and WhatsApp from a prompt
+### `twilio`: SMS and WhatsApp from a prompt
 
 ```bash
 pip install twilio && pip-skill convert twilio --select
 ```
 
-Outbound SMS, WhatsApp, voice calls, number lookup — the whole Twilio API without reading any docs.
+Outbound SMS, WhatsApp, voice calls, number lookup, the whole Twilio API without reading any docs.
 
 > *"text everyone on this list that their appointment is confirmed for tomorrow 10am"*
 
@@ -373,13 +373,13 @@ failed: Alex Rivera -- Invalid phone number
 
 ---
 
-### `reportlab` — Generate PDFs from scratch
+### `reportlab`: Generate PDFs from scratch
 
 ```bash
 pip install reportlab && pip-skill convert reportlab --select
 ```
 
-Tables, charts, headers, footers, embedded images, custom fonts — contracts, invoices, and reports fully generated.
+Tables, charts, headers, footers, embedded images, custom fonts, contracts, invoices, and reports fully generated.
 
 > *"produce a professional invoice PDF from this JSON data"*
 
@@ -416,13 +416,13 @@ invoice.pdf written -- 1 page, 8 line items, $4,320.00 total
 
 ---
 
-### `pyarrow` — Work with datasets too big for pandas
+### `pyarrow`: Work with datasets too big for pandas
 
 ```bash
 pip install pyarrow && pip-skill convert pyarrow --select
 ```
 
-Read Parquet files, filter and transform columnar data, convert between Arrow/Pandas/CSV — handles datasets that don't fit in memory.
+Read Parquet files, filter and transform columnar data, convert between Arrow/Pandas/CSV, handles datasets that don't fit in memory.
 
 > *"filter this 4GB Parquet file for APAC revenue > 10000 and export the top 20 rows"*
 

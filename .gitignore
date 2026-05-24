@@ -40,3 +40,8 @@ make_new_feature_demos.py
 /STATUS.md
 plans/
 .planning/
+
+# vhs outputs — rebuildable from docs/*.tape via scripts/bootstrap-demo.sh
+# (the committed copies live at pip-skill-demo.gif and demos/*.gif)
+docs/*.gif
+docs/*.mp4

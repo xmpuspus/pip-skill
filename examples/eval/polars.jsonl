@@ -1,0 +1,10 @@
+{"task": "Read a JSON file from disk into a polars DataFrame", "expected_qualname": "polars.read_json"}
+{"task": "Read a database table using a SQLAlchemy connection string", "expected_qualname": "polars.read_database"}
+{"task": "Read a Delta Lake table at path './my_table'", "expected_qualname": "polars.read_delta"}
+{"task": "Read raw lines from a text file path", "expected_qualname": "polars.read_lines"}
+{"task": "Stack two DataFrames vertically into one", "expected_qualname": "polars.concat"}
+{"task": "Compute the covariance between two numeric Series", "expected_qualname": "polars.cov"}
+{"task": "Add a cumulative row count column", "expected_qualname": "polars.cum_count"}
+{"task": "Build an expression that emits integers 0..N", "expected_qualname": "polars.arange"}
+{"task": "Pick the first non-null value across multiple columns", "expected_qualname": "polars.coalesce"}
+{"task": "Concatenate the elements of two Array-typed columns row-wise", "expected_qualname": "polars.concat_arr"}

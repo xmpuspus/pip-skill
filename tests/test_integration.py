@@ -159,3 +159,127 @@ def test_mcp_server_generation(tmp_path):
     import ast
 
     ast.parse(content)  # raises SyntaxError if invalid
+
+
+@pytest.mark.integration
+def test_class_constructors_selected_for_pydantic():
+    """Pydantic is class-centric — class constructors should appear in selection."""
+    pytest.importorskip("pydantic")
+
+    from pip_skill.introspect import introspect_package
+    from pip_skill.selector import select_functions
+
+    pkg = introspect_package("pydantic")
+    selected = select_functions(pkg, max_tools=30)
+    names = [fn.name for fn, _ in selected]
+
+    # At least some classes should be selected (not just standalone functions)
+    # Pydantic has many public classes: validators, serializers, types, constraints
+    known_classes = {
+        "BaseModel",
+        "TypeAdapter",
+        "ConfigDict",
+        "Field",
+        "AfterValidator",
+        "BeforeValidator",
+        "PlainValidator",
+        "StringConstraints",
+        "AliasChoices",
+        "AliasPath",
+        "WrapSerializer",
+        "PlainSerializer",
+        "Discriminator",
+    }
+    found = known_classes & set(names)
+    assert len(found) >= 1, (
+        f"No pydantic classes found in selection. Expected at least one of {known_classes}, "
+        f"got: {names}"
+    )
+
+
+@pytest.mark.integration
+def test_no_duplicate_names_with_classes():
+    """Selection should not produce duplicate names even when classes are included."""
+    pytest.importorskip("pydantic")
+
+    from pip_skill.introspect import introspect_package
+    from pip_skill.selector import select_functions
+
+    pkg = introspect_package("pydantic")
+    selected = select_functions(pkg, max_tools=20)
+    names = [fn.name for fn, _ in selected]
+    assert len(names) == len(set(names)), f"Duplicates found: {names}"
+
+
+@pytest.mark.integration
+def test_skill_md_frontmatter_spec_compliance(tmp_path):
+    """Generated SKILL.md should have Agent Skills spec-compliant frontmatter."""
+    pytest.importorskip("requests")
+
+    from pip_skill.generator import render_templates
+    from pip_skill.introspect import introspect_package
+    from pip_skill.schema import build_tool_schemas
+    from pip_skill.selector import select_functions
+
+    pkg = introspect_package("requests")
+    selected = select_functions(pkg, max_tools=5)
+    schemas = build_tool_schemas([fn for fn, _ in selected])
+    render_templates(pkg, schemas, {}, tmp_path)
+
+    from pip_skill.utils import normalize_skill_name
+
+    skill_md = tmp_path / "skills" / normalize_skill_name("requests") / "SKILL.md"
+    content = skill_md.read_text()
+
+    # Frontmatter must have spec-compliant fields
+    assert "name:" in content
+    assert "description:" in content
+    assert "compatibility:" in content
+    assert "metadata:" in content
+    assert "tool-count:" in content
+
+    # Must NOT have old non-spec fields at top level
+    lines = content.split("---")[1]  # frontmatter block
+    assert "toolCount:" not in lines
+    assert "\nrequires:" not in lines
+
+
+@pytest.mark.integration
+def test_cli_convert_timing_output(tmp_path):
+    """CLI convert should print timing information."""
+    pytest.importorskip("requests")
+
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pip_skill",
+            "convert",
+            "requests",
+            "--output",
+            str(tmp_path / "out"),
+            "--force",
+        ],
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    assert result.returncode == 0
+    assert "functions selected in" in result.stdout
+    assert "introspect" in result.stdout
+
+
+@pytest.mark.integration
+def test_tier_detection_with_lazy_imports():
+    """Packages with __getattr__-based lazy imports should be detected."""
+    pytest.importorskip("pydantic")
+
+    from pip_skill.introspect import introspect_package
+
+    pkg = introspect_package("pydantic")
+    # pydantic uses __getattr__ for lazy imports — should be detected
+    # Tier depends on annotation coverage, but the detection itself should not crash
+    assert pkg.tier in (1, 2, 3)

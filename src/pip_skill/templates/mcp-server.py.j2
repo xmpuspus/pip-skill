@@ -8,13 +8,14 @@ import json
 import {{ package.import_name }}
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("{{ skill_name }}")
+mcp = FastMCP({{ skill_name | tojson }})
 
 {% for tool in tools %}
+{% if (tool.function_name is safe_identifier) and (tool.qualname is safe_identifier) %}
 
 @mcp.tool()
 def {{ tool.function_name }}({{ tool_params_with_types(tool) }}) -> str:
-    """{{ tool.description }}"""
+    """{{ tool.description | sanitize | replace('"""', '\\"\\"\\"') }}"""
     try:
         result = {{ tool.qualname }}({{ tool_call_args(tool) }})
     except Exception as e:
@@ -27,7 +28,9 @@ def {{ tool.function_name }}({{ tool_params_with_types(tool) }}) -> str:
     if isinstance(result, bytes):
         return f"<bytes: {len(result)} bytes>"
     return str(result)
-
+{% else %}
+# Skipped: {{ tool.qualname }} (unsafe identifier, would inject Python source)
+{% endif %}
 {% endfor %}
 
 if __name__ == "__main__":

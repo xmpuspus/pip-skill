@@ -1,0 +1,61 @@
+name: pip-skill
+description: Convert installed pip packages into AI coding assistant skills (Claude Code, Cursor, Windsurf, OpenCode, MCP)
+author: Xavier Puspus
+branding:
+  icon: package
+  color: purple
+
+inputs:
+  packages:
+    description: Space-separated list of pip packages OR path to a requirements.txt file
+    required: true
+  format:
+    description: Output format (claude, cursor, windsurf, opencode)
+    required: false
+    default: claude
+  output-dir:
+    description: Base directory for generated skills
+    required: false
+    default: ./skills
+  mcp:
+    description: Also generate FastMCP servers
+    required: false
+    default: "false"
+  workers:
+    description: Parallel workers for batch conversion
+    required: false
+    default: "4"
+  pip-skill-version:
+    description: Version of pip-skill to install (use "latest" for the most recent)
+    required: false
+    default: latest
+
+runs:
+  using: composite
+  steps:
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v4
+
+    - name: Install pip-skill
+      shell: bash
+      run: |
+        if [ "${{ inputs.pip-skill-version }}" = "latest" ]; then
+          uv tool install pip-skill
+        else
+          uv tool install "pip-skill==${{ inputs.pip-skill-version }}"
+        fi
+
+    - name: Generate skills
+      shell: bash
+      run: |
+        ARGS="--format ${{ inputs.format }} --output-dir ${{ inputs.output-dir }} --workers ${{ inputs.workers }} --force"
+        if [ "${{ inputs.mcp }}" = "true" ]; then
+          ARGS="$ARGS --mcp"
+        fi
+        # If `packages` is a single token that names an existing file, treat it
+        # as a requirements file; otherwise pass tokens as package names.
+        if [ -f "${{ inputs.packages }}" ]; then
+          uv tool run pip-skill batch "${{ inputs.packages }}" $ARGS
+        else
+          uv tool run pip-skill batch ${{ inputs.packages }} $ARGS
+        fi

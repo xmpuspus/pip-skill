@@ -56,9 +56,8 @@ def test_render_skill_md_frontmatter(tmp_path, fake_package_info, fake_package_o
     assert lines[0] == "---"
     assert any("name:" in line for line in lines)
     assert any("description:" in line for line in lines)
-    assert any("version:" in line for line in lines)
-    assert any("requires:" in line for line in lines)
-    assert any("toolCount:" in line for line in lines)
+    assert any("compatibility:" in line for line in lines)
+    assert any("tool-count:" in line for line in lines)
 
 
 def test_render_api_reference(tmp_path, fake_package_info, fake_package_on_path):
@@ -292,3 +291,71 @@ def test_render_claude_format_is_default(tmp_path, fake_package_info, fake_packa
     assert len(written) == 4
     assert (tmp_path / ".claude-plugin" / "plugin.json").exists()
     assert (tmp_path / "skills" / "fake-package" / "SKILL.md").exists()
+
+
+# --- install_skill ---
+
+
+def test_install_skill_claude(tmp_path, fake_package_info, fake_package_on_path):
+    """install_skill should copy the entire Claude plugin bundle so it is
+    self-contained and auto-discovered by Claude Code on next session.
+
+    That means: plugin.json AND skills/{name}/SKILL.md AND CONTEXT.md AND
+    references/, mirroring the generated layout exactly.
+    """
+    from pip_skill.generator import install_skill
+
+    output_dir = tmp_path / "output"
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(fake_package_info, [tool], {"mcp": False}, output_dir)
+
+    install_dir = tmp_path / "fake_claude_plugins"
+    install_skill(output_dir, "fake-package", "claude", force=True, install_base=install_dir)
+
+    plugin_root = install_dir / "fake-package"
+    assert plugin_root.exists()
+    # Plugin manifest must be present so Claude Code can discover the plugin
+    assert (plugin_root / ".claude-plugin" / "plugin.json").exists()
+    # The skill bundle (SKILL.md + CONTEXT.md + references/) must be copied
+    skill_dir = plugin_root / "skills" / "fake-package"
+    assert (skill_dir / "SKILL.md").exists()
+    assert (skill_dir / "CONTEXT.md").exists()
+    assert (skill_dir / "references" / "api-reference.md").exists()
+
+
+def test_install_skill_claude_normalizes_package_name(
+    tmp_path, fake_package_info, fake_package_on_path
+):
+    """install_skill must normalize names so case-mismatched packages
+    (Pillow -> pillow, PyYAML -> pyyaml) work on case-sensitive filesystems."""
+    from pip_skill.generator import install_skill
+
+    output_dir = tmp_path / "out"
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(fake_package_info, [tool], {"mcp": False}, output_dir)
+
+    install_dir = tmp_path / "plugins"
+    # Pass a deliberately mis-cased name to mimic the Pillow/PyYAML scenario
+    target = install_skill(
+        output_dir, "Fake-Package", "claude", force=True, install_base=install_dir
+    )
+
+    # Target should land under the normalized name, with a complete bundle
+    assert target.name == "fake-package"
+    assert (target / ".claude-plugin" / "plugin.json").exists()
+    assert (target / "skills" / "fake-package" / "SKILL.md").exists()
+
+
+def test_install_skill_cursor(tmp_path, fake_package_info, fake_package_on_path):
+    """install_skill should write .cursorrules for cursor format."""
+    from pip_skill.generator import install_skill
+
+    output_dir = tmp_path / "output"
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(fake_package_info, [tool], {"format": "cursor"}, output_dir)
+
+    project_dir = tmp_path / "project"
+    project_dir.mkdir()
+    install_skill(output_dir, "fake-package", "cursor", force=True, install_base=project_dir)
+
+    assert (project_dir / ".cursor" / "rules" / "fake-package.mdc").exists()

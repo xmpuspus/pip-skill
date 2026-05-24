@@ -317,3 +317,121 @@ def test_cli_install_not_found():
         result = main(["install", "nonexistent-pkg"])
 
     assert result == 1
+
+
+# --- --select flag ---
+
+
+def test_convert_select_flag_requires_api_key(capsys, monkeypatch):
+    """--select flag should error when ANTHROPIC_API_KEY is not set."""
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    from unittest.mock import MagicMock
+
+    mock_pkg_info = MagicMock()
+    mock_pkg_info.name = "fake-package"
+    mock_pkg_info.import_name = "fake_package"
+    mock_pkg_info.version = "1.0.0"
+    mock_pkg_info.description = "A fake package"
+    mock_pkg_info.modules = []
+    mock_pkg_info.tier = 1
+    mock_pkg_info.annotation_coverage = 1.0
+    mock_pkg_info.dependencies = []
+
+    mock_fn = MagicMock()
+    mock_fn.name = "fetch"
+
+    with (
+        patch("pip_skill.introspect.introspect_package", return_value=mock_pkg_info),
+        patch("pip_skill.selector.select_functions", return_value=[(mock_fn, 80)]),
+    ):
+        result = main(["convert", "fake-package", "--select"])
+
+    assert result == 1
+    captured = capsys.readouterr()
+    assert "ANTHROPIC_API_KEY" in captured.err
+
+
+# --- build command ---
+
+
+def test_build_command_accepts_package_arg():
+    """`build` accepts a positional package argument and routes to cmd_build.
+
+    cmd_build is patched so the test is hermetic regardless of whether the
+    `[tui]` extra is installed.
+    """
+    with patch("pip_skill.cli.cmd_build", return_value=0):
+        result = main(["build", "requests"])
+    assert result == 0
+
+    # `build` without a package argument is rejected by argparse with exit 2.
+    with pytest.raises(SystemExit) as exc_info:
+        main(["build"])
+    assert exc_info.value.code == 2
+
+
+# --- test command ---
+
+
+def test_test_command_nonexistent_dir(tmp_path):
+    """pip-skill test should fail for nonexistent plugin dir."""
+    result = main(["test", str(tmp_path / "nonexistent")])
+    assert result == 1
+
+
+def test_test_command_validates_skill(tmp_path):
+    """pip-skill test should validate a generated skill directory by reading
+    the structured `tools` manifest (not by regex-scraping markdown)."""
+    import json
+
+    (tmp_path / ".claude-plugin").mkdir()
+    (tmp_path / ".claude-plugin" / "plugin.json").write_text(
+        json.dumps(
+            {
+                "name": "requests",
+                "sourcePackage": "requests",
+                "sourceVersion": "0.0.0",
+                "tools": [
+                    {
+                        "name": "get",
+                        "functionName": "get",
+                        "qualname": "requests.get",
+                        "module": "requests",
+                        "isDestructive": False,
+                        "isWrite": False,
+                        "parameters": [],
+                    },
+                    {
+                        "name": "post",
+                        "functionName": "post",
+                        "qualname": "requests.post",
+                        "module": "requests",
+                        "isDestructive": False,
+                        "isWrite": True,
+                        "parameters": [],
+                    },
+                ],
+            }
+        )
+    )
+    (tmp_path / "skills" / "requests").mkdir(parents=True)
+    (tmp_path / "skills" / "requests" / "SKILL.md").write_text("# requests\n")
+
+    result = main(["test", str(tmp_path)])
+    assert result == 0
+
+
+def test_test_command_rejects_legacy_skill_without_manifest(tmp_path):
+    """A skill without the `tools` manifest must not silently pass — instruct
+    the user to regenerate."""
+    import json
+
+    (tmp_path / ".claude-plugin").mkdir()
+    (tmp_path / ".claude-plugin" / "plugin.json").write_text(
+        json.dumps({"name": "requests", "sourcePackage": "requests", "sourceVersion": "0.0.0"})
+    )
+    (tmp_path / "skills" / "requests").mkdir(parents=True)
+    (tmp_path / "skills" / "requests" / "SKILL.md").write_text("# requests\n")
+
+    result = main(["test", str(tmp_path)])
+    assert result == 1

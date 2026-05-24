@@ -1,0 +1,10 @@
+{"task": "GET the URL https://api.github.com synchronously and return the response", "expected_qualname": "httpx.get"}
+{"task": "POST a JSON body to https://example.com/api synchronously", "expected_qualname": "httpx.post"}
+{"task": "Send a synchronous PUT request updating https://example.com/users/1", "expected_qualname": "httpx.put"}
+{"task": "Delete the resource at https://example.com/items/42 synchronously", "expected_qualname": "httpx.delete"}
+{"task": "Send a HEAD request to check https://example.com/ synchronously", "expected_qualname": "httpx.head"}
+{"task": "Send an OPTIONS preflight request to https://example.com/api synchronously", "expected_qualname": "httpx.options"}
+{"task": "Construct a typed URL object from the string 'https://example.com/path?q=1'", "expected_qualname": "httpx.URL"}
+{"task": "Build a synchronous HTTP Basic auth helper for user 'u' and password 'p'", "expected_qualname": "httpx.BasicAuth"}
+{"task": "Create a Timeout configuration of 30 seconds for an httpx client", "expected_qualname": "httpx.Timeout"}
+{"task": "Issue a synchronous arbitrary-method request, e.g. method=REPORT to https://example.com", "expected_qualname": "httpx.request"}

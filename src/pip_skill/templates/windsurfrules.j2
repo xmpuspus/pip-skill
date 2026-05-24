@@ -1,6 +1,6 @@
 # {{ package.name }} v{{ package.version }}
 
-{{ package.description }}
+{{ package.description | sanitize }}
 
 ## Setup
 
@@ -14,17 +14,17 @@ pip install {{ package.name }}
 ### {{ tool.qualname }}{{ tool | tools_signature }}
 
 {% if tool.is_destructive %}
-> CAUTION: Destructive operation — confirm before calling.
+> CAUTION: Destructive operation. Confirm before calling.
 
 {% elif tool.is_write %}
-> NOTE: Write operation — verify parameters first.
+> NOTE: Write operation. Verify parameters first.
 
 {% endif %}
-{{ tool.description }}
+{{ tool.description | sanitize }}
 
 {% if tool.parameters %}
 {% for param in tool.parameters %}
-- `{{ param.name }}`{% if param.type_str and param.type_str != 'any' %} ({{ param.type_str }}){% endif %}{% if not param.required %}, optional{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}{% endif %}{% if param.description %} — {{ param.description }}{% endif %}
+- `{{ param.name }}`{% if param.type_str and param.type_str != 'any' %} ({{ param.type_str }}){% endif %}{% if not param.required %}, optional{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}{% endif %}{% if param.description %}: {{ param.description | sanitize }}{% endif %}
 
 {% endfor %}
 {% endif %}

@@ -1,0 +1,10 @@
+{"task": "GET the URL https://api.github.com and return the response body", "expected_qualname": "requests.get"}
+{"task": "POST a JSON payload to https://example.com/api with a 30 second timeout", "expected_qualname": "requests.post"}
+{"task": "Send a PUT request updating a record at https://example.com/users/1", "expected_qualname": "requests.put"}
+{"task": "Delete a resource at https://example.com/items/42", "expected_qualname": "requests.delete"}
+{"task": "Send a HEAD request to check whether https://example.com is reachable", "expected_qualname": "requests.head"}
+{"task": "Send a PATCH request applying a JSON patch to https://example.com/items/42", "expected_qualname": "requests.patch"}
+{"task": "Send a GET request to https://example.com/options to discover OPTIONS metadata", "expected_qualname": "requests.options"}
+{"task": "Start a persistent connection pool that can reuse cookies across multiple GETs", "expected_qualname": "requests.Session"}
+{"task": "Send a GET to a custom HTTP method endpoint using a non-standard verb 'REPORT'", "expected_qualname": "requests.request"}
+{"task": "Add basic auth (user/pass) to a single GET against https://example.com/private", "expected_qualname": "requests.get"}

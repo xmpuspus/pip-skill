@@ -5,9 +5,13 @@ from __future__ import annotations
 import contextlib
 import importlib
 import inspect
+import logging
 import pkgutil
+import sys
 from dataclasses import dataclass
 from typing import get_type_hints
+
+logger = logging.getLogger("pip_skill.introspect")
 
 
 @dataclass
@@ -19,6 +23,7 @@ class ParamInfo:
     default: str | None
     has_default: bool
     kind: str  # "positional", "keyword", "positional_or_keyword", "var_positional", "var_keyword"
+    description: str | None = None  # extracted from Annotated[..., Field(description=...)]
 
 
 @dataclass
@@ -79,6 +84,7 @@ class PackageInfo:
     description: str
     author: str | None
     homepage: str | None
+    docs_url: str | None
     license: str | None
     dependencies: list[str]
     modules: list[ModuleInfo]
@@ -97,6 +103,41 @@ def _format_type(annotation) -> str:
     if hasattr(annotation, "__name__"):
         return annotation.__name__
     return str(annotation).replace("typing.", "")
+
+
+def _extract_annotated_metadata(annotation) -> tuple[object, str | None]:
+    """Unwrap typing.Annotated[X, ...] and extract a description if present.
+
+    Recognises both pydantic.Field(description=...) and msgspec/attrs/dataclass-style
+    metadata objects exposing a `.description` attribute. Returns (inner_type, description).
+    For non-Annotated types, returns (annotation, None).
+    """
+    try:
+        from typing import Annotated, get_args, get_origin
+    except ImportError:
+        return annotation, None
+
+    origin = get_origin(annotation)
+    if origin is not Annotated:
+        return annotation, None
+
+    args = get_args(annotation)
+    if not args:
+        return annotation, None
+
+    inner = args[0]
+    description = None
+    for meta in args[1:]:
+        # pydantic.Field(description="...")  -> FieldInfo with .description
+        desc = getattr(meta, "description", None)
+        if desc:
+            description = str(desc)
+            break
+        # plain string metadata
+        if isinstance(meta, str):
+            description = meta
+            break
+    return inner, description
 
 
 def resolve_import_name(pip_name: str) -> str:
@@ -159,12 +200,22 @@ def get_package_metadata(pip_name: str) -> dict:
                 homepage = parts[1].strip()
                 break
 
+    # Extract docs URL from Project-URL
+    docs_url = None
+    for url_entry in project_urls:
+        if url_entry:
+            label, _, url = url_entry.partition(",")
+            if label.strip().lower() in ("documentation", "docs", "doc"):
+                docs_url = url.strip()
+                break
+
     return {
         "name": m["Name"] or pip_name,
         "version": m["Version"] or "unknown",
         "summary": m["Summary"] or "",
         "author": m["Author"] or m.get("Author-email") or "",
         "homepage": homepage,
+        "docs_url": docs_url,
         "license": m["License"] or "",
     }
 
@@ -196,11 +247,13 @@ def get_required_dependencies(pip_name: str) -> list[str]:
 
 def walk_package_modules(
     import_name: str,
+    progress_callback=None,
 ) -> list[tuple[str, object | None, str | None]]:
     """Walk all submodules of a package.
 
     Args:
         import_name: The Python import name.
+        progress_callback: Optional callable(module_name) for progress reporting.
 
     Returns:
         List of (module_name, module_or_None, error_or_None) tuples.
@@ -208,7 +261,7 @@ def walk_package_modules(
     results = []
     try:
         pkg = importlib.import_module(import_name)
-    except Exception as e:
+    except BaseException as e:
         return [(import_name, None, str(e))]
 
     results.append((import_name, pkg, None))
@@ -221,10 +274,15 @@ def walk_package_modules(
         prefix=pkg.__name__ + ".",
         onerror=lambda name: None,
     ):
+        if progress_callback:
+            progress_callback(modinfo.name)
         try:
             mod = importlib.import_module(modinfo.name)
             results.append((modinfo.name, mod, None))
-        except Exception as e:
+        except BaseException as e:
+            # BaseException catches pytest.importorskip's `Skipped`, GeneratorExit,
+            # SystemExit, etc. that some packages raise at import time.
+            logger.debug("Skipping module %s: %s", modinfo.name, e)
             results.append((modinfo.name, None, str(e)))
 
     return results
@@ -291,8 +349,10 @@ def extract_callable_info(name: str, fn, module_name: str) -> CallableInfo:
     sig = None
     try:
         sig = inspect.signature(fn, eval_str=True)
-    except (ValueError, TypeError):
-        with contextlib.suppress(ValueError, TypeError):
+    except (ValueError, TypeError, NameError):
+        # NameError: forward refs that don't resolve from outside the defining
+        # module (e.g. httpx._api references `ssl` defined elsewhere).
+        with contextlib.suppress(ValueError, TypeError, NameError):
             sig = inspect.signature(fn)
 
     # Get type hints
@@ -321,10 +381,15 @@ def extract_callable_info(name: str, fn, module_name: str) -> CallableInfo:
                 continue
 
             annotation = None
-            if pname in hints:
-                annotation = _format_type(hints[pname])
-            elif param.annotation is not inspect.Parameter.empty:
-                annotation = _format_type(param.annotation)
+            description = None
+            raw_annotation = (
+                hints.get(pname)
+                if pname in hints
+                else (param.annotation if param.annotation is not inspect.Parameter.empty else None)
+            )
+            if raw_annotation is not None:
+                inner, description = _extract_annotated_metadata(raw_annotation)
+                annotation = _format_type(inner)
 
             has_default = param.default is not inspect.Parameter.empty
             default = repr(param.default) if has_default else None
@@ -336,6 +401,7 @@ def extract_callable_info(name: str, fn, module_name: str) -> CallableInfo:
                     default=default,
                     has_default=has_default,
                     kind=kind_map.get(param.kind, "positional_or_keyword"),
+                    description=description,
                 )
             )
 
@@ -503,9 +569,17 @@ def detect_tier(modules: list[ModuleInfo]) -> tuple[int, float]:
             if len(non_init_methods) > 3:
                 has_stateful_classes = True
 
+        # Detect lazy imports via __getattr__ on the module
+        try:
+            mod = importlib.import_module(mod_info.name)
+            if hasattr(mod, "__getattr__"):
+                has_lazy_imports = True
+        except Exception:
+            pass
+
     coverage = annotated_params / total_params if total_params > 0 else 0.0
 
-    if has_lazy_imports or has_stateful_classes and coverage < 0.5:
+    if (has_lazy_imports or has_stateful_classes) and coverage < 0.5:
         tier = 3
     elif coverage >= 0.7:
         tier = 1
@@ -515,11 +589,17 @@ def detect_tier(modules: list[ModuleInfo]) -> tuple[int, float]:
     return tier, coverage
 
 
-def introspect_package(pip_name: str) -> PackageInfo:
+def introspect_package(pip_name: str, deterministic: bool = False) -> PackageInfo:
     """Introspect an installed pip package.
 
     Args:
         pip_name: The pip package name (e.g., 'requests', 'Pillow').
+        deterministic: If True, sort the discovered module list by name
+            before processing. This stabilises the traversal order
+            across operating systems (case-sensitive vs case-insensitive
+            filesystems give different `pkgutil.walk_packages` orders)
+            so two runs against the same installed version yield the
+            same selected functions.
 
     Returns:
         PackageInfo with complete API information.
@@ -527,6 +607,8 @@ def introspect_package(pip_name: str) -> PackageInfo:
     Raises:
         ValueError: If the package is not installed or cannot be imported.
     """
+    logger.info("Introspecting package %s", pip_name)
+
     # Step 1: Resolve import name
     import_name = resolve_import_name(pip_name)
 
@@ -551,7 +633,14 @@ def introspect_package(pip_name: str) -> PackageInfo:
         deps = []
 
     # Step 4-6: Walk modules and enumerate API
-    modules_data = walk_package_modules(import_name)
+    def _progress(mod_name):
+        print(f"  Scanning {mod_name}...", file=sys.stderr, end="\r", flush=True)
+
+    modules_data = walk_package_modules(import_name, progress_callback=_progress)
+    print(" " * 60, file=sys.stderr, end="\r", flush=True)  # clear progress line
+    if deterministic:
+        modules_data = sorted(modules_data, key=lambda t: t[0])
+    logger.info("Walked %d modules for %s", len(modules_data), import_name)
     modules = []
 
     for mod_name, mod, error in modules_data:
@@ -566,14 +655,16 @@ def introspect_package(pip_name: str) -> PackageInfo:
         for fn_name, fn_obj in functions:
             try:
                 callables.append(extract_callable_info(fn_name, fn_obj, mod_name))
-            except Exception:
+            except BaseException as e:
+                logger.debug("extract_callable_info skipped %s.%s: %s", mod_name, fn_name, e)
                 continue
 
         class_infos = []
         for cls_name, cls_obj in classes:
             try:
                 class_infos.append(extract_class_info(cls_name, cls_obj, mod_name))
-            except Exception:
+            except BaseException as e:
+                logger.debug("extract_class_info skipped %s.%s: %s", mod_name, cls_name, e)
                 continue
 
         modules.append(
@@ -597,6 +688,7 @@ def introspect_package(pip_name: str) -> PackageInfo:
         description=meta["summary"],
         author=meta["author"] or None,
         homepage=meta["homepage"] or None,
+        docs_url=meta.get("docs_url"),
         license=meta["license"] or None,
         dependencies=deps,
         modules=modules,

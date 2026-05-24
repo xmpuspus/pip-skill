@@ -16,14 +16,14 @@
 ## Context Window Management
 
 - SKILL.md contains the {{ tools | length }} most useful functions
-- api-reference.md contains full schemas — read only the sections you need
+- api-reference.md contains full schemas; read only the sections you need
 - Do not read the entire api-reference.md into context unless necessary
 
 ## Error Handling
 
-- `ImportError`: Package not installed — run `pip install {{ package.name }}`
-- `AttributeError`: Function may have moved between versions — check `{{ package.import_name }}.__version__`
-- `TypeError`: Wrong argument types — check parameter types in SKILL.md
+- `ImportError`: Package not installed. Run `pip install {{ package.name }}`
+- `AttributeError`: Function may have moved between versions. Check `{{ package.import_name }}.__version__`
+- `TypeError`: Wrong argument types. Check parameter types in SKILL.md
 {% if package.tier == 3 %}
 
 ## Dynamic Package Note
