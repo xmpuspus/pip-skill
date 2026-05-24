@@ -1,0 +1,3 @@
+{"task": "Using the pendulum library (not the stdlib), parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime", "expected_qualname": "pendulum.parse"}
+{"task": "Get the current time in the 'America/New_York' timezone using pendulum", "expected_qualname": "pendulum.now"}
+{"task": "Construct a pendulum duration representing 2 days and 3 hours", "expected_qualname": "pendulum.duration"}

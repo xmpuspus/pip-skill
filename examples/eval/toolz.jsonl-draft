@@ -1,0 +1,3 @@
+{"task": "Using the toolz library, look up the key 'name' in a dictionary `d` and return the string 'unknown' if the key is missing", "expected_qualname": "toolz.get"}
+{"task": "Merge a list of dictionaries `[a, b, c]` into a single dictionary using the toolz library, with later dicts winning on key conflicts", "expected_qualname": "toolz.merge"}
+{"task": "Compose two unary functions f and g into a single callable equivalent to `lambda x: f(g(x))`, using toolz", "expected_qualname": "toolz.compose"}

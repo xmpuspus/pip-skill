@@ -395,6 +395,137 @@ plus pass-rate on Experiment 1's eval set. The result is two
 contributions: the largest real-API tool-spec corpus, and a principled
 justification for each selector signal.
 
+## Extended experiments (v0.2 corpus expansion)
+
+The v0.1 eval ships three packages (httpx, requests, polars). v0.2
+grows that to fifteen, structured in three phases. Candidate list
+mined from four independent research streams (tool-use benchmark
+archaeology, 2026 industry signal, post-cutoff release notes,
+per-archetype design rules). The full ranked list is in the v0.2
+planning notes; the short version below covers the packages drafted
+into `examples/eval/*.jsonl-draft`.
+
+### Why these packages
+
+The v0.1 eval covers HTTP clients (well-known to the model) and one
+DataFrame library (idiomatic collision with the stdlib). To
+generalize the +40pp polars result, the v0.2 corpus stresses three
+new archetypes the model is *known* to mishandle:
+
+1. **Post-cutoff protocol SDKs** (`mcp`, `fastmcp`). Released after
+   January 2026; the model has no training data for the v1.x APIs.
+2. **Renamed-everything domain libraries** (`h3`). h3-py 4.x renamed
+   every public function (`geo_to_h3` → `latlng_to_cell`,
+   `polyfill` → `polygon_to_cells`); the model emits 3.x names that
+   no longer exist.
+3. **Stdlib-shadowing functional util libraries** (`toolz`, `returns`,
+   `arrow`, `pendulum`, `msgspec`). Each has a public name that
+   collides with a stdlib or third-party convention with a different
+   signature. Polars is the existing exemplar; these are the
+   non-DataFrame versions of the same trap.
+
+### Phase 1: seven packages (no new harness work)
+
+Drafted as 3-item starter sets in `examples/eval/<pkg>.jsonl-draft`.
+Expansion to n=30 (or the recommended count for the archetype) is a
+mechanical paraphrase pass before running.
+
+| Package | Archetype | Items (full) | Predicted no-skill | Predicted skill | Drafted |
+|---|---|---|---|---|---|
+| `polars` (rerun) | DataFrame | 30 | 50% (baseline) | 90% (baseline) | already shipped |
+| `mcp` | Protocol SDK | 30 | 20% | 65% | [mcp.jsonl-draft](examples/eval/mcp.jsonl-draft) |
+| `fastmcp` | MCP framework | 20 | 15% | 65% | [fastmcp.jsonl-draft](examples/eval/fastmcp.jsonl-draft) |
+| `h3` | Geospatial indexing | 25 | 15% | 70% | [h3.jsonl-draft](examples/eval/h3.jsonl-draft) |
+| `arrow` | Datetime | 15 | 25% | 65% | [arrow.jsonl-draft](examples/eval/arrow.jsonl-draft) |
+| `pendulum` | Datetime | 12 | 35% | 65% | [pendulum.jsonl-draft](examples/eval/pendulum.jsonl-draft) |
+| `toolz` | Functional util | 15 | 25% | 65% | [toolz.jsonl-draft](examples/eval/toolz.jsonl-draft) |
+| `returns` | Result monad | 12 | 20% | 70% | [returns.jsonl-draft](examples/eval/returns.jsonl-draft) |
+| `msgspec` | Serde | 15 | 30% | 70% | [msgspec.jsonl-draft](examples/eval/msgspec.jsonl-draft) |
+
+Predictions are calibrated against the polars +40pp result. They
+will move once measured; the point is the *direction* and the
+*ranking*, not the absolute number.
+
+**Budget:** 174 items × 2 conditions (base vs skill) × 2 models
+(Sonnet 4.5 + Haiku 4.5) = 696 claude-cli calls. Add ~10% for
+retries and a partial Opus 4.7 replication on the top failures →
+~750 calls. Wall time ~1h with the harness's default 8-worker
+concurrency. Zero API tokens spent (the harness uses the cached OAuth
+session per `gotcha_claude-cli-bare-blocks-oauth`).
+
+### Phase 2: six packages (needs new authoring rules)
+
+These are LLM and agent SDKs where the universal blind-to-manifest
+rule is hardest to apply, because every task naturally sounds like
+"build an agent" or "send a message". Authoring requires either
+explicit version pinning in the prose or `accept_qualnames` lists
+in the eval format.
+
+| Package | Items | Predicted lift |
+|---|---|---|
+| `anthropic` (>=1.12) | 35 | +30pp (beta tool patterns post-cutoff) |
+| `openai` (v2) | 35 | +25pp (Responses default vs Chat Completions) |
+| `pydantic-ai` | 30 | +30pp (post-cutoff API; `Agent`/`RunContext`) |
+| `langgraph` | 30 | +30pp (moved imports in 1.0) |
+| `google-genai` | 25 | +35pp (LLM still emits deprecated `google.generativeai`) |
+| `crewai` | 25 | +25pp (decorator API LLM frequently invents) |
+
+**Budget:** 180 items × 4 = ~720 calls baseline. With the n=50-per-package
+bump recommended for sprawling agent SDKs, scale to ~1200 calls.
+Wall time ~2h.
+
+### Phase 3: BFCL submission + scientific corpus
+
+After v0.2 ships, three follow-on tracks:
+
+- Convert pip-skill into a BFCL submission (each pip package = one
+  "API class" in BFCL terms). Validates the harness against external
+  scoring.
+- Add heavy-install scientific packages (`scanpy`, `rdkit`,
+  `astropy.units`, `qiskit`) under a controlled conda environment.
+  Subagent C predicts +30pp+ on `scanpy` (in-place return semantics)
+  and `h3`-class +40pp on `qiskit` (Aer removed, Primitives V1 vs
+  V2). These are domain-CI-flaky so they wait for Phase 3.
+- Teach the selector to read botocore service models so `boto3`'s
+  runtime-generated qualnames (`s3.list_buckets`, ~6000 ops across
+  ~300 services) become eval-able. This is the unlock for Tier-3
+  cloud SDK evaluation.
+
+Estimated Phase 3 budget: 5,000+ calls across multi-vendor models.
+Multi-day wall time.
+
+### Recommendation: ship v0.2 with Phase 1 inline
+
+Phase 1 alone covers three new archetypes (protocol SDK, geospatial
+indexing, idiomatic-collision functional utils) at zero API-token
+cost. That is enough new evidence to justify v0.2 and a 1h harness
+run from the author's laptop. Phase 2 ships as v0.2.1 two weeks
+later, by which point the post-cutoff agent SDKs (`claude-agent-sdk`,
+`openai-agents`, `agent-framework`) will have stabilized enough to
+add to the corpus as the strongest possible "the LLM literally
+cannot have known this API" story.
+
+### Threats to validity (predicted before measuring)
+
+- **Selector miss on deep submodules.** `mcp.client.session.ClientSession`
+  is three levels deep. If the v0.1 selector reexport-scores only
+  shallow modules, the SKILL.md manifest will not list it and the
+  skill condition will score 0 on those items, not because the LLM
+  can't use the skill but because the skill doesn't surface the
+  target. Verify by running `pip-skill convert mcp` and grepping
+  `plugin.json` for each draft's `expected_qualname` before kicking
+  off the run.
+- **Method qualnames** (`fastmcp.FastMCP.list_tools`, `returns.result.Result.bind`).
+  The harness compares against a flat qualname string. If the
+  manifest only lists the class but not the method, the skill miss
+  is again a coverage gap, not a knowledge gap. May need a separate
+  "method discovery" sub-experiment for archetypes where methods are
+  the canonical API surface (DataFrames, OO clients, Result monads).
+- **Ambiguity on `arrow.now` vs `pendulum.now`.** Both packages
+  expose `now()`. The draft items pin the package in the prose, but
+  the harness's alias-extraction may collapse them. Spot-check the
+  first batch of runs.
+
 ## Open questions
 
 These would make good first contributions to the project.

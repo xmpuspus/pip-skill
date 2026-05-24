@@ -1,0 +1,3 @@
+{"task": "Using the dry-python `returns` library, wrap the integer 42 in the container that represents a successful computation result", "expected_qualname": "returns.result.Success"}
+{"task": "Wrap a string error message 'invalid input' in the `returns` library's container that represents a failed computation", "expected_qualname": "returns.result.Failure"}
+{"task": "Given a Result value `r` from the `returns` library, chain a function `parse: int -> Result[int, str]` onto it so failures propagate, using the monadic bind operation", "expected_qualname": "returns.result.Result.bind"}

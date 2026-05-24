@@ -1,0 +1,3 @@
+{"task": "I want to create an MCP server in Python that exposes tools to an LLM client; instantiate the high-level server with the name 'demo'", "expected_qualname": "mcp.server.fastmcp.FastMCP"}
+{"task": "Connect to a locally-running MCP server over standard input/output from a Python client, opening the read/write streams", "expected_qualname": "mcp.client.stdio.stdio_client"}
+{"task": "Given a read stream and a write stream returned by the stdio client, open a client session that speaks the MCP protocol", "expected_qualname": "mcp.client.session.ClientSession"}

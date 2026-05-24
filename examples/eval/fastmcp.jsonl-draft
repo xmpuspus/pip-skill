@@ -1,0 +1,3 @@
+{"task": "I want to build an MCP server where every Python function I register with a decorator becomes a callable tool; instantiate the server class from the fastmcp library", "expected_qualname": "fastmcp.FastMCP"}
+{"task": "Asynchronously fetch the list of tools currently registered on a FastMCP server instance named `server`", "expected_qualname": "fastmcp.FastMCP.list_tools"}
+{"task": "Connect a Python client to a remote MCP server reachable over streamable HTTP at 'https://example.com/mcp'", "expected_qualname": "fastmcp.Client"}
