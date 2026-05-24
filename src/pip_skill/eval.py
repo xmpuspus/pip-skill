@@ -55,19 +55,49 @@ from pathlib import Path
 
 @dataclass
 class EvalItem:
-    """A single task in the eval set."""
+    """A single task in the eval set.
+
+    Items may declare either a single ``expected_qualname`` or a list
+    ``expected_qualnames`` of equivalent forms. Lists are useful when a
+    task can be solved through more than one canonical path — typically
+    a free function and an equivalent method on a class
+    (``anthropic.messages.create`` vs ``Anthropic.messages.create``).
+    """
 
     task: str
     expected_qualname: str
+    expected_qualnames: list[str] = field(default_factory=list)
+
+    def matches(self, qualname: str | None) -> bool:
+        """True iff `qualname` equals the primary or any alternate qualname."""
+        if qualname is None:
+            return False
+        if qualname == self.expected_qualname:
+            return True
+        return qualname in self.expected_qualnames
 
     @classmethod
     def from_dict(cls, d: dict) -> EvalItem:
-        if "task" not in d or "expected_qualname" not in d:
+        if "task" not in d:
+            raise ValueError(f"Eval item is missing required field 'task': {d!r}.")
+        # Accept either form; `expected_qualnames` wins if both are present.
+        alternates: list[str] = []
+        if "expected_qualnames" in d:
+            raw = d["expected_qualnames"]
+            if not isinstance(raw, list) or not raw:
+                raise ValueError(f"Eval item 'expected_qualnames' must be a non-empty list: {d!r}.")
+            alternates = [str(x) for x in raw]
+            primary = alternates[0]
+            rest = alternates[1:]
+        elif "expected_qualname" in d:
+            primary = str(d["expected_qualname"])
+            rest = []
+        else:
             raise ValueError(
-                f"Eval item is missing required fields: {d!r}. "
-                "Required: 'task', 'expected_qualname'."
+                f"Eval item is missing required field 'expected_qualname' "
+                f"or 'expected_qualnames': {d!r}."
             )
-        return cls(task=str(d["task"]), expected_qualname=str(d["expected_qualname"]))
+        return cls(task=str(d["task"]), expected_qualname=primary, expected_qualnames=rest)
 
 
 @dataclass
@@ -161,7 +191,17 @@ def _accepted_roots(import_name: str) -> set[str]:
 
 
 def extract_qualname(emitted_python: str, import_name: str) -> str | None:
-    """Extract the first `import_name.path.fn` call in emitted Python.
+    """Extract the first strict `import_name.path.fn` call in emitted Python.
+
+    Strict here means the chain bottoms out at a Name node, never
+    recursing through inner Calls. This preserves the v0.1 contract:
+    `requests.Session().get('x')` returns ``requests.Session`` (the
+    constructor), not the method.
+
+    Eval items that want to accept the method-aware form (e.g.
+    ``requests.Session.get``) should list both forms in
+    ``expected_qualnames``; the eval runner consults
+    ``extract_qualnames`` for matching.
 
     Accepts both the canonical package name (`polars.read_json(...)`)
     and any commonly-used alias (`pl.read_json(...)`). Aliases are
@@ -191,13 +231,61 @@ def extract_qualname(emitted_python: str, import_name: str) -> str | None:
             if root == import_name:
                 return qual
             if root in accepted:
-                # Normalize alias back to canonical name.
                 return f"{import_name}.{rest}" if rest else import_name
     return None
 
 
+def extract_qualnames(emitted_python: str, import_name: str) -> list[str]:
+    """Extract every plausible `import_name.path.fn` chain in emitted Python.
+
+    Returns all matching chains in AST walk order. Each call expression
+    contributes up to two chains:
+
+    1. The strict chain (``_attr_chain``) — bottoms out at a Name, never
+       traverses inner calls. This is what ``extract_qualname`` returns.
+    2. The method-aware chain (``_attr_chain_thru_calls``) — resolves
+       through inline class instantiation (``anthropic.Anthropic().messages.create``
+       becomes ``anthropic.Anthropic.messages.create``).
+
+    Both forms are kept distinct (deduplicated, but never merged) so
+    eval items declaring ``expected_qualnames`` can match either
+    expectation without changing the strict extractor's contract.
+    """
+    cleaned = _strip_markdown(emitted_python)
+    try:
+        tree = ast.parse(cleaned)
+    except SyntaxError:
+        return []
+    accepted = _accepted_roots(import_name)
+    results: list[str] = []
+
+    def _accept(qual: str | None) -> None:
+        if not qual:
+            return
+        root, _, rest = qual.partition(".")
+        if root == import_name:
+            normalized = qual
+        elif root in accepted:
+            normalized = f"{import_name}.{rest}" if rest else import_name
+        else:
+            return
+        if normalized not in results:
+            results.append(normalized)
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            _accept(_attr_chain(node.func))
+            _accept(_attr_chain_thru_calls(node.func))
+    return results
+
+
 def _attr_chain(node: ast.AST) -> str | None:
-    """Recover dotted attribute chain from an AST node, or None."""
+    """Recover dotted attribute chain from an AST node, or None.
+
+    Backward-compatible: returns None when the chain bottoms out at a
+    Call rather than a Name. The method-aware variant ``_attr_chain_thru_calls``
+    handles ``ClassName().method`` patterns separately.
+    """
     if isinstance(node, ast.Attribute):
         left = _attr_chain(node.value)
         return f"{left}.{node.attr}" if left else None
@@ -206,8 +294,30 @@ def _attr_chain(node: ast.AST) -> str | None:
     return None
 
 
+def _attr_chain_thru_calls(node: ast.AST) -> str | None:
+    """Like ``_attr_chain`` but recurses through ``Call`` nodes.
+
+    This recovers the chain for inline class instantiation written as
+    ``Anthropic().messages.create(...)`` — the dotted form reads as
+    ``Anthropic.messages.create``. Returned only as an alternate; the
+    primary chain (without recursion) remains the canonical extraction.
+    """
+    if isinstance(node, ast.Attribute):
+        left = _attr_chain_thru_calls(node.value)
+        return f"{left}.{node.attr}" if left else None
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Call):
+        return _attr_chain_thru_calls(node.func)
+    return None
+
+
 def evaluate_coverage(items: list[EvalItem], plugin_dir: Path) -> list[EvalResult]:
-    """Offline metric: is each expected qualname present in plugin.json's manifest?"""
+    """Offline metric: is any expected qualname present in plugin.json's manifest?
+
+    For items declaring `expected_qualnames`, coverage passes when ANY
+    alternate appears in the manifest.
+    """
     pj = plugin_dir / ".claude-plugin" / "plugin.json"
     if not pj.exists():
         raise ValueError(f"plugin.json missing in {plugin_dir}")
@@ -215,7 +325,8 @@ def evaluate_coverage(items: list[EvalItem], plugin_dir: Path) -> list[EvalResul
     in_skill = {t.get("qualname", "") for t in manifest.get("tools", [])}
     results = []
     for item in items:
-        passed = item.expected_qualname in in_skill
+        candidates = [item.expected_qualname, *item.expected_qualnames]
+        passed = any(c in in_skill for c in candidates)
         detail = "in manifest" if passed else "missing from manifest"
         results.append(EvalResult(item=item, condition="coverage", passed=passed, detail=detail))
     return results
@@ -407,11 +518,22 @@ def evaluate_with_claude(
                 )
             )
             continue
-        qual = extract_qualname(emitted, import_name)
-        passed = qual == item.expected_qualname
-        detail = (
-            f"matched {qual!r}" if passed else f"got {qual!r}, expected {item.expected_qualname!r}"
-        )
+        # Collect every plausible call chain, then pass if any matches
+        # the primary expected qualname or any declared alternate.
+        candidates = extract_qualnames(emitted, import_name)
+        # `qual` keeps the canonical first-match for legacy detail output.
+        qual = candidates[0] if candidates else None
+        matched = next((c for c in candidates if item.matches(c)), None)
+        passed = matched is not None
+        if passed:
+            detail = f"matched {matched!r}"
+        else:
+            expected_repr = (
+                repr(item.expected_qualname)
+                if not item.expected_qualnames
+                else f"one of {[item.expected_qualname, *item.expected_qualnames]!r}"
+            )
+            detail = f"got {qual!r}, expected {expected_repr}"
         results.append(
             EvalResult(
                 item=item, condition=condition, passed=passed, detail=detail, emitted=emitted

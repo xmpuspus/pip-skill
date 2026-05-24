@@ -1,6 +1,7 @@
 """Tests for pip_skill.selector."""
 
 from pip_skill.selector import (
+    score_canonical,
     score_module_depth,
     score_name,
     score_param_count,
@@ -121,6 +122,34 @@ def test_no_duplicates_in_result(fake_package_info):
     selected = select_functions(fake_package_info)
     names = [fn.name for fn, _ in selected]
     assert len(names) == len(set(names))
+
+
+def test_score_canonical_penalizes_experimental():
+    # Canonical surface should outscore the experimental variant by 20pts —
+    # the gap that drove h3 to ship polygon_to_cells_experimental ahead of
+    # polygon_to_cells under v0.2.
+    assert score_canonical("polygon_to_cells_experimental") == -20
+    assert score_canonical("polygon_to_cells") == 0
+
+
+def test_score_canonical_penalizes_versioned_variants():
+    assert score_canonical("get_v1") == -20
+    assert score_canonical("get_v2") == -20
+    assert score_canonical("legacy_handler") == 0  # word, not suffix
+    assert score_canonical("handler_legacy") == -20
+
+
+def test_score_canonical_penalizes_scaffolding_substrings():
+    assert score_canonical("_build_tlz") == -10
+    assert score_canonical("TlzLoader") == -10
+    # Plain canonical names get 0
+    assert score_canonical("merge") == 0
+    assert score_canonical("curry") == 0
+
+
+def test_score_canonical_is_case_insensitive():
+    assert score_canonical("LATLNG_TO_CELL_V1") == -20
+    assert score_canonical("LatLng_To_Cell") == 0
 
 
 # Helpers

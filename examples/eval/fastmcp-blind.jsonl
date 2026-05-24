@@ -1,0 +1,15 @@
+{"task": "Using fastmcp, build an MCP server application object", "expected_qualnames": ["fastmcp.FastMCP", "fastmcp.FastMCPApp"]}
+{"task": "Instantiate a fastmcp Client to connect to a running MCP server", "expected_qualname": "fastmcp.Client"}
+{"task": "With fastmcp, get a typed Context object the server can use during tool invocation", "expected_qualname": "fastmcp.Context"}
+{"task": "Using fastmcp, create a proxy server that forwards requests to an upstream MCP server", "expected_qualname": "fastmcp.server.create_proxy"}
+{"task": "With fastmcp, list the skill files registered on a server's skill provider", "expected_qualname": "fastmcp.utilities.skills.list_skills"}
+{"task": "Get a fastmcp logger for instrumenting tool calls via the telemetry module", "expected_qualname": "fastmcp.telemetry.get_tracer"}
+{"task": "Using fastmcp, expose the project's settings via the fastmcp.settings module", "expected_qualname": "fastmcp.settings.get_logger"}
+{"task": "Build a fastmcp lifespan context manager for resource setup and teardown during server startup", "expected_qualname": "fastmcp.server.lifespan.lifespan"}
+{"task": "Use fastmcp's TokenClaim helper to declare an authentication token shape", "expected_qualname": "fastmcp.dependencies.TokenClaim"}
+{"task": "Resolve fastmcp's server-side dependencies before tool invocation", "expected_qualname": "fastmcp.server.dependencies.resolve_dependencies"}
+{"task": "Construct a fastmcp authentication middleware to gate incoming tool calls", "expected_qualname": "fastmcp.server.middleware.AuthMiddleware"}
+{"task": "Build a fastmcp EventStore for persisting MCP session events", "expected_qualname": "fastmcp.server.event_store.EventStore"}
+{"task": "Using fastmcp, attach a ClaudeSkillsProvider to the server so it serves skill files", "expected_qualname": "fastmcp.server.providers.ClaudeSkillsProvider"}
+{"task": "Using fastmcp, attach a FileSystemProvider that serves files from a local directory", "expected_qualname": "fastmcp.server.providers.FileSystemProvider"}
+{"task": "Build a fastmcp task key from the components needed by background task management", "expected_qualname": "fastmcp.server.tasks.build_task_key"}

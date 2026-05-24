@@ -1,0 +1,15 @@
+{"task": "Get the current local time as a pendulum DateTime", "expected_qualname": "pendulum.now"}
+{"task": "Get a pendulum DateTime for the current moment in 'Asia/Tokyo' timezone", "expected_qualname": "pendulum.now"}
+{"task": "Parse the ISO 8601 string '2024-03-15T14:30:00+09:00' into a pendulum DateTime", "expected_qualname": "pendulum.parse"}
+{"task": "Using pendulum, parse a date string like '2024-12-25' into a DateTime", "expected_qualname": "pendulum.parse"}
+{"task": "Create a pendulum date object for January 1, 2024", "expected_qualname": "pendulum.date"}
+{"task": "Construct a pendulum time-of-day object for 09:30:00", "expected_qualname": "pendulum.time"}
+{"task": "Get today's date as a pendulum DateTime at the start of the day", "expected_qualname": "pendulum.today"}
+{"task": "Get yesterday's date as a pendulum DateTime", "expected_qualname": "pendulum.yesterday"}
+{"task": "Get tomorrow's date as a pendulum DateTime", "expected_qualname": "pendulum.tomorrow"}
+{"task": "Construct a pendulum Timezone object for 'America/New_York'", "expected_qualname": "pendulum.timezone"}
+{"task": "Convert the Unix epoch timestamp 1700000000 into a pendulum DateTime", "expected_qualname": "pendulum.from_timestamp"}
+{"task": "Parse the string '15/03/2024' using the format 'DD/MM/YYYY' with pendulum", "expected_qualname": "pendulum.from_format"}
+{"task": "Build a pendulum interval/duration spanning 3 days and 4 hours", "expected_qualname": "pendulum.interval"}
+{"task": "Wrap an existing datetime.datetime as a pendulum DateTime", "expected_qualname": "pendulum.instance"}
+{"task": "Get the current UTC time as a pendulum DateTime", "expected_qualname": "pendulum.now"}

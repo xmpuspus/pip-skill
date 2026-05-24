@@ -12,6 +12,7 @@ from pip_skill.eval import (
     BACKEND_CLAUDE_CLI,
     EvalItem,
     extract_qualname,
+    extract_qualnames,
     load_eval_set,
     run_eval,
     select_backend,
@@ -206,3 +207,98 @@ def test_ships_real_requests_eval_set():
     # Every item must target the requests package.
     for item in items:
         assert item.expected_qualname.startswith("requests.")
+
+
+# ---- Method-aware extraction + expected_qualnames support ----
+
+
+def test_extract_qualnames_includes_both_strict_and_method_aware_forms():
+    code = "requests.Session().get('https://x.com')"
+    qns = extract_qualnames(code, "requests")
+    # extract_qualnames emits BOTH the strict chain (Session) and the
+    # method-aware chain (Session.get) — order reflects AST walk order
+    # plus the per-call (strict, method-aware) tuple. The outer .get
+    # call's method-aware chain comes first; the inner Session() call
+    # contributes the strict constructor name next.
+    assert "requests.Session" in qns
+    assert "requests.Session.get" in qns
+
+
+def test_extract_qualnames_handles_class_then_attr_chain():
+    code = "anthropic.Anthropic().messages.create(model='claude-sonnet-4-5')"
+    qns = extract_qualnames(code, "anthropic")
+    # The method-aware chain reaches the import name as the root and
+    # rebuilds the full dotted form including the class instantiation.
+    assert "anthropic.Anthropic" in qns
+    assert "anthropic.Anthropic.messages.create" in qns
+
+
+def test_extract_qualnames_skips_bare_class_chain_without_import_root():
+    """`Anthropic().messages.create()` without the `anthropic.` prefix
+    has no root the extractor can normalize — keep returning nothing
+    so eval items can't accidentally match via bare class names."""
+    code = "Anthropic().messages.create(model='m')"
+    assert extract_qualnames(code, "anthropic") == []
+
+
+def test_extract_qualnames_passes_through_inline_constructor():
+    code = "requests.Session().get('x')"
+    qns = extract_qualnames(code, "requests")
+    # Both the constructor and the method-aware chain are recovered.
+    assert "requests.Session" in qns
+    assert "requests.Session.get" in qns
+
+
+def test_extract_qualname_back_compat_preserved():
+    """extract_qualname must keep the old behavior — first strict chain only."""
+    code = "requests.Session().get('https://x.com')"
+    # Strict chain returns the constructor (matches v0.1 eval semantics).
+    assert extract_qualname(code, "requests") == "requests.Session"
+
+
+def test_eval_item_supports_expected_qualnames_list():
+    item = EvalItem.from_dict(
+        {
+            "task": "Call the API to create a message",
+            "expected_qualnames": [
+                "anthropic.Anthropic",
+                "anthropic.messages.create",
+            ],
+        }
+    )
+    assert item.expected_qualname == "anthropic.Anthropic"
+    assert item.expected_qualnames == ["anthropic.messages.create"]
+    assert item.matches("anthropic.Anthropic")
+    assert item.matches("anthropic.messages.create")
+    assert not item.matches("anthropic.completions.create")
+    assert not item.matches(None)
+
+
+def test_eval_item_rejects_empty_qualnames_list():
+    with pytest.raises(ValueError, match="non-empty list"):
+        EvalItem.from_dict({"task": "x", "expected_qualnames": []})
+
+
+def test_eval_item_rejects_missing_qualname_fields():
+    with pytest.raises(ValueError, match="expected_qualname"):
+        EvalItem.from_dict({"task": "missing both forms"})
+
+
+def test_run_eval_coverage_passes_when_any_alternate_in_manifest(tmp_path, fake_package_on_path):
+    from pip_skill import generate_skill
+
+    bundle = generate_skill("fake-package", output_dir=tmp_path / "fake", max_tools=5)
+    target = bundle.tool_names[0]
+    eval_path = tmp_path / "eval.jsonl"
+    eval_path.write_text(
+        json.dumps(
+            {
+                "task": "x",
+                "expected_qualnames": ["fake_package.never_in_manifest", target],
+            }
+        )
+        + "\n"
+    )
+    summary = run_eval(bundle.bundle_dir, eval_path, ["coverage"])
+    # The second alternate exists in the manifest — coverage passes.
+    assert summary.per_condition_pass["coverage"] == 1

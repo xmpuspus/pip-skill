@@ -233,6 +233,52 @@ def score_reexport(name: str, fn, top_module) -> int:
     return 0
 
 
+# Suffixes that mark a callable as a non-canonical variant of another
+# function in the same package. Better-annotated experimental wrappers
+# kept outscoring the stable canonical surface (e.g. h3 was emitting
+# `polygon_to_cells_experimental` ahead of `polygon_to_cells`).
+_NON_CANONICAL_SUFFIXES: tuple[str, ...] = (
+    "_experimental",
+    "_unstable",
+    "_legacy",
+    "_deprecated",
+    "_internal",
+    "_v1",
+    "_v2",
+    "_v3",
+    "_old",
+)
+
+# Substrings that mark a callable as scaffolding (lazy-loader plumbing,
+# metaclass helpers) rather than user-facing API.
+_SCAFFOLDING_SUBSTRINGS: tuple[str, ...] = (
+    "_build_",
+    "_meta_",
+    "TlzLoader",
+)
+
+
+def score_canonical(name: str) -> int:
+    """Penalize non-canonical or scaffolding variants.
+
+    Args:
+        name: Function name.
+
+    Returns:
+        0 for canonical names, -20 for variants with non-canonical
+        suffixes (`_experimental`, `_legacy`, `_v1`, ...), -10 for
+        scaffolding helpers (`_build_*`, `_meta_*`, `TlzLoader`).
+    """
+    lower = name.lower()
+    for suffix in _NON_CANONICAL_SUFFIXES:
+        if lower.endswith(suffix):
+            return -20
+    for needle in _SCAFFOLDING_SUBSTRINGS:
+        if needle.lower() in lower:
+            return -10
+    return 0
+
+
 def _resolve_callable(callable_info: CallableInfo):
     """Attempt to resolve a CallableInfo back to a live Python object.
 
@@ -389,6 +435,7 @@ def select_functions(
         reexport_score = (
             score_reexport(fn_info.name, fn_obj, top_module) if (fn_obj and top_module) else 0
         )
+        canonical_score = score_canonical(fn_info.name)
 
         base_score = (
             depth_score
@@ -400,6 +447,7 @@ def select_functions(
             + return_score
             + dep_score
             + reexport_score
+            + canonical_score
         )
 
         if verbose:
@@ -415,6 +463,7 @@ def select_functions(
             print(f"  return_type:     {return_score:2d}", file=sys.stderr)
             print(f"  not_deprecated:  {dep_score:2d}", file=sys.stderr)
             print(f"  reexport:        {reexport_score:2d}", file=sys.stderr)
+            print(f"  canonical:       {canonical_score:2d}", file=sys.stderr)
             print(f"  BASE:            {base_score}", file=sys.stderr)
 
         scored.append((fn_info, base_score))

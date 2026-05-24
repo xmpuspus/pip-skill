@@ -143,6 +143,13 @@ def _extract_annotated_metadata(annotation) -> tuple[object, str | None]:
 def resolve_import_name(pip_name: str) -> str:
     """Find the import name for a pip package.
 
+    When a pip distribution exposes multiple importable top-level
+    packages (e.g. ``toolz`` ships both ``toolz`` and ``tlz``), prefer
+    the import name that matches the pip name itself. Otherwise we'd
+    silently introspect the wrong module — ``toolz`` would return
+    ``tlz`` and the caller gets a 5-tool manifest of lazy-loader
+    internals instead of the real ``toolz`` surface.
+
     Args:
         pip_name: The pip package name (e.g., 'Pillow', 'python-dateutil').
 
@@ -155,8 +162,19 @@ def resolve_import_name(pip_name: str) -> str:
     from importlib.metadata import packages_distributions
 
     mapping = packages_distributions()
+    normalized = pip_name.lower().replace("-", "_")
 
-    # Search mapping: import_name -> [pip_names]
+    # Pass 1: prefer an import_name that matches the pip_name directly.
+    # This breaks ties when one distribution exposes multiple imports
+    # (e.g. toolz ships toolz + tlz; both list `toolz` as the dist).
+    for import_name, pip_names in mapping.items():
+        dist_match = pip_name in pip_names or pip_name.lower() in [p.lower() for p in pip_names]
+        if dist_match and (
+            import_name == pip_name or import_name.lower().replace("-", "_") == normalized
+        ):
+            return import_name
+
+    # Pass 2: any distribution-name match (handles Pillow -> PIL, fastmcp-slim -> fastmcp).
     for import_name, pip_names in mapping.items():
         if pip_name in pip_names or pip_name.lower() in [p.lower() for p in pip_names]:
             return import_name
@@ -305,7 +323,14 @@ def get_public_api(module) -> tuple[list, list, bool]:
         public_names = set(module.__all__)
         has_all = True
     else:
+        # When __all__ is absent we infer "public" from name + provenance.
+        # Provenance was previously restricted to the current module subtree,
+        # but that filters out C-extension callables that are re-exported by
+        # Python submodules (msgspec.json.encode lives in msgspec._core, etc).
+        # Widen the trust boundary to "any module within the same top-level
+        # package" so canonical re-exports keep their seat at the table.
         public_names = set()
+        top_pkg = module.__name__.split(".")[0]
         for name in dir(module):
             if name.startswith("_"):
                 continue
@@ -313,9 +338,7 @@ def get_public_api(module) -> tuple[list, list, bool]:
             if obj is None:
                 continue
             obj_module = getattr(obj, "__module__", None)
-            if obj_module and (
-                obj_module == module.__name__ or obj_module.startswith(module.__name__ + ".")
-            ):
+            if obj_module and (obj_module == top_pkg or obj_module.startswith(top_pkg + ".")):
                 public_names.add(name)
         has_all = False
 

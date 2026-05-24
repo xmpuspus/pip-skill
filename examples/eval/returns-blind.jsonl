@@ -1,0 +1,15 @@
+{"task": "Using the returns library, check whether a Result is the success variant", "expected_qualnames": ["returns.pipeline.is_successful", "returns.converters.is_successful", "returns.result.is_successful"]}
+{"task": "With returns, define an identity function that returns its input unchanged", "expected_qualnames": ["returns.functions.identity", "returns.converters.identity"]}
+{"task": "Using returns.curry, transform a function so it can be called one argument at a time", "expected_qualname": "returns.curry.curry"}
+{"task": "Compose two functions f and g so calling compose(f, g)(x) is equivalent to f(g(x)) using the returns library", "expected_qualname": "returns.functions.compose"}
+{"task": "Apply returns.curry.partial to bind the first argument of a function ahead of time", "expected_qualname": "returns.curry.partial"}
+{"task": "Use the returns library to convert a Maybe value into a Result", "expected_qualname": "returns.converters.maybe_to_result"}
+{"task": "Convert a Result type back into a Maybe using the returns library", "expected_qualname": "returns.converters.result_to_maybe"}
+{"task": "Flatten a nested IOResult[IOResult[T]] into IOResult[T] using returns", "expected_qualname": "returns.converters.flatten"}
+{"task": "Using the returns library, define a tap function that performs a side effect and returns its input unchanged", "expected_qualname": "returns.functions.tap"}
+{"task": "Wrap a callable so it raises a given exception when invoked, using returns.functions", "expected_qualname": "returns.functions.raise_exception"}
+{"task": "Make returns.kinded work with a higher-kinded type for proper variance", "expected_qualname": "returns.converters.kinded"}
+{"task": "Negate a predicate function using the returns library's `not_` helper", "expected_qualname": "returns.functions.not_"}
+{"task": "Using returns, take an arbitrary value and discard side-effects after observing them", "expected_qualname": "returns.functions.untap"}
+{"task": "Using returns.pipeline, chain a Result-returning computation through several steps", "expected_qualnames": ["returns.pipeline.flow", "returns.pipeline.pipe"]}
+{"task": "With the returns library, lift a plain value into a Success Result", "expected_qualnames": ["returns.result.Success", "returns.result.Result.from_value"]}

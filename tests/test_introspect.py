@@ -2,10 +2,13 @@
 
 import importlib
 
+import pytest
+
 from pip_skill.introspect import (
     extract_callable_info,
     extract_class_info,
     get_public_api,
+    resolve_import_name,
     walk_package_modules,
 )
 
@@ -107,3 +110,49 @@ def test_qualname_includes_module(fake_package_on_path):
     mod = importlib.import_module("fake_package.api")
     info = extract_callable_info("fetch", mod.fetch, "fake_package.api")
     assert "fetch" in info.qualname
+
+
+def test_resolve_import_name_handles_simple_package():
+    # The pip name and the import name agree, so the result is itself.
+    assert resolve_import_name("pytest") == "pytest"
+
+
+def test_resolve_import_name_picks_self_over_sibling_when_dist_alias_exists():
+    """Regression: toolz ships both `toolz` and `tlz` import names but the
+    distribution metadata calls both 'toolz'. Resolving 'toolz' must
+    return 'toolz', not the alias `tlz`; the alternative produced a
+    5-tool manifest of lazy-loader internals under v0.2.
+    """
+    try:
+        import toolz  # noqa: F401
+    except ImportError:
+        pytest.skip("toolz is not installed in this environment")
+    assert resolve_import_name("toolz") == "toolz"
+
+
+def test_resolve_import_name_pep625_style():
+    """Pillow imports as PIL — the distribution metadata bridges these.
+    The fix for the toolz/tlz tie-break must not regress this path."""
+    try:
+        import PIL  # noqa: F401
+    except ImportError:
+        pytest.skip("Pillow not installed in this environment")
+    assert resolve_import_name("Pillow") == "PIL"
+
+
+def test_get_public_api_includes_c_extension_callables():
+    """Regression: msgspec.json.encode is a builtin whose __module__
+    is `msgspec._core`. The old `get_public_api` rule required the
+    object's module to equal or descend from the scanned module — so
+    sibling C-extension re-exports were silently dropped.
+    """
+    try:
+        import msgspec.json
+    except ImportError:
+        pytest.skip("msgspec is not installed in this environment")
+    functions, classes, has_all = get_public_api(msgspec.json)
+    func_names = {n for n, _ in functions}
+    # `encode` and `decode` live in msgspec._core but are exposed at
+    # msgspec.json — they must show up as candidates.
+    assert "encode" in func_names
+    assert "decode" in func_names

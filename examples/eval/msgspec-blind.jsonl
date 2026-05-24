@@ -1,0 +1,15 @@
+{"task": "Using msgspec, decode a JSON byte string into a typed Person struct subclass", "expected_qualname": "msgspec.json.decode"}
+{"task": "Encode a msgspec Struct instance to JSON bytes using the json submodule", "expected_qualname": "msgspec.json.encode"}
+{"task": "Serialize a typed msgspec Struct to a compact JSON byte string", "expected_qualname": "msgspec.json.encode"}
+{"task": "Parse JSON bytes into a typed structure with msgspec's high-performance JSON decoder", "expected_qualname": "msgspec.json.decode"}
+{"task": "Convert an instance of a msgspec Struct subclass into a plain dict of Python builtins", "expected_qualname": "msgspec.to_builtins"}
+{"task": "With msgspec, coerce an already-parsed dict into a typed Struct subclass using the convert helper", "expected_qualname": "msgspec.convert"}
+{"task": "Dynamically build a Struct subclass named 'User' with fields ('id', int) and ('name', str) using msgspec", "expected_qualname": "msgspec.defstruct"}
+{"task": "Declare per-field validation constraints (gt=0, le=100) using msgspec's Meta annotation", "expected_qualname": "msgspec.Meta"}
+{"task": "Wrap precomputed JSON bytes in msgspec's container so they're spliced into output without re-encoding", "expected_qualname": "msgspec.Raw"}
+{"task": "Define a typed structure base class for use with msgspec's encoders and decoders", "expected_qualname": "msgspec.Struct"}
+{"task": "Encode a Python value to MessagePack bytes using msgspec's msgpack submodule", "expected_qualname": "msgspec.msgpack.encode"}
+{"task": "Decode MessagePack bytes into a typed msgspec Struct", "expected_qualname": "msgspec.msgpack.decode"}
+{"task": "Encode a Python value to YAML using msgspec.yaml", "expected_qualname": "msgspec.yaml.encode"}
+{"task": "Encode a Python value to TOML bytes using msgspec.toml", "expected_qualname": "msgspec.toml.encode"}
+{"task": "Validate-and-construct a msgspec Struct from a plain Python value via msgspec's helper", "expected_qualname": "msgspec.convert"}

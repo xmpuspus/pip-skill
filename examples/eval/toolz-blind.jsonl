@@ -1,0 +1,15 @@
+{"task": "Merge two dicts into one using the toolz library", "expected_qualname": "toolz.merge"}
+{"task": "Using toolz, transform a regular function into a curried version that can be called argument-by-argument", "expected_qualname": "toolz.curry"}
+{"task": "Apply a sequence of single-argument functions to a value, left-to-right, using toolz", "expected_qualname": "toolz.pipe"}
+{"task": "With toolz, compose multiple functions into one (g composed with f)", "expected_qualname": "toolz.compose"}
+{"task": "Group elements of an iterable by a key function using toolz", "expected_qualname": "toolz.groupby"}
+{"task": "Count occurrences of items in an iterable using toolz", "expected_qualname": "toolz.frequencies"}
+{"task": "Extract a value from a nested dict given a sequence of keys, with toolz", "expected_qualname": "toolz.get_in"}
+{"task": "Yield the unique items of an iterable in order using toolz", "expected_qualname": "toolz.unique"}
+{"task": "Partition an iterable into chunks of size n using toolz", "expected_qualname": "toolz.partition"}
+{"task": "Take the first n items of an iterable using toolz", "expected_qualname": "toolz.take"}
+{"task": "Drop the first n items of an iterable using toolz", "expected_qualname": "toolz.drop"}
+{"task": "Update a single key in a dict immutably using toolz", "expected_qualname": "toolz.assoc"}
+{"task": "Remove a key from a dict immutably using toolz", "expected_qualname": "toolz.dissoc"}
+{"task": "Concatenate a sequence of iterables into one using toolz", "expected_qualname": "toolz.concat"}
+{"task": "Apply a function to each value of a dict using toolz", "expected_qualnames": ["toolz.valmap", "toolz.dicttoolz.valmap"]}

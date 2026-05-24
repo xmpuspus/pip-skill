@@ -1,0 +1,15 @@
+{"task": "Get the current local time as an Arrow datetime using the arrow library", "expected_qualname": "arrow.now"}
+{"task": "With arrow, get the current time in the 'Asia/Tokyo' timezone", "expected_qualname": "arrow.now"}
+{"task": "Get the current time in UTC as an Arrow datetime", "expected_qualname": "arrow.utcnow"}
+{"task": "Parse an ISO 8601 timestamp string into an Arrow object using the arrow library", "expected_qualname": "arrow.get"}
+{"task": "Convert the Unix epoch timestamp 1700000000 into an Arrow datetime", "expected_qualname": "arrow.get"}
+{"task": "Parse the string '2024-01-15 09:30' against the format 'YYYY-MM-DD HH:mm' using arrow", "expected_qualname": "arrow.get"}
+{"task": "Construct an Arrow datetime from explicit year, month, day, hour, minute, second parts", "expected_qualname": "arrow.Arrow"}
+{"task": "Directly instantiate the arrow library's Arrow class for January 1 2027 at midnight UTC", "expected_qualname": "arrow.Arrow"}
+{"task": "Build a factory object that produces Arrow datetimes from arbitrary inputs", "expected_qualname": "arrow.ArrowFactory"}
+{"task": "Configure a custom Arrow subclass and create a factory bound to it", "expected_qualname": "arrow.ArrowFactory"}
+{"task": "Convert a datetime.datetime object to an Arrow datetime using the arrow library", "expected_qualname": "arrow.get"}
+{"task": "Parse a date string with no format hint and let arrow auto-detect the format", "expected_qualname": "arrow.get"}
+{"task": "Get an Arrow datetime for the current time in the 'America/Los_Angeles' timezone", "expected_qualname": "arrow.now"}
+{"task": "Using arrow, get the current moment in UTC without specifying a timezone string", "expected_qualname": "arrow.utcnow"}
+{"task": "Parse the date 2024-12-25 using arrow's standard parser", "expected_qualname": "arrow.get"}

@@ -1,0 +1,15 @@
+{"task": "Using the mcp library, build a StdioServerParameters config to launch an MCP server with the command 'python' and args ['server.py']", "expected_qualname": "mcp.StdioServerParameters"}
+{"task": "Construct StdioServerParameters using mcp pointing at 'node' with args ['index.js']", "expected_qualname": "mcp.StdioServerParameters"}
+{"task": "Build an mcp Implementation describing this peer as name 'demo-server' and version '1.0.0'", "expected_qualname": "mcp.Implementation"}
+{"task": "Using mcp, create an ErrorData payload with code -32600 and message 'Invalid Request'", "expected_qualname": "mcp.ErrorData"}
+{"task": "With mcp, build a default ClientCapabilities object", "expected_qualname": "mcp.ClientCapabilities"}
+{"task": "Construct a JSONRPCError response from the mcp library wrapping an inner ErrorData", "expected_qualname": "mcp.JSONRPCError"}
+{"task": "Using mcp, open a stdio MCP client session connected to a given StdioServerParameters config", "expected_qualnames": ["mcp.client.stdio.stdio_client", "mcp.stdio_client", "mcp.ClientSession"]}
+{"task": "With mcp, build a CallToolRequest naming the tool to invoke and its arguments", "expected_qualname": "mcp.CallToolRequest"}
+{"task": "Using mcp, construct a CompleteRequest for argument completion suggestions during prompt authoring", "expected_qualname": "mcp.CompleteRequest"}
+{"task": "Build an mcp GetPromptRequest naming the prompt template to fetch", "expected_qualname": "mcp.GetPromptRequest"}
+{"task": "Using mcp, declare the server's CreateMessageRequest body for a sampling request to the client LLM", "expected_qualname": "mcp.CreateMessageRequest"}
+{"task": "With mcp, create an InitializeRequest to begin the handshake with an MCP server", "expected_qualname": "mcp.InitializeRequest"}
+{"task": "Build an mcp InitializedNotification to send after the initialize handshake completes", "expected_qualname": "mcp.InitializedNotification"}
+{"task": "Using mcp, declare the server's capability set during handshake via a ServerCapabilities object", "expected_qualnames": ["mcp.ServerCapabilities", "mcp.types.ServerCapabilities"]}
+{"task": "With mcp, build a ListToolsRequest to ask an MCP server for its available tools", "expected_qualnames": ["mcp.ListToolsRequest", "mcp.types.ListToolsRequest"]}

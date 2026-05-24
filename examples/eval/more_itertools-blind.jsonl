@@ -1,0 +1,15 @@
+{"task": "Split an iterable into chunks of size 3 using more_itertools", "expected_qualname": "more_itertools.chunked"}
+{"task": "Group consecutive items in an iterable into fixed-size windows using more_itertools", "expected_qualname": "more_itertools.windowed"}
+{"task": "Use more_itertools to flatten a list of lists into a single iterable", "expected_qualname": "more_itertools.flatten"}
+{"task": "Get the first item of an iterable, with a default for empty input, using more_itertools", "expected_qualname": "more_itertools.first"}
+{"task": "Take the last item of an iterable, returning a default if it's empty, using more_itertools", "expected_qualname": "more_itertools.last"}
+{"task": "Get the only element of an iterable, raising if there is not exactly one, using more_itertools", "expected_qualname": "more_itertools.one"}
+{"task": "Use more_itertools to take exactly N items from an iterator", "expected_qualname": "more_itertools.take"}
+{"task": "Yield successive pairs of adjacent elements from an iterable using more_itertools", "expected_qualname": "more_itertools.pairwise"}
+{"task": "Interleave multiple iterables by taking one element from each in turn using more_itertools", "expected_qualname": "more_itertools.interleave"}
+{"task": "Partition an iterable into two iterables based on a predicate using more_itertools", "expected_qualname": "more_itertools.partition"}
+{"task": "Bucket items of an iterable by a key function using more_itertools", "expected_qualname": "more_itertools.bucket"}
+{"task": "Yield all unique elements of an iterable in their original order using more_itertools", "expected_qualname": "more_itertools.unique_everseen"}
+{"task": "Use more_itertools to consume an iterator entirely, discarding results", "expected_qualname": "more_itertools.consume"}
+{"task": "Get an iterator that always yields the same value forever (constant_factory style) with more_itertools", "expected_qualname": "more_itertools.repeat_last"}
+{"task": "Run-length encode an iterable into (value, count) pairs using more_itertools", "expected_qualname": "more_itertools.run_length"}
