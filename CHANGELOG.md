@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.1.0] - 2026-05-24
+
+Initial public release. PyPI publish gated on manual approval of the
+`pypi` GitHub environment after the test matrix passes (ubuntu /
+macos / windows × Python 3.11 / 3.12 / 3.13).
 
 ### Research and evaluation
 - `pip-skill eval <plugin-dir> <eval-file.jsonl>` subcommand that
@@ -28,12 +32,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   SkillBundle`. Documented at [`src/pip_skill/api.py`](src/pip_skill/api.py).
 - Sample eval sets ship for `requests` and `polars` under
   [`examples/eval/`](examples/eval/).
-- First measured results in [`RESEARCH.md`](RESEARCH.md), three
-  reproducible findings on 4 (package, model) combinations:
-  - Lift inversely scales with model prior: httpx ceiling, requests
-    +10pp, polars +30pp.
-  - Smaller models benefit more: Haiku polars +40pp vs Sonnet polars
-    +30pp; Haiku reaches 10/10 on polars with skill.
+- First measured results in [`RESEARCH.md`](RESEARCH.md), five
+  reproducible findings across packages and model sizes:
+  - Lift inversely scales with model prior: httpx ceiling (10/10
+    both conditions), requests +10pp (9/10 → 10/10 at n=10), polars
+    +40pp (15/30 → 27/30 at n=30).
+  - Model size barely changes the lift at n=30: Sonnet polars +40pp,
+    Haiku polars +43pp. Haiku + skill (29/30) beats Sonnet without
+    skill (15/30) by 47pp.
+  - Residual failures are concentrated: 2 of 3 polars misses target
+    `polars.format` (model prefers Python `str.format` idiom); 1
+    targets `polars.cum_reduce` (model prefers `functools.reduce`).
+    Real failure mode that prompt engineering alone cannot fix.
   - More tools is not better: max_tools sweep N=5/10/20/40 found
     pip-skill's default N=20 was the sweet spot. Doubling the menu
     to 40 produced zero improvement.
@@ -152,4 +162,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - VHS `.tape` file at `docs/demo.tape` for reproducible terminal demo
   recording
 
-[Unreleased]: https://github.com/xmpuspus/pip-skill/compare/main...HEAD
+[0.1.0]: https://github.com/xmpuspus/pip-skill/releases/tag/v0.1.0

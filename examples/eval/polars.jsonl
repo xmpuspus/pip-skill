@@ -1,10 +1,30 @@
 {"task": "Read a JSON file from disk into a polars DataFrame", "expected_qualname": "polars.read_json"}
+{"task": "Load a .json file at path './data.json' into a DataFrame", "expected_qualname": "polars.read_json"}
+{"task": "Parse JSON bytes from disk into polars", "expected_qualname": "polars.read_json"}
 {"task": "Read a database table using a SQLAlchemy connection string", "expected_qualname": "polars.read_database"}
+{"task": "Run a SQL query against a Postgres connection and load the rows", "expected_qualname": "polars.read_database"}
 {"task": "Read a Delta Lake table at path './my_table'", "expected_qualname": "polars.read_delta"}
-{"task": "Read raw lines from a text file path", "expected_qualname": "polars.read_lines"}
+{"task": "Load a Delta-format table into a DataFrame", "expected_qualname": "polars.read_delta"}
+{"task": "Read raw lines from a text file path into a Series", "expected_qualname": "polars.read_lines"}
 {"task": "Stack two DataFrames vertically into one", "expected_qualname": "polars.concat"}
+{"task": "Concatenate three DataFrames along the row axis", "expected_qualname": "polars.concat"}
 {"task": "Compute the covariance between two numeric Series", "expected_qualname": "polars.cov"}
-{"task": "Add a cumulative row count column", "expected_qualname": "polars.cum_count"}
+{"task": "Calculate covariance of columns 'x' and 'y'", "expected_qualname": "polars.cov"}
+{"task": "Add a cumulative row count column to a Series", "expected_qualname": "polars.cum_count"}
+{"task": "Get a running count of non-null values along a Series", "expected_qualname": "polars.cum_count"}
 {"task": "Build an expression that emits integers 0..N", "expected_qualname": "polars.arange"}
+{"task": "Generate an integer range expression with start=0 and end=10", "expected_qualname": "polars.arange"}
 {"task": "Pick the first non-null value across multiple columns", "expected_qualname": "polars.coalesce"}
+{"task": "Replace nulls in column 'a' with values from column 'b' as fallback", "expected_qualname": "polars.coalesce"}
 {"task": "Concatenate the elements of two Array-typed columns row-wise", "expected_qualname": "polars.concat_arr"}
+{"task": "Join two Array columns into a single Array column", "expected_qualname": "polars.concat_arr"}
+{"task": "Concatenate elements of two List-typed columns row-wise", "expected_qualname": "polars.concat_list"}
+{"task": "Format a numeric column with a printf-style format string", "expected_qualname": "polars.format"}
+{"task": "Build a formatted string column from a template and column values", "expected_qualname": "polars.format"}
+{"task": "Align multiple DataFrames on a common column for joining", "expected_qualname": "polars.align_frames"}
+{"task": "Compute the elementwise atan2 of two columns", "expected_qualname": "polars.arctan2"}
+{"task": "Sort by multiple columns and return the sort indices", "expected_qualname": "polars.arg_sort_by"}
+{"task": "Return the indices where a boolean expression is True", "expected_qualname": "polars.arg_where"}
+{"task": "Count the number of business days between two date columns", "expected_qualname": "polars.business_day_count"}
+{"task": "Reduce a column cumulatively with a custom function", "expected_qualname": "polars.cum_reduce"}
+{"task": "Reduce values along a Series, accumulating via a binary function", "expected_qualname": "polars.cum_reduce"}
