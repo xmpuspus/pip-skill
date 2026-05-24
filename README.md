@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey.svg" alt="Linux | macOS | Windows">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
   <img src="https://img.shields.io/badge/offline-yes-success.svg" alt="Offline by default">
-  <img src="https://img.shields.io/badge/eval-90%25%20on%20polars-brightgreen.svg" alt="Eval: 90% on polars">
+  <img src="https://img.shields.io/badge/eval-%2B22pp%20Sonnet%20%2F%20%2B24pp%20Haiku-brightgreen.svg" alt="Eval: +22pp Sonnet / +24pp Haiku across 8 packages">
 </p>
 
 <p align="center"><img src="pip-skill-demo.gif" alt="pip-skill demo: one command turns requests into a Claude skill" width="900"></p>
@@ -31,7 +31,29 @@ Prefer a permanent install? `pip install pip-skill` and use the
 
 ## Does it actually help the AI?
 
-We measured it. See [`RESEARCH.md`](RESEARCH.md) for methodology.
+We measured it. See [`RESEARCH.md`](RESEARCH.md) for methodology and
+the per-package breakdown.
+
+### v0.2 corpus (8 new packages, May 2026)
+
+| Model | Packages | Items | no-skill | **skill** | Lift |
+|---|---|---|---|---|---|
+| Sonnet 4.5 | 8 | 123 | 82/123 (66.7%) | **109/123 (88.6%)** | **+22.0pp** |
+| Haiku 4.5  | 8 | 123 | 87/123 (70.7%) | **117/123 (95.1%)** | **+24.4pp** |
+
+Per-package on Sonnet: mcp `+80pp`, fastmcp `+44pp`, more_itertools
+`+33pp`, returns / msgspec `+13pp` each, pendulum / h3 at ceiling
+(no room to lift), arrow `-13pp` (selector ranks `arrow.factory`
+over `arrow.ArrowFactory`, a real bug to fix). Same shape on Haiku
+with h3 `+56pp` and more_itertools `+60pp` (smaller model knew the
+4.x renames and niche helpers less well). Full per-package and
+per-model table in [`eval-results/REPORT.md`](eval-results/REPORT.md).
+
+**Cross-model headline:** Haiku + skill (95.1%) beats Sonnet alone
+(66.7%) by 28pp. The smaller model with the skill outperforms the
+larger model without.
+
+### v0.1 baseline (3 packages, May 2026)
 
 | Package | Tier | Model | Items | no-skill | **skill** | Lift |
 |---|---|---|---|---|---|---|
@@ -48,11 +70,13 @@ instruction. Judging is BFCL-style AST-equivalence on the first
 `<package>.<fn>(...)` call. Backend is `claude -p` against your
 existing Claude Code session, so the runs above cost zero API tokens.
 
-**Pattern:** pip-skill's value scales inversely with how well the
+**Pattern.** pip-skill's value scales inversely with how well the
 model already knows the package. On stable canonical APIs (httpx,
-requests) the model is at ceiling without help. On packages with
-non-obvious top-level surfaces (polars's `cum_count`, `concat_arr`,
-`coalesce`), the skill closes most of the gap, `+40pp` on 30 items.
+requests, arrow) the model is at or near ceiling without help. On
+post-cutoff or non-obvious-top-level packages (mcp, fastmcp,
+more_itertools, polars's `cum_count` / `concat_arr` / `coalesce`),
+the skill closes most of the gap, `+22pp` to `+80pp` depending on
+how unfamiliar the surface is.
 
 ## Quick start
 

@@ -1,0 +1,15 @@
+{"task": "Using the msgspec library, convert a plain dict {'name': 'Ada', 'age': 30} into an instance of a typed Struct subclass Person via the convert helper", "expected_qualname": "msgspec.convert"}
+{"task": "With msgspec, coerce a JSON-like Python value into a typed Struct using the library's convert function", "expected_qualname": "msgspec.convert"}
+{"task": "Validate-and-construct a typed msgspec Struct from a plain Python value via msgspec's convert helper", "expected_qualname": "msgspec.convert"}
+{"task": "Using msgspec, turn an instance of a typed Struct into a plain dict of Python builtins via the to_builtins function", "expected_qualname": "msgspec.to_builtins"}
+{"task": "With msgspec, recursively convert a Struct instance into JSON-serializable primitive Python values", "expected_qualname": "msgspec.to_builtins"}
+{"task": "Use msgspec's to_builtins helper to turn a Struct subclass instance into a serializable dict", "expected_qualname": "msgspec.to_builtins"}
+{"task": "Using msgspec, dynamically construct a Struct subclass named 'Person' with fields [('name', str), ('age', int)] via defstruct", "expected_qualname": "msgspec.defstruct"}
+{"task": "With the msgspec library, programmatically define a Struct class at runtime using the defstruct helper", "expected_qualname": "msgspec.defstruct"}
+{"task": "Define a msgspec Struct subclass at runtime from a list of (name, type) field tuples using msgspec.defstruct", "expected_qualname": "msgspec.defstruct"}
+{"task": "Using msgspec, attach metadata constraints (gt=0, le=100) to an int field via the Meta annotation helper", "expected_qualname": "msgspec.Meta"}
+{"task": "With msgspec, declare an Annotated field carrying a Meta object that specifies validation constraints", "expected_qualname": "msgspec.Meta"}
+{"task": "Build a msgspec Meta annotation object describing per-field validation rules", "expected_qualname": "msgspec.Meta"}
+{"task": "Using msgspec, wrap a precomputed JSON bytes payload in the library's Raw container so it's spliced into output as-is without re-encoding", "expected_qualname": "msgspec.Raw"}
+{"task": "With msgspec, construct a Raw object holding already-encoded JSON bytes to embed in a larger message", "expected_qualname": "msgspec.Raw"}
+{"task": "Embed a precomputed JSON fragment into a msgspec serialization output without re-encoding, using the library's Raw type", "expected_qualname": "msgspec.Raw"}

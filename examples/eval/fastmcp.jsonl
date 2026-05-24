@@ -1,0 +1,18 @@
+{"task": "Using the fastmcp library, connect a client to a remote MCP server reachable over streamable HTTP at 'https://example.com/mcp'", "expected_qualname": "fastmcp.Client"}
+{"task": "Instantiate a fastmcp Client pointing at the URL 'http://localhost:9000/mcp'", "expected_qualname": "fastmcp.Client"}
+{"task": "With fastmcp, build a client that talks to an MCP server at 'https://api.example.com/mcp/v1'", "expected_qualname": "fastmcp.Client"}
+{"task": "Inside a fastmcp tool implementation, construct the Context object that the framework passes to tools so they can log and report progress", "expected_qualname": "fastmcp.Context"}
+{"task": "Build a fastmcp Context instance representing the per-call context object handed to tool implementations", "expected_qualname": "fastmcp.Context"}
+{"task": "Using fastmcp, create the Context type used to expose framework state inside tool callbacks", "expected_qualname": "fastmcp.Context"}
+{"task": "Create a fastmcp FastMCPApp instance with the name 'my-app'", "expected_qualname": "fastmcp.FastMCPApp"}
+{"task": "Using fastmcp, instantiate a FastMCPApp to host an application surface (not the lower-level server class)", "expected_qualname": "fastmcp.FastMCPApp"}
+{"task": "Build a FastMCPApp object from the fastmcp library to wrap an application module", "expected_qualname": "fastmcp.FastMCPApp"}
+{"task": "Using the fastmcp library, create a proxy server in front of an existing MCP backend via fastmcp's server.create_proxy helper", "expected_qualname": "fastmcp.server.create_proxy"}
+{"task": "Build a fastmcp proxy server that forwards calls to a remote backend, using fastmcp's create_proxy function under fastmcp.server", "expected_qualname": "fastmcp.server.create_proxy"}
+{"task": "With fastmcp, stand up a proxy MCP server in front of another server using the create_proxy helper from fastmcp.server", "expected_qualname": "fastmcp.server.create_proxy"}
+{"task": "Using fastmcp's telemetry submodule, get a tracer for a span named 'mcp.call_tool'", "expected_qualname": "fastmcp.telemetry.get_tracer"}
+{"task": "With fastmcp, obtain an OpenTelemetry tracer via fastmcp.telemetry.get_tracer for the module name '__main__'", "expected_qualname": "fastmcp.telemetry.get_tracer"}
+{"task": "Get a tracer object from fastmcp's telemetry submodule for instrumenting a fastmcp server", "expected_qualname": "fastmcp.telemetry.get_tracer"}
+{"task": "Using fastmcp.utilities.skills, list the Claude-style skills exposed by the current fastmcp server", "expected_qualname": "fastmcp.utilities.skills.list_skills"}
+{"task": "Via the fastmcp library, enumerate registered skills using the list_skills helper under fastmcp.utilities.skills", "expected_qualname": "fastmcp.utilities.skills.list_skills"}
+{"task": "With fastmcp, call the list_skills function from fastmcp.utilities.skills to discover registered skill modules", "expected_qualname": "fastmcp.utilities.skills.list_skills"}

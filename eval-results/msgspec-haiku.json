@@ -1,0 +1,338 @@
+{
+  "plugin_dir": "/tmp/pip-skill-bundles/msgspec",
+  "eval_path": "examples/eval/msgspec.jsonl",
+  "conditions": [
+    "coverage",
+    "no-skill",
+    "skill"
+  ],
+  "items": 15,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "coverage": 15,
+    "no-skill": 15,
+    "skill": 15
+  },
+  "per_condition_rate": {
+    "coverage": 1.0,
+    "no-skill": 1.0,
+    "skill": 1.0
+  },
+  "per_item": [
+    {
+      "task": "Using the msgspec library, convert a plain dict {'name': 'Ada', 'age': 30} into an instance of a typed Struct subclass Person via the convert helper",
+      "expected": "msgspec.convert",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With msgspec, coerce a JSON-like Python value into a typed Struct using the library's convert function",
+      "expected": "msgspec.convert",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Validate-and-construct a typed msgspec Struct from a plain Python value via msgspec's convert helper",
+      "expected": "msgspec.convert",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using msgspec, turn an instance of a typed Struct into a plain dict of Python builtins via the to_builtins function",
+      "expected": "msgspec.to_builtins",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With msgspec, recursively convert a Struct instance into JSON-serializable primitive Python values",
+      "expected": "msgspec.to_builtins",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Use msgspec's to_builtins helper to turn a Struct subclass instance into a serializable dict",
+      "expected": "msgspec.to_builtins",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using msgspec, dynamically construct a Struct subclass named 'Person' with fields [('name', str), ('age', int)] via defstruct",
+      "expected": "msgspec.defstruct",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With the msgspec library, programmatically define a Struct class at runtime using the defstruct helper",
+      "expected": "msgspec.defstruct",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Define a msgspec Struct subclass at runtime from a list of (name, type) field tuples using msgspec.defstruct",
+      "expected": "msgspec.defstruct",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using msgspec, attach metadata constraints (gt=0, le=100) to an int field via the Meta annotation helper",
+      "expected": "msgspec.Meta",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With msgspec, declare an Annotated field carrying a Meta object that specifies validation constraints",
+      "expected": "msgspec.Meta",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Build a msgspec Meta annotation object describing per-field validation rules",
+      "expected": "msgspec.Meta",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using msgspec, wrap a precomputed JSON bytes payload in the library's Raw container so it's spliced into output as-is without re-encoding",
+      "expected": "msgspec.Raw",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With msgspec, construct a Raw object holding already-encoded JSON bytes to embed in a larger message",
+      "expected": "msgspec.Raw",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Embed a precomputed JSON fragment into a msgspec serialization output without re-encoding, using the library's Raw type",
+      "expected": "msgspec.Raw",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the msgspec library, convert a plain dict {'name': 'Ada', 'age': 30} into an instance of a typed Struct subclass Person via the convert helper",
+      "expected": "msgspec.convert",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.convert'"
+    },
+    {
+      "task": "With msgspec, coerce a JSON-like Python value into a typed Struct using the library's convert function",
+      "expected": "msgspec.convert",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.convert'"
+    },
+    {
+      "task": "Validate-and-construct a typed msgspec Struct from a plain Python value via msgspec's convert helper",
+      "expected": "msgspec.convert",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.convert'"
+    },
+    {
+      "task": "Using msgspec, turn an instance of a typed Struct into a plain dict of Python builtins via the to_builtins function",
+      "expected": "msgspec.to_builtins",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.to_builtins'"
+    },
+    {
+      "task": "With msgspec, recursively convert a Struct instance into JSON-serializable primitive Python values",
+      "expected": "msgspec.to_builtins",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.to_builtins'"
+    },
+    {
+      "task": "Use msgspec's to_builtins helper to turn a Struct subclass instance into a serializable dict",
+      "expected": "msgspec.to_builtins",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.to_builtins'"
+    },
+    {
+      "task": "Using msgspec, dynamically construct a Struct subclass named 'Person' with fields [('name', str), ('age', int)] via defstruct",
+      "expected": "msgspec.defstruct",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.defstruct'"
+    },
+    {
+      "task": "With the msgspec library, programmatically define a Struct class at runtime using the defstruct helper",
+      "expected": "msgspec.defstruct",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.defstruct'"
+    },
+    {
+      "task": "Define a msgspec Struct subclass at runtime from a list of (name, type) field tuples using msgspec.defstruct",
+      "expected": "msgspec.defstruct",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.defstruct'"
+    },
+    {
+      "task": "Using msgspec, attach metadata constraints (gt=0, le=100) to an int field via the Meta annotation helper",
+      "expected": "msgspec.Meta",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Meta'"
+    },
+    {
+      "task": "With msgspec, declare an Annotated field carrying a Meta object that specifies validation constraints",
+      "expected": "msgspec.Meta",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Meta'"
+    },
+    {
+      "task": "Build a msgspec Meta annotation object describing per-field validation rules",
+      "expected": "msgspec.Meta",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Meta'"
+    },
+    {
+      "task": "Using msgspec, wrap a precomputed JSON bytes payload in the library's Raw container so it's spliced into output as-is without re-encoding",
+      "expected": "msgspec.Raw",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Raw'"
+    },
+    {
+      "task": "With msgspec, construct a Raw object holding already-encoded JSON bytes to embed in a larger message",
+      "expected": "msgspec.Raw",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Raw'"
+    },
+    {
+      "task": "Embed a precomputed JSON fragment into a msgspec serialization output without re-encoding, using the library's Raw type",
+      "expected": "msgspec.Raw",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Raw'"
+    },
+    {
+      "task": "Using the msgspec library, convert a plain dict {'name': 'Ada', 'age': 30} into an instance of a typed Struct subclass Person via the convert helper",
+      "expected": "msgspec.convert",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.convert'"
+    },
+    {
+      "task": "With msgspec, coerce a JSON-like Python value into a typed Struct using the library's convert function",
+      "expected": "msgspec.convert",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.convert'"
+    },
+    {
+      "task": "Validate-and-construct a typed msgspec Struct from a plain Python value via msgspec's convert helper",
+      "expected": "msgspec.convert",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.convert'"
+    },
+    {
+      "task": "Using msgspec, turn an instance of a typed Struct into a plain dict of Python builtins via the to_builtins function",
+      "expected": "msgspec.to_builtins",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.to_builtins'"
+    },
+    {
+      "task": "With msgspec, recursively convert a Struct instance into JSON-serializable primitive Python values",
+      "expected": "msgspec.to_builtins",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.to_builtins'"
+    },
+    {
+      "task": "Use msgspec's to_builtins helper to turn a Struct subclass instance into a serializable dict",
+      "expected": "msgspec.to_builtins",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.to_builtins'"
+    },
+    {
+      "task": "Using msgspec, dynamically construct a Struct subclass named 'Person' with fields [('name', str), ('age', int)] via defstruct",
+      "expected": "msgspec.defstruct",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.defstruct'"
+    },
+    {
+      "task": "With the msgspec library, programmatically define a Struct class at runtime using the defstruct helper",
+      "expected": "msgspec.defstruct",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.defstruct'"
+    },
+    {
+      "task": "Define a msgspec Struct subclass at runtime from a list of (name, type) field tuples using msgspec.defstruct",
+      "expected": "msgspec.defstruct",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.defstruct'"
+    },
+    {
+      "task": "Using msgspec, attach metadata constraints (gt=0, le=100) to an int field via the Meta annotation helper",
+      "expected": "msgspec.Meta",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Meta'"
+    },
+    {
+      "task": "With msgspec, declare an Annotated field carrying a Meta object that specifies validation constraints",
+      "expected": "msgspec.Meta",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Meta'"
+    },
+    {
+      "task": "Build a msgspec Meta annotation object describing per-field validation rules",
+      "expected": "msgspec.Meta",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Meta'"
+    },
+    {
+      "task": "Using msgspec, wrap a precomputed JSON bytes payload in the library's Raw container so it's spliced into output as-is without re-encoding",
+      "expected": "msgspec.Raw",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Raw'"
+    },
+    {
+      "task": "With msgspec, construct a Raw object holding already-encoded JSON bytes to embed in a larger message",
+      "expected": "msgspec.Raw",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Raw'"
+    },
+    {
+      "task": "Embed a precomputed JSON fragment into a msgspec serialization output without re-encoding, using the library's Raw type",
+      "expected": "msgspec.Raw",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'msgspec.Raw'"
+    }
+  ]
+}

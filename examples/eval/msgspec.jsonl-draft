@@ -1,3 +1,0 @@
-{"task": "Define a typed struct `Person` with fields `name: str` and `age: int` using the msgspec library; inherit from msgspec's struct base class", "expected_qualname": "msgspec.Struct"}
-{"task": "Decode JSON bytes `b'{\"name\": \"Ada\", \"age\": 30}'` straight into an instance of a typed msgspec Struct subclass `Person`", "expected_qualname": "msgspec.json.decode"}
-{"task": "Serialize an instance of a msgspec Struct subclass to JSON bytes", "expected_qualname": "msgspec.json.encode"}

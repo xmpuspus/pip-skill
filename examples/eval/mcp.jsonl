@@ -1,0 +1,15 @@
+{"task": "Using the mcp library, construct a StdioServerParameters config that launches an MCP server via 'python' with args ['server.py']", "expected_qualname": "mcp.StdioServerParameters"}
+{"task": "Build an mcp StdioServerParameters object pointing at 'node' with args ['index.js']", "expected_qualname": "mcp.StdioServerParameters"}
+{"task": "With the mcp library, configure the parameters for connecting to a stdio MCP server invoked as 'uv run my_server'", "expected_qualname": "mcp.StdioServerParameters"}
+{"task": "Construct an mcp Implementation block identifying the server as name 'demo-server' and version '1.0.0'", "expected_qualname": "mcp.Implementation"}
+{"task": "Build an Implementation object from the mcp library to advertise a client called 'my-client' at version '0.1.0'", "expected_qualname": "mcp.Implementation"}
+{"task": "Using mcp, create the Implementation type that announces an MCP peer's name and version during the initialize handshake", "expected_qualname": "mcp.Implementation"}
+{"task": "Build an mcp ErrorData payload with code -32600 and message 'Invalid Request'", "expected_qualname": "mcp.ErrorData"}
+{"task": "Construct an MCP ErrorData with code -32601 and message 'Method not found' using the mcp library", "expected_qualname": "mcp.ErrorData"}
+{"task": "Using mcp, create an ErrorData object describing a JSON-RPC error with a custom code and human-readable message", "expected_qualname": "mcp.ErrorData"}
+{"task": "Using the mcp library, build a default ClientCapabilities object", "expected_qualname": "mcp.ClientCapabilities"}
+{"task": "Construct an mcp ClientCapabilities instance to advertise this client's capabilities during initialize", "expected_qualname": "mcp.ClientCapabilities"}
+{"task": "With mcp, build a ClientCapabilities object indicating no extra optional features beyond defaults", "expected_qualname": "mcp.ClientCapabilities"}
+{"task": "Build an mcp JSONRPCError with id 1 and an inner ErrorData of code -32700, message 'Parse error'", "expected_qualname": "mcp.JSONRPCError"}
+{"task": "Construct a JSONRPCError response from the mcp library wrapping an ErrorData", "expected_qualname": "mcp.JSONRPCError"}
+{"task": "Using mcp, build a JSONRPCError object for a JSON-RPC failure reply", "expected_qualname": "mcp.JSONRPCError"}

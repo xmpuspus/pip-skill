@@ -1,0 +1,275 @@
+{
+  "plugin_dir": "/tmp/pip-skill-bundles/pendulum",
+  "eval_path": "examples/eval/pendulum.jsonl",
+  "conditions": [
+    "coverage",
+    "no-skill",
+    "skill"
+  ],
+  "items": 12,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "coverage": 12,
+    "no-skill": 12,
+    "skill": 12
+  },
+  "per_condition_rate": {
+    "coverage": 1.0,
+    "no-skill": 1.0,
+    "skill": 1.0
+  },
+  "per_item": [
+    {
+      "task": "Using the pendulum library (not the stdlib), parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime",
+      "expected": "pendulum.parse",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With pendulum, parse the datetime string '2026-05-24 10:00:00' into a DateTime object",
+      "expected": "pendulum.parse",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Convert the string '2026-12-31T23:59:59Z' into a pendulum DateTime using the library's default parser",
+      "expected": "pendulum.parse",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Get the current time in the 'America/New_York' timezone using pendulum",
+      "expected": "pendulum.now",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using pendulum, return the current local time as a DateTime object",
+      "expected": "pendulum.now",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Get a pendulum DateTime representing the current moment in UTC",
+      "expected": "pendulum.now",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Construct a pendulum duration representing 2 days and 3 hours",
+      "expected": "pendulum.duration",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Build a pendulum duration spanning 7 days using the duration helper",
+      "expected": "pendulum.duration",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using pendulum, create a duration of 90 minutes that I can add to a DateTime",
+      "expected": "pendulum.duration",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using pendulum, construct a DateTime for 2026 May 24 at 10:30 AM in the 'UTC' timezone, passing year, month, day, hour, minute as positional args plus tz",
+      "expected": "pendulum.datetime",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Build a pendulum DateTime for July 4 2026 at noon in the 'America/Chicago' timezone using the library's datetime constructor function",
+      "expected": "pendulum.datetime",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Create a pendulum DateTime for 2027 January 1 at midnight UTC via pendulum's datetime helper (not the stdlib datetime class)",
+      "expected": "pendulum.datetime",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the pendulum library (not the stdlib), parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime",
+      "expected": "pendulum.parse",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "With pendulum, parse the datetime string '2026-05-24 10:00:00' into a DateTime object",
+      "expected": "pendulum.parse",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "Convert the string '2026-12-31T23:59:59Z' into a pendulum DateTime using the library's default parser",
+      "expected": "pendulum.parse",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "Get the current time in the 'America/New_York' timezone using pendulum",
+      "expected": "pendulum.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Using pendulum, return the current local time as a DateTime object",
+      "expected": "pendulum.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Get a pendulum DateTime representing the current moment in UTC",
+      "expected": "pendulum.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Construct a pendulum duration representing 2 days and 3 hours",
+      "expected": "pendulum.duration",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.duration'"
+    },
+    {
+      "task": "Build a pendulum duration spanning 7 days using the duration helper",
+      "expected": "pendulum.duration",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.duration'"
+    },
+    {
+      "task": "Using pendulum, create a duration of 90 minutes that I can add to a DateTime",
+      "expected": "pendulum.duration",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.duration'"
+    },
+    {
+      "task": "Using pendulum, construct a DateTime for 2026 May 24 at 10:30 AM in the 'UTC' timezone, passing year, month, day, hour, minute as positional args plus tz",
+      "expected": "pendulum.datetime",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.datetime'"
+    },
+    {
+      "task": "Build a pendulum DateTime for July 4 2026 at noon in the 'America/Chicago' timezone using the library's datetime constructor function",
+      "expected": "pendulum.datetime",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.datetime'"
+    },
+    {
+      "task": "Create a pendulum DateTime for 2027 January 1 at midnight UTC via pendulum's datetime helper (not the stdlib datetime class)",
+      "expected": "pendulum.datetime",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'pendulum.datetime'"
+    },
+    {
+      "task": "Using the pendulum library (not the stdlib), parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime",
+      "expected": "pendulum.parse",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "With pendulum, parse the datetime string '2026-05-24 10:00:00' into a DateTime object",
+      "expected": "pendulum.parse",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "Convert the string '2026-12-31T23:59:59Z' into a pendulum DateTime using the library's default parser",
+      "expected": "pendulum.parse",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.parse'"
+    },
+    {
+      "task": "Get the current time in the 'America/New_York' timezone using pendulum",
+      "expected": "pendulum.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Using pendulum, return the current local time as a DateTime object",
+      "expected": "pendulum.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Get a pendulum DateTime representing the current moment in UTC",
+      "expected": "pendulum.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.now'"
+    },
+    {
+      "task": "Construct a pendulum duration representing 2 days and 3 hours",
+      "expected": "pendulum.duration",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.duration'"
+    },
+    {
+      "task": "Build a pendulum duration spanning 7 days using the duration helper",
+      "expected": "pendulum.duration",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.duration'"
+    },
+    {
+      "task": "Using pendulum, create a duration of 90 minutes that I can add to a DateTime",
+      "expected": "pendulum.duration",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.duration'"
+    },
+    {
+      "task": "Using pendulum, construct a DateTime for 2026 May 24 at 10:30 AM in the 'UTC' timezone, passing year, month, day, hour, minute as positional args plus tz",
+      "expected": "pendulum.datetime",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.datetime'"
+    },
+    {
+      "task": "Build a pendulum DateTime for July 4 2026 at noon in the 'America/Chicago' timezone using the library's datetime constructor function",
+      "expected": "pendulum.datetime",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.datetime'"
+    },
+    {
+      "task": "Create a pendulum DateTime for 2027 January 1 at midnight UTC via pendulum's datetime helper (not the stdlib datetime class)",
+      "expected": "pendulum.datetime",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'pendulum.datetime'"
+    }
+  ]
+}

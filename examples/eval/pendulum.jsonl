@@ -1,0 +1,12 @@
+{"task": "Using the pendulum library (not the stdlib), parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime", "expected_qualname": "pendulum.parse"}
+{"task": "With pendulum, parse the datetime string '2026-05-24 10:00:00' into a DateTime object", "expected_qualname": "pendulum.parse"}
+{"task": "Convert the string '2026-12-31T23:59:59Z' into a pendulum DateTime using the library's default parser", "expected_qualname": "pendulum.parse"}
+{"task": "Get the current time in the 'America/New_York' timezone using pendulum", "expected_qualname": "pendulum.now"}
+{"task": "Using pendulum, return the current local time as a DateTime object", "expected_qualname": "pendulum.now"}
+{"task": "Get a pendulum DateTime representing the current moment in UTC", "expected_qualname": "pendulum.now"}
+{"task": "Construct a pendulum duration representing 2 days and 3 hours", "expected_qualname": "pendulum.duration"}
+{"task": "Build a pendulum duration spanning 7 days using the duration helper", "expected_qualname": "pendulum.duration"}
+{"task": "Using pendulum, create a duration of 90 minutes that I can add to a DateTime", "expected_qualname": "pendulum.duration"}
+{"task": "Using pendulum, construct a DateTime for 2026 May 24 at 10:30 AM in the 'UTC' timezone, passing year, month, day, hour, minute as positional args plus tz", "expected_qualname": "pendulum.datetime"}
+{"task": "Build a pendulum DateTime for July 4 2026 at noon in the 'America/Chicago' timezone using the library's datetime constructor function", "expected_qualname": "pendulum.datetime"}
+{"task": "Create a pendulum DateTime for 2027 January 1 at midnight UTC via pendulum's datetime helper (not the stdlib datetime class)", "expected_qualname": "pendulum.datetime"}

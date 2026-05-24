@@ -1,0 +1,338 @@
+{
+  "plugin_dir": "/tmp/pip-skill-bundles/arrow",
+  "eval_path": "examples/eval/arrow.jsonl",
+  "conditions": [
+    "coverage",
+    "no-skill",
+    "skill"
+  ],
+  "items": 15,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "coverage": 15,
+    "no-skill": 14,
+    "skill": 12
+  },
+  "per_condition_rate": {
+    "coverage": 1.0,
+    "no-skill": 0.9333333333333333,
+    "skill": 0.8
+  },
+  "per_item": [
+    {
+      "task": "Parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime using the arrow library (not the stdlib)",
+      "expected": "arrow.get",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Convert the Unix timestamp 1748080800 to an Arrow datetime, using the arrow library",
+      "expected": "arrow.get",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With the arrow library, parse the date string '2026/05/24 10:00' according to a custom format 'YYYY/MM/DD HH:mm'",
+      "expected": "arrow.get",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Get the current time in UTC as an Arrow datetime object",
+      "expected": "arrow.utcnow",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the arrow library, fetch the current UTC moment as an Arrow instance",
+      "expected": "arrow.utcnow",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "I need the present time, in UTC, as an arrow Arrow object, not a naive stdlib datetime",
+      "expected": "arrow.utcnow",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using arrow, get the current time localized to the 'Asia/Tokyo' timezone",
+      "expected": "arrow.now",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With the arrow library, return the current time in the local system timezone",
+      "expected": "arrow.now",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Get an arrow Arrow object representing this exact moment in the 'America/New_York' timezone",
+      "expected": "arrow.now",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the arrow library, construct an Arrow datetime for 2026 May 24 at 10:30 UTC by passing year, month, day, hour, minute as positional arguments",
+      "expected": "arrow.Arrow",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Build an arrow Arrow object for January 1, 2027 at midnight UTC by directly instantiating the Arrow class",
+      "expected": "arrow.Arrow",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Instantiate an Arrow datetime from the arrow library for July 4, 2026 at 9:00 AM UTC",
+      "expected": "arrow.Arrow",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the arrow library, create an ArrowFactory instance to produce arrow datetimes with a custom Arrow subclass",
+      "expected": "arrow.ArrowFactory",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "I want to instantiate the arrow library's factory class so I can configure custom Arrow subclassing behavior",
+      "expected": "arrow.ArrowFactory",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Construct an arrow ArrowFactory bound to a custom Arrow-derived class for specialized datetime construction",
+      "expected": "arrow.ArrowFactory",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime using the arrow library (not the stdlib)",
+      "expected": "arrow.get",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Convert the Unix timestamp 1748080800 to an Arrow datetime, using the arrow library",
+      "expected": "arrow.get",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'arrow.Arrow.fromtimestamp', expected 'arrow.get'"
+    },
+    {
+      "task": "With the arrow library, parse the date string '2026/05/24 10:00' according to a custom format 'YYYY/MM/DD HH:mm'",
+      "expected": "arrow.get",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Get the current time in UTC as an Arrow datetime object",
+      "expected": "arrow.utcnow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.utcnow'"
+    },
+    {
+      "task": "Using the arrow library, fetch the current UTC moment as an Arrow instance",
+      "expected": "arrow.utcnow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.utcnow'"
+    },
+    {
+      "task": "I need the present time, in UTC, as an arrow Arrow object, not a naive stdlib datetime",
+      "expected": "arrow.utcnow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.utcnow'"
+    },
+    {
+      "task": "Using arrow, get the current time localized to the 'Asia/Tokyo' timezone",
+      "expected": "arrow.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "With the arrow library, return the current time in the local system timezone",
+      "expected": "arrow.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "Get an arrow Arrow object representing this exact moment in the 'America/New_York' timezone",
+      "expected": "arrow.now",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "Using the arrow library, construct an Arrow datetime for 2026 May 24 at 10:30 UTC by passing year, month, day, hour, minute as positional arguments",
+      "expected": "arrow.Arrow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Build an arrow Arrow object for January 1, 2027 at midnight UTC by directly instantiating the Arrow class",
+      "expected": "arrow.Arrow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Instantiate an Arrow datetime from the arrow library for July 4, 2026 at 9:00 AM UTC",
+      "expected": "arrow.Arrow",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Using the arrow library, create an ArrowFactory instance to produce arrow datetimes with a custom Arrow subclass",
+      "expected": "arrow.ArrowFactory",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.ArrowFactory'"
+    },
+    {
+      "task": "I want to instantiate the arrow library's factory class so I can configure custom Arrow subclassing behavior",
+      "expected": "arrow.ArrowFactory",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.ArrowFactory'"
+    },
+    {
+      "task": "Construct an arrow ArrowFactory bound to a custom Arrow-derived class for specialized datetime construction",
+      "expected": "arrow.ArrowFactory",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'arrow.ArrowFactory'"
+    },
+    {
+      "task": "Parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime using the arrow library (not the stdlib)",
+      "expected": "arrow.get",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Convert the Unix timestamp 1748080800 to an Arrow datetime, using the arrow library",
+      "expected": "arrow.get",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'arrow.Arrow.fromtimestamp', expected 'arrow.get'"
+    },
+    {
+      "task": "With the arrow library, parse the date string '2026/05/24 10:00' according to a custom format 'YYYY/MM/DD HH:mm'",
+      "expected": "arrow.get",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.get'"
+    },
+    {
+      "task": "Get the current time in UTC as an Arrow datetime object",
+      "expected": "arrow.utcnow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.utcnow'"
+    },
+    {
+      "task": "Using the arrow library, fetch the current UTC moment as an Arrow instance",
+      "expected": "arrow.utcnow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.utcnow'"
+    },
+    {
+      "task": "I need the present time, in UTC, as an arrow Arrow object, not a naive stdlib datetime",
+      "expected": "arrow.utcnow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.utcnow'"
+    },
+    {
+      "task": "Using arrow, get the current time localized to the 'Asia/Tokyo' timezone",
+      "expected": "arrow.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "With the arrow library, return the current time in the local system timezone",
+      "expected": "arrow.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "Get an arrow Arrow object representing this exact moment in the 'America/New_York' timezone",
+      "expected": "arrow.now",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.now'"
+    },
+    {
+      "task": "Using the arrow library, construct an Arrow datetime for 2026 May 24 at 10:30 UTC by passing year, month, day, hour, minute as positional arguments",
+      "expected": "arrow.Arrow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Build an arrow Arrow object for January 1, 2027 at midnight UTC by directly instantiating the Arrow class",
+      "expected": "arrow.Arrow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Instantiate an Arrow datetime from the arrow library for July 4, 2026 at 9:00 AM UTC",
+      "expected": "arrow.Arrow",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.Arrow'"
+    },
+    {
+      "task": "Using the arrow library, create an ArrowFactory instance to produce arrow datetimes with a custom Arrow subclass",
+      "expected": "arrow.ArrowFactory",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'arrow.factory', expected 'arrow.ArrowFactory'"
+    },
+    {
+      "task": "I want to instantiate the arrow library's factory class so I can configure custom Arrow subclassing behavior",
+      "expected": "arrow.ArrowFactory",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'arrow.ArrowFactory'"
+    },
+    {
+      "task": "Construct an arrow ArrowFactory bound to a custom Arrow-derived class for specialized datetime construction",
+      "expected": "arrow.ArrowFactory",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'arrow.factory', expected 'arrow.ArrowFactory'"
+    }
+  ]
+}

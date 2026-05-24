@@ -1,0 +1,338 @@
+{
+  "plugin_dir": "/tmp/pip-skill-bundles/more_itertools",
+  "eval_path": "examples/eval/more_itertools.jsonl",
+  "conditions": [
+    "coverage",
+    "no-skill",
+    "skill"
+  ],
+  "items": 15,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "coverage": 15,
+    "no-skill": 2,
+    "skill": 7
+  },
+  "per_condition_rate": {
+    "coverage": 1.0,
+    "no-skill": 0.13333333333333333,
+    "skill": 0.4666666666666667
+  },
+  "per_item": [
+    {
+      "task": "Using more_itertools, test whether two iterables of ints contain exactly the same elements in the same order, accepting iterators that may not have len()",
+      "expected": "more_itertools.iequals",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Compare two iterables for equality (same elements in same order) without requiring them to be sized, using more_itertools",
+      "expected": "more_itertools.iequals",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With the more_itertools library, check whether two arbitrary iterables yield identical sequences",
+      "expected": "more_itertools.iequals",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using more_itertools, interleave the elements of three lists [1,2,3], [4,5,6], [7,8,9] in round-robin order, stopping at the shortest",
+      "expected": "more_itertools.interleave",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Round-robin interleave several iterables, terminating when the shortest is exhausted, via more_itertools",
+      "expected": "more_itertools.interleave",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With more_itertools, take one element from each of multiple iterables in alternating order, stopping at the shortest input",
+      "expected": "more_itertools.interleave",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using more_itertools, round-robin through several iterables [1,2,3] and [4,5,6,7] taking one element from each in turn, continuing until all are exhausted",
+      "expected": "more_itertools.roundrobin",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With more_itertools, walk multiple iterables in round-robin order, continuing past the shortest until every input is consumed",
+      "expected": "more_itertools.roundrobin",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Interleave several iterables of differing lengths via more_itertools, taking turns and not stopping when one runs out",
+      "expected": "more_itertools.roundrobin",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using more_itertools, run-length-encode the iterable ['a','a','a','b','b','c'] into pairs of (element, count)",
+      "expected": "more_itertools.run_length",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With more_itertools, produce a run-length encoding of a sequence as (value, run_count) pairs",
+      "expected": "more_itertools.run_length",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Compute a run-length encoded representation of a sequence of repeating values using the more_itertools library",
+      "expected": "more_itertools.run_length",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using more_itertools, for each iterable in a list of iterables, find the elements unique to that iterable",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With more_itertools, determine the elements that appear in only one of several input iterables, per iterable",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Compute, for each input iterable in a collection, the elements unique to that iterable, using more_itertools",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using more_itertools, test whether two iterables of ints contain exactly the same elements in the same order, accepting iterators that may not have len()",
+      "expected": "more_itertools.iequals",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.equal', expected 'more_itertools.iequals'"
+    },
+    {
+      "task": "Compare two iterables for equality (same elements in same order) without requiring them to be sized, using more_itertools",
+      "expected": "more_itertools.iequals",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.equal', expected 'more_itertools.iequals'"
+    },
+    {
+      "task": "With the more_itertools library, check whether two arbitrary iterables yield identical sequences",
+      "expected": "more_itertools.iequals",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.equal', expected 'more_itertools.iequals'"
+    },
+    {
+      "task": "Using more_itertools, interleave the elements of three lists [1,2,3], [4,5,6], [7,8,9] in round-robin order, stopping at the shortest",
+      "expected": "more_itertools.interleave",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.interleave'"
+    },
+    {
+      "task": "Round-robin interleave several iterables, terminating when the shortest is exhausted, via more_itertools",
+      "expected": "more_itertools.interleave",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.roundrobin', expected 'more_itertools.interleave'"
+    },
+    {
+      "task": "With more_itertools, take one element from each of multiple iterables in alternating order, stopping at the shortest input",
+      "expected": "more_itertools.interleave",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.roundrobin', expected 'more_itertools.interleave'"
+    },
+    {
+      "task": "Using more_itertools, round-robin through several iterables [1,2,3] and [4,5,6,7] taking one element from each in turn, continuing until all are exhausted",
+      "expected": "more_itertools.roundrobin",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.roundrobin'"
+    },
+    {
+      "task": "With more_itertools, walk multiple iterables in round-robin order, continuing past the shortest until every input is consumed",
+      "expected": "more_itertools.roundrobin",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.interleave_longest', expected 'more_itertools.roundrobin'"
+    },
+    {
+      "task": "Interleave several iterables of differing lengths via more_itertools, taking turns and not stopping when one runs out",
+      "expected": "more_itertools.roundrobin",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.interleave_longest', expected 'more_itertools.roundrobin'"
+    },
+    {
+      "task": "Using more_itertools, run-length-encode the iterable ['a','a','a','b','b','c'] into pairs of (element, count)",
+      "expected": "more_itertools.run_length",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.run_length.encode', expected 'more_itertools.run_length'"
+    },
+    {
+      "task": "With more_itertools, produce a run-length encoding of a sequence as (value, run_count) pairs",
+      "expected": "more_itertools.run_length",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.run_length.encode', expected 'more_itertools.run_length'"
+    },
+    {
+      "task": "Compute a run-length encoded representation of a sequence of repeating values using the more_itertools library",
+      "expected": "more_itertools.run_length",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.run_length.encode', expected 'more_itertools.run_length'"
+    },
+    {
+      "task": "Using more_itertools, for each iterable in a list of iterables, find the elements unique to that iterable",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.difference', expected 'more_itertools.unique_to_each'"
+    },
+    {
+      "task": "With more_itertools, determine the elements that appear in only one of several input iterables, per iterable",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'more_itertools.classify_unique', expected 'more_itertools.unique_to_each'"
+    },
+    {
+      "task": "Compute, for each input iterable in a collection, the elements unique to that iterable, using more_itertools",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'more_itertools.unique_to_each'"
+    },
+    {
+      "task": "Using more_itertools, test whether two iterables of ints contain exactly the same elements in the same order, accepting iterators that may not have len()",
+      "expected": "more_itertools.iequals",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.iequals'"
+    },
+    {
+      "task": "Compare two iterables for equality (same elements in same order) without requiring them to be sized, using more_itertools",
+      "expected": "more_itertools.iequals",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.iequals'"
+    },
+    {
+      "task": "With the more_itertools library, check whether two arbitrary iterables yield identical sequences",
+      "expected": "more_itertools.iequals",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.iequals'"
+    },
+    {
+      "task": "Using more_itertools, interleave the elements of three lists [1,2,3], [4,5,6], [7,8,9] in round-robin order, stopping at the shortest",
+      "expected": "more_itertools.interleave",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.roundrobin', expected 'more_itertools.interleave'"
+    },
+    {
+      "task": "Round-robin interleave several iterables, terminating when the shortest is exhausted, via more_itertools",
+      "expected": "more_itertools.interleave",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.roundrobin', expected 'more_itertools.interleave'"
+    },
+    {
+      "task": "With more_itertools, take one element from each of multiple iterables in alternating order, stopping at the shortest input",
+      "expected": "more_itertools.interleave",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.roundrobin', expected 'more_itertools.interleave'"
+    },
+    {
+      "task": "Using more_itertools, round-robin through several iterables [1,2,3] and [4,5,6,7] taking one element from each in turn, continuing until all are exhausted",
+      "expected": "more_itertools.roundrobin",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.roundrobin'"
+    },
+    {
+      "task": "With more_itertools, walk multiple iterables in round-robin order, continuing past the shortest until every input is consumed",
+      "expected": "more_itertools.roundrobin",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.interleave_longest', expected 'more_itertools.roundrobin'"
+    },
+    {
+      "task": "Interleave several iterables of differing lengths via more_itertools, taking turns and not stopping when one runs out",
+      "expected": "more_itertools.roundrobin",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.interleave_longest', expected 'more_itertools.roundrobin'"
+    },
+    {
+      "task": "Using more_itertools, run-length-encode the iterable ['a','a','a','b','b','c'] into pairs of (element, count)",
+      "expected": "more_itertools.run_length",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.run_length.encode', expected 'more_itertools.run_length'"
+    },
+    {
+      "task": "With more_itertools, produce a run-length encoding of a sequence as (value, run_count) pairs",
+      "expected": "more_itertools.run_length",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.run_length.encode', expected 'more_itertools.run_length'"
+    },
+    {
+      "task": "Compute a run-length encoded representation of a sequence of repeating values using the more_itertools library",
+      "expected": "more_itertools.run_length",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got 'more_itertools.run_length.encode', expected 'more_itertools.run_length'"
+    },
+    {
+      "task": "Using more_itertools, for each iterable in a list of iterables, find the elements unique to that iterable",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.unique_to_each'"
+    },
+    {
+      "task": "With more_itertools, determine the elements that appear in only one of several input iterables, per iterable",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.unique_to_each'"
+    },
+    {
+      "task": "Compute, for each input iterable in a collection, the elements unique to that iterable, using more_itertools",
+      "expected": "more_itertools.unique_to_each",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'more_itertools.unique_to_each'"
+    }
+  ]
+}

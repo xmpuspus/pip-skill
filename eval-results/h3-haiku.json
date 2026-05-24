@@ -1,0 +1,401 @@
+{
+  "plugin_dir": "/tmp/pip-skill-bundles/h3",
+  "eval_path": "examples/eval/h3.jsonl",
+  "conditions": [
+    "coverage",
+    "no-skill",
+    "skill"
+  ],
+  "items": 18,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "coverage": 18,
+    "no-skill": 8,
+    "skill": 18
+  },
+  "per_condition_rate": {
+    "coverage": 1.0,
+    "no-skill": 0.4444444444444444,
+    "skill": 1.0
+  },
+  "per_item": [
+    {
+      "task": "Using Uber's H3 library, get the resolution (a small integer) of the H3 cell index '8928308280fffff'",
+      "expected": "h3.get_resolution",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With h3, return the resolution number of a given H3 cell address",
+      "expected": "h3.get_resolution",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "I have an H3 cell '85283473fffffff' and need to know what resolution it lives at, using the h3 library",
+      "expected": "h3.get_resolution",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the h3 library, check whether the cell '8928308280fffff' is one of the 12 pentagonal cells",
+      "expected": "h3.is_pentagon",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With h3, test whether a given H3 cell is a pentagon rather than a hexagon",
+      "expected": "h3.is_pentagon",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Predicate check via h3: does a given cell index correspond to one of the special pentagonal cells",
+      "expected": "h3.is_pentagon",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using h3, test whether two H3 cells '8928308280fffff' and '8928308283bffff' are neighbors",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With h3, check if two given cell indexes are adjacent at the same resolution",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Determine via the h3 library whether two H3 cells share an edge at the same resolution",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using h3, list all the pentagonal H3 cells that exist at resolution 5",
+      "expected": "h3.get_pentagons",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With h3, enumerate the 12 pentagons of the H3 grid at resolution 9",
+      "expected": "h3.get_pentagons",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Get the set of pentagonal cells at a given H3 resolution, using the h3 library",
+      "expected": "h3.get_pentagons",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using h3, compute the average area of a hexagon at resolution 8 in square kilometers",
+      "expected": "h3.average_hexagon_area",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With h3, return the mean area of a hexagonal H3 cell at resolution 5 expressed in 'km^2'",
+      "expected": "h3.average_hexagon_area",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Get the average hexagon area at resolution 9 in square meters via the h3 library",
+      "expected": "h3.average_hexagon_area",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using h3, convert an H3Shape geometry back into the list of H3 cell indexes that tile it at resolution 7",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With h3, materialize a list of H3 cells that cover an h3shape polygon at a given resolution",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Convert an h3 H3Shape geometry into its constituent cell indexes at resolution 9 using the h3 library",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using Uber's H3 library, get the resolution (a small integer) of the H3 cell index '8928308280fffff'",
+      "expected": "h3.get_resolution",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.get_resolution'"
+    },
+    {
+      "task": "With h3, return the resolution number of a given H3 cell address",
+      "expected": "h3.get_resolution",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.get_resolution'"
+    },
+    {
+      "task": "I have an H3 cell '85283473fffffff' and need to know what resolution it lives at, using the h3 library",
+      "expected": "h3.get_resolution",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.get_resolution'"
+    },
+    {
+      "task": "Using the h3 library, check whether the cell '8928308280fffff' is one of the 12 pentagonal cells",
+      "expected": "h3.is_pentagon",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.is_pentagon'"
+    },
+    {
+      "task": "With h3, test whether a given H3 cell is a pentagon rather than a hexagon",
+      "expected": "h3.is_pentagon",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.is_pentagon'"
+    },
+    {
+      "task": "Predicate check via h3: does a given cell index correspond to one of the special pentagonal cells",
+      "expected": "h3.is_pentagon",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.is_pentagon'"
+    },
+    {
+      "task": "Using h3, test whether two H3 cells '8928308280fffff' and '8928308283bffff' are neighbors",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.are_neighbors', expected 'h3.are_neighbor_cells'"
+    },
+    {
+      "task": "With h3, check if two given cell indexes are adjacent at the same resolution",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.are_neighbors', expected 'h3.are_neighbor_cells'"
+    },
+    {
+      "task": "Determine via the h3 library whether two H3 cells share an edge at the same resolution",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.are_neighbors', expected 'h3.are_neighbor_cells'"
+    },
+    {
+      "task": "Using h3, list all the pentagonal H3 cells that exist at resolution 5",
+      "expected": "h3.get_pentagons",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.get_pentagon_indexes', expected 'h3.get_pentagons'"
+    },
+    {
+      "task": "With h3, enumerate the 12 pentagons of the H3 grid at resolution 9",
+      "expected": "h3.get_pentagons",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.get_pentagons'"
+    },
+    {
+      "task": "Get the set of pentagonal cells at a given H3 resolution, using the h3 library",
+      "expected": "h3.get_pentagons",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'h3.get_pentagons'"
+    },
+    {
+      "task": "Using h3, compute the average area of a hexagon at resolution 8 in square kilometers",
+      "expected": "h3.average_hexagon_area",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.hex_area', expected 'h3.average_hexagon_area'"
+    },
+    {
+      "task": "With h3, return the mean area of a hexagonal H3 cell at resolution 5 expressed in 'km^2'",
+      "expected": "h3.average_hexagon_area",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.hex_area', expected 'h3.average_hexagon_area'"
+    },
+    {
+      "task": "Get the average hexagon area at resolution 9 in square meters via the h3 library",
+      "expected": "h3.average_hexagon_area",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.hex_area', expected 'h3.average_hexagon_area'"
+    },
+    {
+      "task": "Using h3, convert an H3Shape geometry back into the list of H3 cell indexes that tile it at resolution 7",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.polyfill', expected 'h3.h3shape_to_cells'"
+    },
+    {
+      "task": "With h3, materialize a list of H3 cells that cover an h3shape polygon at a given resolution",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.polyfill', expected 'h3.h3shape_to_cells'"
+    },
+    {
+      "task": "Convert an h3 H3Shape geometry into its constituent cell indexes at resolution 9 using the h3 library",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'h3.polyfill', expected 'h3.h3shape_to_cells'"
+    },
+    {
+      "task": "Using Uber's H3 library, get the resolution (a small integer) of the H3 cell index '8928308280fffff'",
+      "expected": "h3.get_resolution",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.get_resolution'"
+    },
+    {
+      "task": "With h3, return the resolution number of a given H3 cell address",
+      "expected": "h3.get_resolution",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.get_resolution'"
+    },
+    {
+      "task": "I have an H3 cell '85283473fffffff' and need to know what resolution it lives at, using the h3 library",
+      "expected": "h3.get_resolution",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.get_resolution'"
+    },
+    {
+      "task": "Using the h3 library, check whether the cell '8928308280fffff' is one of the 12 pentagonal cells",
+      "expected": "h3.is_pentagon",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.is_pentagon'"
+    },
+    {
+      "task": "With h3, test whether a given H3 cell is a pentagon rather than a hexagon",
+      "expected": "h3.is_pentagon",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.is_pentagon'"
+    },
+    {
+      "task": "Predicate check via h3: does a given cell index correspond to one of the special pentagonal cells",
+      "expected": "h3.is_pentagon",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.is_pentagon'"
+    },
+    {
+      "task": "Using h3, test whether two H3 cells '8928308280fffff' and '8928308283bffff' are neighbors",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.are_neighbor_cells'"
+    },
+    {
+      "task": "With h3, check if two given cell indexes are adjacent at the same resolution",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.are_neighbor_cells'"
+    },
+    {
+      "task": "Determine via the h3 library whether two H3 cells share an edge at the same resolution",
+      "expected": "h3.are_neighbor_cells",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.are_neighbor_cells'"
+    },
+    {
+      "task": "Using h3, list all the pentagonal H3 cells that exist at resolution 5",
+      "expected": "h3.get_pentagons",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.get_pentagons'"
+    },
+    {
+      "task": "With h3, enumerate the 12 pentagons of the H3 grid at resolution 9",
+      "expected": "h3.get_pentagons",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.get_pentagons'"
+    },
+    {
+      "task": "Get the set of pentagonal cells at a given H3 resolution, using the h3 library",
+      "expected": "h3.get_pentagons",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.get_pentagons'"
+    },
+    {
+      "task": "Using h3, compute the average area of a hexagon at resolution 8 in square kilometers",
+      "expected": "h3.average_hexagon_area",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.average_hexagon_area'"
+    },
+    {
+      "task": "With h3, return the mean area of a hexagonal H3 cell at resolution 5 expressed in 'km^2'",
+      "expected": "h3.average_hexagon_area",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.average_hexagon_area'"
+    },
+    {
+      "task": "Get the average hexagon area at resolution 9 in square meters via the h3 library",
+      "expected": "h3.average_hexagon_area",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.average_hexagon_area'"
+    },
+    {
+      "task": "Using h3, convert an H3Shape geometry back into the list of H3 cell indexes that tile it at resolution 7",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.h3shape_to_cells'"
+    },
+    {
+      "task": "With h3, materialize a list of H3 cells that cover an h3shape polygon at a given resolution",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.h3shape_to_cells'"
+    },
+    {
+      "task": "Convert an h3 H3Shape geometry into its constituent cell indexes at resolution 9 using the h3 library",
+      "expected": "h3.h3shape_to_cells",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'h3.h3shape_to_cells'"
+    }
+  ]
+}

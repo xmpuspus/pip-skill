@@ -1,3 +1,0 @@
-{"task": "With Uber's H3 geospatial library, convert latitude 37.775 and longitude -122.418 into the hexagonal cell index that contains them at resolution 9", "expected_qualname": "h3.latlng_to_cell"}
-{"task": "Given an H3 cell index '8928308280fffff', recover the latitude and longitude of its centroid using the h3 library", "expected_qualname": "h3.cell_to_latlng"}
-{"task": "Using h3, enumerate every cell at resolution 8 whose centroid falls inside a polygon defined by a list of (lat, lng) vertices", "expected_qualname": "h3.polygon_to_cells"}

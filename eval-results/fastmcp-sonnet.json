@@ -1,0 +1,401 @@
+{
+  "plugin_dir": "/tmp/pip-skill-bundles/fastmcp",
+  "eval_path": "examples/eval/fastmcp.jsonl",
+  "conditions": [
+    "coverage",
+    "no-skill",
+    "skill"
+  ],
+  "items": 18,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "coverage": 18,
+    "no-skill": 9,
+    "skill": 17
+  },
+  "per_condition_rate": {
+    "coverage": 1.0,
+    "no-skill": 0.5,
+    "skill": 0.9444444444444444
+  },
+  "per_item": [
+    {
+      "task": "Using the fastmcp library, connect a client to a remote MCP server reachable over streamable HTTP at 'https://example.com/mcp'",
+      "expected": "fastmcp.Client",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Instantiate a fastmcp Client pointing at the URL 'http://localhost:9000/mcp'",
+      "expected": "fastmcp.Client",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With fastmcp, build a client that talks to an MCP server at 'https://api.example.com/mcp/v1'",
+      "expected": "fastmcp.Client",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Inside a fastmcp tool implementation, construct the Context object that the framework passes to tools so they can log and report progress",
+      "expected": "fastmcp.Context",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Build a fastmcp Context instance representing the per-call context object handed to tool implementations",
+      "expected": "fastmcp.Context",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using fastmcp, create the Context type used to expose framework state inside tool callbacks",
+      "expected": "fastmcp.Context",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Create a fastmcp FastMCPApp instance with the name 'my-app'",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using fastmcp, instantiate a FastMCPApp to host an application surface (not the lower-level server class)",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Build a FastMCPApp object from the fastmcp library to wrap an application module",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the fastmcp library, create a proxy server in front of an existing MCP backend via fastmcp's server.create_proxy helper",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Build a fastmcp proxy server that forwards calls to a remote backend, using fastmcp's create_proxy function under fastmcp.server",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With fastmcp, stand up a proxy MCP server in front of another server using the create_proxy helper from fastmcp.server",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using fastmcp's telemetry submodule, get a tracer for a span named 'mcp.call_tool'",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With fastmcp, obtain an OpenTelemetry tracer via fastmcp.telemetry.get_tracer for the module name '__main__'",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Get a tracer object from fastmcp's telemetry submodule for instrumenting a fastmcp server",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using fastmcp.utilities.skills, list the Claude-style skills exposed by the current fastmcp server",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Via the fastmcp library, enumerate registered skills using the list_skills helper under fastmcp.utilities.skills",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With fastmcp, call the list_skills function from fastmcp.utilities.skills to discover registered skill modules",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the fastmcp library, connect a client to a remote MCP server reachable over streamable HTTP at 'https://example.com/mcp'",
+      "expected": "fastmcp.Client",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Client'"
+    },
+    {
+      "task": "Instantiate a fastmcp Client pointing at the URL 'http://localhost:9000/mcp'",
+      "expected": "fastmcp.Client",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Client'"
+    },
+    {
+      "task": "With fastmcp, build a client that talks to an MCP server at 'https://api.example.com/mcp/v1'",
+      "expected": "fastmcp.Client",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Client'"
+    },
+    {
+      "task": "Inside a fastmcp tool implementation, construct the Context object that the framework passes to tools so they can log and report progress",
+      "expected": "fastmcp.Context",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Context'"
+    },
+    {
+      "task": "Build a fastmcp Context instance representing the per-call context object handed to tool implementations",
+      "expected": "fastmcp.Context",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'fastmcp.Context'"
+    },
+    {
+      "task": "Using fastmcp, create the Context type used to expose framework state inside tool callbacks",
+      "expected": "fastmcp.Context",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'fastmcp.Context'"
+    },
+    {
+      "task": "Create a fastmcp FastMCPApp instance with the name 'my-app'",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'fastmcp.FastMCPApp'"
+    },
+    {
+      "task": "Using fastmcp, instantiate a FastMCPApp to host an application surface (not the lower-level server class)",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.FastMCP', expected 'fastmcp.FastMCPApp'"
+    },
+    {
+      "task": "Build a FastMCPApp object from the fastmcp library to wrap an application module",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.FastMCP', expected 'fastmcp.FastMCPApp'"
+    },
+    {
+      "task": "Using the fastmcp library, create a proxy server in front of an existing MCP backend via fastmcp's server.create_proxy helper",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.FastMCP.as_proxy', expected 'fastmcp.server.create_proxy'"
+    },
+    {
+      "task": "Build a fastmcp proxy server that forwards calls to a remote backend, using fastmcp's create_proxy function under fastmcp.server",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.server.proxy.FastMCPProxy.from_client', expected 'fastmcp.server.create_proxy'"
+    },
+    {
+      "task": "With fastmcp, stand up a proxy MCP server in front of another server using the create_proxy helper from fastmcp.server",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.server.FastMCP.as_proxy', expected 'fastmcp.server.create_proxy'"
+    },
+    {
+      "task": "Using fastmcp's telemetry submodule, get a tracer for a span named 'mcp.call_tool'",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.telemetry.get_tracer'"
+    },
+    {
+      "task": "With fastmcp, obtain an OpenTelemetry tracer via fastmcp.telemetry.get_tracer for the module name '__main__'",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.telemetry.get_tracer'"
+    },
+    {
+      "task": "Get a tracer object from fastmcp's telemetry submodule for instrumenting a fastmcp server",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.telemetry.get_tracer'"
+    },
+    {
+      "task": "Using fastmcp.utilities.skills, list the Claude-style skills exposed by the current fastmcp server",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'fastmcp.utilities.skills.get_skills', expected 'fastmcp.utilities.skills.list_skills'"
+    },
+    {
+      "task": "Via the fastmcp library, enumerate registered skills using the list_skills helper under fastmcp.utilities.skills",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.utilities.skills.list_skills'"
+    },
+    {
+      "task": "With fastmcp, call the list_skills function from fastmcp.utilities.skills to discover registered skill modules",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.utilities.skills.list_skills'"
+    },
+    {
+      "task": "Using the fastmcp library, connect a client to a remote MCP server reachable over streamable HTTP at 'https://example.com/mcp'",
+      "expected": "fastmcp.Client",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Client'"
+    },
+    {
+      "task": "Instantiate a fastmcp Client pointing at the URL 'http://localhost:9000/mcp'",
+      "expected": "fastmcp.Client",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Client'"
+    },
+    {
+      "task": "With fastmcp, build a client that talks to an MCP server at 'https://api.example.com/mcp/v1'",
+      "expected": "fastmcp.Client",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Client'"
+    },
+    {
+      "task": "Inside a fastmcp tool implementation, construct the Context object that the framework passes to tools so they can log and report progress",
+      "expected": "fastmcp.Context",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Context'"
+    },
+    {
+      "task": "Build a fastmcp Context instance representing the per-call context object handed to tool implementations",
+      "expected": "fastmcp.Context",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.Context'"
+    },
+    {
+      "task": "Using fastmcp, create the Context type used to expose framework state inside tool callbacks",
+      "expected": "fastmcp.Context",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got None, expected 'fastmcp.Context'"
+    },
+    {
+      "task": "Create a fastmcp FastMCPApp instance with the name 'my-app'",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.FastMCPApp'"
+    },
+    {
+      "task": "Using fastmcp, instantiate a FastMCPApp to host an application surface (not the lower-level server class)",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.FastMCPApp'"
+    },
+    {
+      "task": "Build a FastMCPApp object from the fastmcp library to wrap an application module",
+      "expected": "fastmcp.FastMCPApp",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.FastMCPApp'"
+    },
+    {
+      "task": "Using the fastmcp library, create a proxy server in front of an existing MCP backend via fastmcp's server.create_proxy helper",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.server.create_proxy'"
+    },
+    {
+      "task": "Build a fastmcp proxy server that forwards calls to a remote backend, using fastmcp's create_proxy function under fastmcp.server",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.server.create_proxy'"
+    },
+    {
+      "task": "With fastmcp, stand up a proxy MCP server in front of another server using the create_proxy helper from fastmcp.server",
+      "expected": "fastmcp.server.create_proxy",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.server.create_proxy'"
+    },
+    {
+      "task": "Using fastmcp's telemetry submodule, get a tracer for a span named 'mcp.call_tool'",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.telemetry.get_tracer'"
+    },
+    {
+      "task": "With fastmcp, obtain an OpenTelemetry tracer via fastmcp.telemetry.get_tracer for the module name '__main__'",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.telemetry.get_tracer'"
+    },
+    {
+      "task": "Get a tracer object from fastmcp's telemetry submodule for instrumenting a fastmcp server",
+      "expected": "fastmcp.telemetry.get_tracer",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.telemetry.get_tracer'"
+    },
+    {
+      "task": "Using fastmcp.utilities.skills, list the Claude-style skills exposed by the current fastmcp server",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.utilities.skills.list_skills'"
+    },
+    {
+      "task": "Via the fastmcp library, enumerate registered skills using the list_skills helper under fastmcp.utilities.skills",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.utilities.skills.list_skills'"
+    },
+    {
+      "task": "With fastmcp, call the list_skills function from fastmcp.utilities.skills to discover registered skill modules",
+      "expected": "fastmcp.utilities.skills.list_skills",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'fastmcp.utilities.skills.list_skills'"
+    }
+  ]
+}

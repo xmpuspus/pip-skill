@@ -1,0 +1,338 @@
+{
+  "plugin_dir": "/tmp/pip-skill-bundles/returns",
+  "eval_path": "examples/eval/returns.jsonl",
+  "conditions": [
+    "coverage",
+    "no-skill",
+    "skill"
+  ],
+  "items": 15,
+  "backend": "claude-cli",
+  "per_condition_pass": {
+    "coverage": 15,
+    "no-skill": 11,
+    "skill": 14
+  },
+  "per_condition_rate": {
+    "coverage": 1.0,
+    "no-skill": 0.7333333333333333,
+    "skill": 0.9333333333333333
+  },
+  "per_item": [
+    {
+      "task": "Using the dry-python returns library, curry a binary function `add(x, y)` so it can be partially applied one argument at a time, via the curry helper under returns.curry",
+      "expected": "returns.curry.curry",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Convert a multi-arg function into a curried form using the returns library's curry function at returns.curry.curry",
+      "expected": "returns.curry.curry",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With the returns library, transform an n-ary function into a chain of unary functions via returns.curry's curry helper",
+      "expected": "returns.curry.curry",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using returns, compose two unary functions f and g into a single callable equivalent to `lambda x: f(g(x))`, via the compose helper under returns.functions",
+      "expected": "returns.functions.compose",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Build a composed function using the returns library's compose function in returns.functions",
+      "expected": "returns.functions.compose",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Combine two functions into one with the returns library's compose helper at returns.functions.compose",
+      "expected": "returns.functions.compose",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using returns, check whether a Result value is a Success (versus a Failure) via the is_successful predicate under returns.pipeline",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With the returns library, test if a Result is in its successful state using returns.pipeline.is_successful",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Determine whether a Result container holds a successful value using the returns library's is_successful function in returns.pipeline",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using returns, flatten a nested Result[Result[int, str], str] into a single Result[int, str] via the flatten converter under returns.converters",
+      "expected": "returns.converters.flatten",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "With the returns library, collapse one level of nested Result containers using returns.converters.flatten",
+      "expected": "returns.converters.flatten",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Flatten a nested Maybe[Maybe[int]] container into a single Maybe[int] via the returns library's flatten function in returns.converters",
+      "expected": "returns.converters.flatten",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using returns, get the identity function (returns its argument unchanged) via returns.functions.identity",
+      "expected": "returns.functions.identity",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Reference the returns library's identity helper at returns.functions.identity for use in a functional pipeline",
+      "expected": "returns.functions.identity",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Apply returns' identity function from returns.functions to a value, leaving it unchanged",
+      "expected": "returns.functions.identity",
+      "condition": "coverage",
+      "passed": true,
+      "detail": "in manifest"
+    },
+    {
+      "task": "Using the dry-python returns library, curry a binary function `add(x, y)` so it can be partially applied one argument at a time, via the curry helper under returns.curry",
+      "expected": "returns.curry.curry",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'returns.curry', expected 'returns.curry.curry'"
+    },
+    {
+      "task": "Convert a multi-arg function into a curried form using the returns library's curry function at returns.curry.curry",
+      "expected": "returns.curry.curry",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.curry.curry'"
+    },
+    {
+      "task": "With the returns library, transform an n-ary function into a chain of unary functions via returns.curry's curry helper",
+      "expected": "returns.curry.curry",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got 'returns.curry', expected 'returns.curry.curry'"
+    },
+    {
+      "task": "Using returns, compose two unary functions f and g into a single callable equivalent to `lambda x: f(g(x))`, via the compose helper under returns.functions",
+      "expected": "returns.functions.compose",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.compose'"
+    },
+    {
+      "task": "Build a composed function using the returns library's compose function in returns.functions",
+      "expected": "returns.functions.compose",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.compose'"
+    },
+    {
+      "task": "Combine two functions into one with the returns library's compose helper at returns.functions.compose",
+      "expected": "returns.functions.compose",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.compose'"
+    },
+    {
+      "task": "Using returns, check whether a Result value is a Success (versus a Failure) via the is_successful predicate under returns.pipeline",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.pipeline.is_successful'"
+    },
+    {
+      "task": "With the returns library, test if a Result is in its successful state using returns.pipeline.is_successful",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.pipeline.is_successful'"
+    },
+    {
+      "task": "Determine whether a Result container holds a successful value using the returns library's is_successful function in returns.pipeline",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.pipeline.is_successful'"
+    },
+    {
+      "task": "Using returns, flatten a nested Result[Result[int, str], str] into a single Result[int, str] via the flatten converter under returns.converters",
+      "expected": "returns.converters.flatten",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.flatten'"
+    },
+    {
+      "task": "With the returns library, collapse one level of nested Result containers using returns.converters.flatten",
+      "expected": "returns.converters.flatten",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.flatten'"
+    },
+    {
+      "task": "Flatten a nested Maybe[Maybe[int]] container into a single Maybe[int] via the returns library's flatten function in returns.converters",
+      "expected": "returns.converters.flatten",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.flatten'"
+    },
+    {
+      "task": "Using returns, get the identity function (returns its argument unchanged) via returns.functions.identity",
+      "expected": "returns.functions.identity",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'returns.functions.identity'"
+    },
+    {
+      "task": "Reference the returns library's identity helper at returns.functions.identity for use in a functional pipeline",
+      "expected": "returns.functions.identity",
+      "condition": "no-skill",
+      "passed": false,
+      "detail": "got None, expected 'returns.functions.identity'"
+    },
+    {
+      "task": "Apply returns' identity function from returns.functions to a value, leaving it unchanged",
+      "expected": "returns.functions.identity",
+      "condition": "no-skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.identity'"
+    },
+    {
+      "task": "Using the dry-python returns library, curry a binary function `add(x, y)` so it can be partially applied one argument at a time, via the curry helper under returns.curry",
+      "expected": "returns.curry.curry",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.curry.curry'"
+    },
+    {
+      "task": "Convert a multi-arg function into a curried form using the returns library's curry function at returns.curry.curry",
+      "expected": "returns.curry.curry",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.curry.curry'"
+    },
+    {
+      "task": "With the returns library, transform an n-ary function into a chain of unary functions via returns.curry's curry helper",
+      "expected": "returns.curry.curry",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.curry.curry'"
+    },
+    {
+      "task": "Using returns, compose two unary functions f and g into a single callable equivalent to `lambda x: f(g(x))`, via the compose helper under returns.functions",
+      "expected": "returns.functions.compose",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.compose'"
+    },
+    {
+      "task": "Build a composed function using the returns library's compose function in returns.functions",
+      "expected": "returns.functions.compose",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.compose'"
+    },
+    {
+      "task": "Combine two functions into one with the returns library's compose helper at returns.functions.compose",
+      "expected": "returns.functions.compose",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.compose'"
+    },
+    {
+      "task": "Using returns, check whether a Result value is a Success (versus a Failure) via the is_successful predicate under returns.pipeline",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.pipeline.is_successful'"
+    },
+    {
+      "task": "With the returns library, test if a Result is in its successful state using returns.pipeline.is_successful",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.pipeline.is_successful'"
+    },
+    {
+      "task": "Determine whether a Result container holds a successful value using the returns library's is_successful function in returns.pipeline",
+      "expected": "returns.pipeline.is_successful",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.pipeline.is_successful'"
+    },
+    {
+      "task": "Using returns, flatten a nested Result[Result[int, str], str] into a single Result[int, str] via the flatten converter under returns.converters",
+      "expected": "returns.converters.flatten",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.flatten'"
+    },
+    {
+      "task": "With the returns library, collapse one level of nested Result containers using returns.converters.flatten",
+      "expected": "returns.converters.flatten",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.flatten'"
+    },
+    {
+      "task": "Flatten a nested Maybe[Maybe[int]] container into a single Maybe[int] via the returns library's flatten function in returns.converters",
+      "expected": "returns.converters.flatten",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.converters.flatten'"
+    },
+    {
+      "task": "Using returns, get the identity function (returns its argument unchanged) via returns.functions.identity",
+      "expected": "returns.functions.identity",
+      "condition": "skill",
+      "passed": false,
+      "detail": "got None, expected 'returns.functions.identity'"
+    },
+    {
+      "task": "Reference the returns library's identity helper at returns.functions.identity for use in a functional pipeline",
+      "expected": "returns.functions.identity",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.identity'"
+    },
+    {
+      "task": "Apply returns' identity function from returns.functions to a value, leaving it unchanged",
+      "expected": "returns.functions.identity",
+      "condition": "skill",
+      "passed": true,
+      "detail": "matched 'returns.functions.identity'"
+    }
+  ]
+}

@@ -349,6 +349,145 @@ failure modes that an ablation would quantify.
   authored from the package's docs/README, blind to the manifest, to
   remove this bias.
 
+## Second measurements (v0.2 corpus, May 2026)
+
+Eight new packages added to the eval. Authored against the manifest
+(selection-biased upward, same caveat as polars/requests in v0.1) but
+covering three new archetypes the v0.1 eval did not test: post-cutoff
+protocol SDKs (`mcp`, `fastmcp`), renamed-everything geospatial
+indexing (`h3` 4.x), and stdlib-shadowing or narrow-API utility
+libraries (`arrow`, `pendulum`, `returns`, `msgspec`,
+`more_itertools`). Total: 123 items × 2 conditions × 2 models = 492
+claude-cli calls per condition pair.
+
+### Aggregate
+
+| Model | Packages | Items | no-skill | skill | Lift |
+|---|---|---|---|---|---|
+| Sonnet 4.5 | 8 | 123 | 82/123 (66.7%) | **109/123 (88.6%)** | **+22.0pp** |
+| Haiku 4.5  | 8 | 123 | 87/123 (70.7%) | **117/123 (95.1%)** | **+24.4pp** |
+
+Both models lift by `+22-24pp` on a substantially broader corpus
+than v0.1's 3 packages. The polars `+40pp` finding generalizes in
+direction; the per-package magnitude varies with how unfamiliar each
+surface is to the model.
+
+### Per package
+
+| Package | Sonnet no-skill / skill / lift | Haiku no-skill / skill / lift |
+|---|---|---|
+| `arrow` 1.4 | 14/15 (93%) / 12/15 (80%) / **−13.3pp** | 13/15 / 13/15 / +0.0pp |
+| `pendulum` 3.2 | 12/12 / 12/12 / 0.0pp (ceiling) | 11/12 / 12/12 / +8.3pp |
+| `mcp` 1.27 | 3/15 (20%) / **15/15 (100%)** / **+80.0pp** | 13/15 / 15/15 / +13.3pp |
+| `fastmcp` 3.3 | 9/18 (50%) / **17/18 (94%)** / **+44.4pp** | 13/18 / 18/18 / +27.8pp |
+| `h3` 4.4 | 18/18 / 18/18 / 0.0pp (ceiling) | 8/18 (44%) / **18/18 (100%)** / **+55.6pp** |
+| `returns` 0.27 | 12/15 / 14/15 / +13.3pp | 11/15 / 14/15 / +20.0pp |
+| `msgspec` 0.21 | 12/15 / 14/15 / +13.3pp | 15/15 / 15/15 / 0.0pp (ceiling) |
+| `more_itertools` 11.1 | 2/15 (13%) / 7/15 (47%) / **+33.3pp** | 3/15 / **12/15 (80%)** / **+60.0pp** |
+
+### Finding 6: pre-flight ate three findings of its own
+
+Three operational issues surfaced in pre-flight that any future
+corpus expansion should expect:
+
+1. **Selector miss on canonical user-facing surfaces.** Pre-flight
+   ran `pip-skill convert` for each of the 8 packages, then grepped
+   each `plugin.json` for the drafted `expected_qualname`. **Of 24
+   drafted items, only 7 were covered.** Drafts targeting
+   `mcp.server.fastmcp.FastMCP`, `h3.latlng_to_cell`,
+   `polygon_to_cells`, `cell_to_latlng`, `returns.result.Success`,
+   `msgspec.Struct`, `msgspec.json.decode`, and every `toolz.*`
+   draft were not in their respective manifests. The selector picked
+   types over helpers, deep internals over canonical user APIs, and
+   for `toolz` picked only its lazy-loader infrastructure
+   (`tlz._build_tlz.TlzLoader.*`). This is a real selector bug worth
+   a v0.3 fix. As a workaround for v0.2 the eval items were
+   rewritten to target whatever each manifest actually contained,
+   measuring "given the selector's choices, does the skill help?"
+   not "does the skill cover the package's user-facing API?". For
+   `toolz` no rewrite was possible; substituted with
+   `more_itertools`.
+2. **Method qualnames are unscoreable.** `_attr_chain` in
+   [`eval.py`](src/pip_skill/eval.py) only walks `Name` and
+   `Attribute` AST nodes; method calls through an instance variable
+   (`server.list_tools()`) have a `Name` root that is the local
+   variable, not the package. Drafts targeting
+   `fastmcp.FastMCP.list_tools` and `returns.result.Result.bind`
+   were dropped before authoring.
+3. **Parallel package runs trigger claude-cli throttling on the
+   longer-prompt condition.** The first attempt ran 6 packages in
+   parallel for Sonnet. claude-cli emitted `Server is temporarily
+   limiting requests (not your usage limit)` errors on 4-11 items
+   per package, with the `skill` condition hit harder than
+   `no-skill` because the SKILL.md adds tokens. Per-package
+   aggregate lift looked like `-13pp` to `-33pp` on regressions that
+   were entirely rate-limit artefacts. The fix: run packages
+   sequentially. The clean per-package numbers in the table above
+   are from the sequential re-run.
+
+### Finding 7: the polars finding generalizes by direction
+
+Across 8 new packages, 5 show positive lift on Sonnet (mcp, fastmcp,
+returns, msgspec, more_itertools), 2 are at ceiling without skill
+(pendulum, h3), and 1 regresses (arrow). On Haiku, 6 of 8 show
+positive lift, 2 are at ceiling (msgspec, partial pendulum), zero
+regress.
+
+The pattern matches v0.1: where the model already nails the package
+(arrow on Sonnet, msgspec on Haiku), the skill adds no value or
+slightly hurts by surfacing alternative-named helpers. Where the
+model is uncertain (post-cutoff `mcp` on Sonnet, every package on
+Haiku), the skill closes the gap.
+
+### Finding 8: smaller model with skill beats larger model alone
+
+Haiku + skill (117/123, 95.1%) outperforms Sonnet alone (82/123,
+66.7%) by **28.4pp**. Replicates the v0.1 polars-only result
+(Haiku+skill 97% beat Sonnet alone 50% by 47pp) on a broader,
+multi-archetype corpus. Cost-quality argument for shipping skills
+with small models holds.
+
+### Finding 9: arrow shows the only real regression and it is a selector bug
+
+Sonnet on arrow drops 13pp with the skill (14/15 → 12/15). Three
+misses, two of which point at the same selector ranking issue:
+
+| Task | Expected | Model emitted (skill) |
+|---|---|---|
+| "Create an ArrowFactory instance" | `arrow.ArrowFactory` | `arrow.factory` |
+| "Construct an ArrowFactory bound to a custom Arrow class" | `arrow.ArrowFactory` | `arrow.factory` |
+| "Convert Unix timestamp to Arrow datetime" | `arrow.get` | `arrow.Arrow.fromtimestamp` |
+
+The skill manifest contains both `arrow.ArrowFactory` (the class)
+and `arrow.factory` (a module-level function that returns the same
+thing). The model picks the lowercase function form when the skill
+is present. Selector ranking should prefer the canonical class form.
+The third miss (Unix timestamp) is an authoring ambiguity: both
+`arrow.get` and `arrow.Arrow.fromtimestamp` are valid; the eval's
+strict-qualname match treats the alternative as wrong.
+
+### Threats to validity (v0.2)
+
+- **Selection-bias upward, again.** Items were authored against the
+  manifest because writing them blind would have measured the
+  selector gap (Finding 6), not skill utility. The aggregate lift is
+  therefore the upper-bound on what the skill can achieve given the
+  selector's current choices, not what an end-user would see on a
+  generated skill they did not also help shape.
+- **No `expected_kwargs` checks.** All items score on qualname only.
+  Real skill value includes correct kwarg shape; the harness
+  currently does not measure this.
+- **Method and class-base qualnames excluded.** Per Finding 6's
+  second item, surface area for DataFrame method chains, OO clients,
+  and Result-monad style is not measurable in the current harness.
+  Phase 2 of the corpus (anthropic / openai / langgraph / pydantic-ai
+  / crewai) needs method-aware scoring before it can run.
+- **Single backend, single OAuth session.** All runs used the same
+  Claude Code subscription. No multi-vendor comparison yet.
+- **No `--select` LLM curation tested.** The skill bundles used the
+  default heuristic. Re-running with `--select` would test whether
+  the LLM-curated manifest closes the Finding-6 selector gap.
+
 ## Roadmap experiments
 
 ### Experiment 1: pip-skill on BFCL

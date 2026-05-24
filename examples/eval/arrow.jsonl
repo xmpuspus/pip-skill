@@ -1,0 +1,15 @@
+{"task": "Parse the ISO 8601 string '2026-05-24T10:00:00+09:00' into a timezone-aware datetime using the arrow library (not the stdlib)", "expected_qualname": "arrow.get"}
+{"task": "Convert the Unix timestamp 1748080800 to an Arrow datetime, using the arrow library", "expected_qualname": "arrow.get"}
+{"task": "With the arrow library, parse the date string '2026/05/24 10:00' according to a custom format 'YYYY/MM/DD HH:mm'", "expected_qualname": "arrow.get"}
+{"task": "Get the current time in UTC as an Arrow datetime object", "expected_qualname": "arrow.utcnow"}
+{"task": "Using the arrow library, fetch the current UTC moment as an Arrow instance", "expected_qualname": "arrow.utcnow"}
+{"task": "I need the present time, in UTC, as an arrow Arrow object, not a naive stdlib datetime", "expected_qualname": "arrow.utcnow"}
+{"task": "Using arrow, get the current time localized to the 'Asia/Tokyo' timezone", "expected_qualname": "arrow.now"}
+{"task": "With the arrow library, return the current time in the local system timezone", "expected_qualname": "arrow.now"}
+{"task": "Get an arrow Arrow object representing this exact moment in the 'America/New_York' timezone", "expected_qualname": "arrow.now"}
+{"task": "Using the arrow library, construct an Arrow datetime for 2026 May 24 at 10:30 UTC by passing year, month, day, hour, minute as positional arguments", "expected_qualname": "arrow.Arrow"}
+{"task": "Build an arrow Arrow object for January 1, 2027 at midnight UTC by directly instantiating the Arrow class", "expected_qualname": "arrow.Arrow"}
+{"task": "Instantiate an Arrow datetime from the arrow library for July 4, 2026 at 9:00 AM UTC", "expected_qualname": "arrow.Arrow"}
+{"task": "Using the arrow library, create an ArrowFactory instance to produce arrow datetimes with a custom Arrow subclass", "expected_qualname": "arrow.ArrowFactory"}
+{"task": "I want to instantiate the arrow library's factory class so I can configure custom Arrow subclassing behavior", "expected_qualname": "arrow.ArrowFactory"}
+{"task": "Construct an arrow ArrowFactory bound to a custom Arrow-derived class for specialized datetime construction", "expected_qualname": "arrow.ArrowFactory"}
