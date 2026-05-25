@@ -35,7 +35,8 @@ dependencies = [
 [project.optional-dependencies]
 mcp = ["mcp>=1.0"]
 llm = ["anthropic>=0.40"]
-all = ["pip-skill[mcp,llm]"]
+tui = ["textual>=0.40"]
+all = ["pip-skill[mcp,llm,tui]"]
 dev = [
     "pytest>=8.0",
     "pytest-tmp-files>=0.0.2",
@@ -61,6 +62,7 @@ packages = ["src/pip_skill"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+extend-exclude = ["eval-results", "dist", "build", ".venv", "tmp"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "B", "C4", "SIM", "I", "UP", "N"]

@@ -24,7 +24,7 @@ rm -rf "$VENV"
 uv venv "$VENV" --python 3.11
 # shellcheck disable=SC1091
 source "$VENV/bin/activate"
-uv pip install requests
+uv pip install requests httpx click
 # Editable install of the local pip-skill checkout.
 uv pip install -e "$(cd "$(dirname "$0")/.." && pwd)"
 

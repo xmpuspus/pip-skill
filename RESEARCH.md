@@ -278,29 +278,6 @@ re-runs.)
 
 ### Finding 5: the uniqueness signal silently drops core API
 
-### Finding 3: more tools is not better
-
-Regenerated the polars bundle at four cap sizes ([sweep script](scripts/tool_count_sweep.py)):
-
-| max_tools | coverage | no-skill | skill | conditional skill* |
-|---|---|---|---|---|
-| 5  | 40%  | 60% | 60% | 150% |
-| 10 | 50%  | 60% | 60% | 120% |
-| **20** | **100%** | 60% | **80%** | 80% |
-| 40 | 100% | 50% | 80% | 80% |
-
-\* `conditional skill = skill_pass / coverage_pass`. Values >100%
-mean the model got items right that were not even in the bundle (its
-own prior).
-
-Doubling the menu from 20 to 40 produced **zero improvement**. The
-sweet spot for this eval is N=20, which happens to be pip-skill's
-default. Below that, coverage limits the absolute score (the
-heuristic didn't include the right tools). Above that, the model's
-attention budget is the bottleneck, not menu size.
-
-### Finding 5: the uniqueness signal silently drops core API
-
 On httpx, `coverage` is 8/10 because the heuristic deduplicated
 `httpx.post` and `httpx.put` as too similar to `httpx.request` /
 `httpx.get` (the `score_uniqueness` filter at
@@ -349,16 +326,13 @@ failure modes that an ablation would quantify.
   authored from the package's docs/README, blind to the manifest, to
   remove this bias.
 
-## Second measurements (v0.3 corpus, blind authoring, May 2026)
+## Second measurements (9-package blind corpus, May 2026)
 
 Nine packages, 10 items each, **authored from each package's docs/README
-without consulting the generated SKILL.md**. The earlier v0.2 corpus
-targeted whatever each manifest actually contained — coverage was
-100% by construction, which made the headline +22/+24pp number an
-upward-biased upper bound. The v0.3 corpus measures what an end-user
-actually sees on a freshly generated skill they did not help shape.
-Same eight v0.2 packages plus `toolz` (the v0.3 `resolve_import_name`
-fix unblocked it).
+without consulting the generated SKILL.md**. The blind protocol measures
+what an end-user actually sees on a freshly generated skill they did
+not help shape, rather than the upper-bound coverage you get when
+items are written *against* the manifest.
 
 Total: 90 items × 2 conditions × 2 models = 360 claude-cli calls per
 condition pair.
@@ -370,13 +344,13 @@ condition pair.
 | Sonnet 4.5 | 9 | 90 | 61/90 (67.8%) | **79/90 (87.8%)** | **+20.0pp** |
 | Haiku 4.5  | 9 | 90 | 62/90 (68.9%) | **82/90 (91.1%)** | **+22.2pp** |
 
-Aggregate lift is within 2pp of v0.2's manifest-aware `+22pp` on
-Sonnet — the headline number survives the bias correction. The per-
-package distribution shifts substantially, though: the regression on
-arrow doubles (`-13pp` → `-20pp`), `more_itertools` flips from `+33pp`
-to `-20pp`, and `returns` quadruples from `+13pp` to `+60pp`. The blind
-corpus exposes which packages the model already knows (skill confuses
-it) versus which it doesn't (skill closes the gap).
+Aggregate lift is within 2pp of the prior manifest-aware sweep on
+Sonnet, so the headline number survives the bias correction. The
+per-package distribution shifts substantially, though: under blind
+authoring the regression on arrow doubles, `more_itertools` flips
+from a strong positive to a regression, and `returns` quadruples its
+lift. The blind corpus exposes which packages the model already knows
+(skill confuses it) versus which it doesn't (skill closes the gap).
 
 ### Per package (blind, n=10 each)
 
@@ -408,14 +382,14 @@ Coverage (offline; does the manifest include the expected qualname?):
 | `h3` 4.4 | 1/10 (10%) | Cython bindings have no annotations; lose to wrappers |
 | `more_itertools` 11.1 | 1/10 (10%) | `Stats` / `run_length` outscore `chunked` / `pairwise` |
 
-The v0.3 selector fixes (`_experimental` / `_legacy` penalty,
-C-extension trust widening, `tlz`/`toolz` resolution) recover the
-worst v0.2 failures — `polygon_to_cells_experimental` no longer beats
+The selector's `_experimental` / `_legacy` penalty, C-extension trust
+widening, and `tlz`/`toolz` resolution recover the worst earlier
+failures: `polygon_to_cells_experimental` no longer beats
 `polygon_to_cells`, `msgspec.json.encode` is now a candidate, and
 `toolz` introspects the real `toolz` module instead of `tlz._build_tlz`.
-But the deeper bias remains: when a package has hundreds of public
+The deeper bias remains: when a package has hundreds of public
 names, the annotation/docstring score lifts obscure-but-typed helpers
-above README-canonical ones. That is the v0.4 selector unblock.
+above README-canonical ones. That is the next selector unblock.
 
 ### Finding 6: v0.3 fixes close the worst selector gaps but not the annotation bias
 
@@ -435,7 +409,7 @@ post-fix manifests on the v0.2 packages:
 Specific gaps still open:
 
 - `score_uniqueness` deduplicates same-named callables across
-  submodules (`msgspec.json.encode` vs `msgspec.toml.encode` — one
+  submodules (`msgspec.json.encode` vs `msgspec.toml.encode`: one
   wins, the other drops out).
 - The annotation/docstring score rewards type hints regardless of
   whether the function is canonical. On `more_itertools` and `toolz`,
@@ -457,7 +431,7 @@ knows the package well (no-skill ≥ 80%), the manifest includes
 multiple equivalent canonical forms, and the model picks the one
 the eval did not target.
 
-The polars `+40pp` pattern from v0.1 generalizes in *direction* —
+The polars `+40pp` pattern from v0.1 generalizes in *direction*:
 big lift on post-cutoff packages (mcp, fastmcp), small or negative
 lift on stable canonical APIs the model already nails. Magnitude is
 package-specific and depends on how much room the no-skill baseline
@@ -471,10 +445,10 @@ by **23.3pp**. Replicates the v0.1 polars-only result (Haiku+skill
 blindly-authored corpus. The cost-quality argument for shipping skills
 with small models continues to hold under bias-corrected measurement.
 
-### Finding 9: arrow regression is the same shape as v0.2 but doubles under blind
+### Finding 9: arrow regression is structural, not a sampling artifact
 
-v0.2 arrow Sonnet was −13pp (14/15 → 12/15). v0.3 blind is −20pp
-(8/10 → 6/10). The misses cluster on the same selector pattern:
+Arrow Sonnet under blind authoring is −20pp (8/10 no-skill → 6/10
+skill). The misses cluster on the same selector pattern:
 
 | Task | Expected | Model emitted under skill | Diagnosis |
 |---|---|---|---|
@@ -482,17 +456,17 @@ v0.2 arrow Sonnet was −13pp (14/15 → 12/15). v0.3 blind is −20pp
 | "Parse with format string" | `arrow.get` | `arrow.parser.DateTimeParser.parse` | same |
 | "Configure custom Arrow subclass" | `arrow.ArrowFactory` | `arrow.api.factory` | function shadows class |
 
-The v0.3 selector raised `arrow.ArrowFactory` above `arrow.api.factory`
+The current selector raises `arrow.ArrowFactory` above `arrow.api.factory`
 in the rank order (rank 4 vs rank 11). The class is in the top 5. But
 both are still in the manifest, and the model under skill picks the
 function form because the prose paragraph adjacent to it mentions
-"factory" matching the task text. A v0.4 fix is to drop function-
+"factory" matching the task text. A future fix is to drop function-
 versions when a class-version of the same noun exists in the manifest.
 
 ### Threats to validity (v0.3)
 
 - **Blind authoring is not zero-bias.** Items were authored from each
-  package's docs/README — that's a different bias (toward the most
+  package's docs/README, which is a different bias (toward the most
   documented surfaces), not no bias. End-users with niche tasks still
   see different coverage from these numbers.
 - **n=10 per package, ±15pp variance.** Aggregate (n=90 per model) is
@@ -560,21 +534,21 @@ plus pass-rate on Experiment 1's eval set. The result is two
 contributions: the largest real-API tool-spec corpus, and a principled
 justification for each selector signal.
 
-## Extended experiments (v0.2 corpus expansion)
+## Extended experiments (corpus expansion)
 
-The v0.1 eval ships three packages (httpx, requests, polars). v0.2
-grows that to fifteen, structured in three phases. Candidate list
-mined from four independent research streams (tool-use benchmark
-archaeology, 2026 industry signal, post-cutoff release notes,
-per-archetype design rules). The full ranked list is in the v0.2
-planning notes; the short version below covers the packages drafted
-into `examples/eval/*.jsonl-draft`.
+The v0.1 eval ships three packages (httpx, requests, polars); the
+expanded corpus adds nine more, structured in three phases.
+Candidate list mined from four independent research streams (tool-use
+benchmark archaeology, 2026 industry signal, post-cutoff release
+notes, per-archetype design rules). The short version below covers
+the nine packages shipped under
+[`examples/eval/<pkg>-blind.jsonl`](examples/eval/).
 
 ### Why these packages
 
 The v0.1 eval covers HTTP clients (well-known to the model) and one
 DataFrame library (idiomatic collision with the stdlib). To
-generalize the +40pp polars result, the v0.2 corpus stresses three
+generalize the +40pp polars result, the expanded corpus stresses three
 new archetypes the model is *known* to mishandle:
 
 1. **Post-cutoff protocol SDKs** (`mcp`, `fastmcp`). Released after
@@ -589,23 +563,23 @@ new archetypes the model is *known* to mishandle:
    signature. Polars is the existing exemplar; these are the
    non-DataFrame versions of the same trap.
 
-### Phase 1: seven packages (no new harness work)
+### Phase 1: eight packages (no new harness work)
 
-Drafted as 3-item starter sets in `examples/eval/<pkg>.jsonl-draft`.
-Expansion to n=30 (or the recommended count for the archetype) is a
-mechanical paraphrase pass before running.
+Shipped as 10-item blind sets in
+[`examples/eval/<pkg>-blind.jsonl`](examples/eval/) and measured in
+[`eval-results/blind/REPORT.md`](eval-results/blind/REPORT.md).
 
-| Package | Archetype | Items (full) | Predicted no-skill | Predicted skill | Drafted |
-|---|---|---|---|---|---|
-| `polars` (rerun) | DataFrame | 30 | 50% (baseline) | 90% (baseline) | already shipped |
-| `mcp` | Protocol SDK | 30 | 20% | 65% | [mcp.jsonl-draft](examples/eval/mcp.jsonl-draft) |
-| `fastmcp` | MCP framework | 20 | 15% | 65% | [fastmcp.jsonl-draft](examples/eval/fastmcp.jsonl-draft) |
-| `h3` | Geospatial indexing | 25 | 15% | 70% | [h3.jsonl-draft](examples/eval/h3.jsonl-draft) |
-| `arrow` | Datetime | 15 | 25% | 65% | [arrow.jsonl-draft](examples/eval/arrow.jsonl-draft) |
-| `pendulum` | Datetime | 12 | 35% | 65% | [pendulum.jsonl-draft](examples/eval/pendulum.jsonl-draft) |
-| `toolz` | Functional util | 15 | 25% | 65% | [toolz.jsonl-draft](examples/eval/toolz.jsonl-draft) |
-| `returns` | Result monad | 12 | 20% | 70% | [returns.jsonl-draft](examples/eval/returns.jsonl-draft) |
-| `msgspec` | Serde | 15 | 30% | 70% | [msgspec.jsonl-draft](examples/eval/msgspec.jsonl-draft) |
+| Package | Archetype | Items | Eval set |
+|---|---|---|---|
+| `mcp` | Protocol SDK | 10 | [mcp-blind.jsonl](examples/eval/mcp-blind.jsonl) |
+| `fastmcp` | MCP framework | 10 | [fastmcp-blind.jsonl](examples/eval/fastmcp-blind.jsonl) |
+| `h3` | Geospatial indexing | 10 | [h3-blind.jsonl](examples/eval/h3-blind.jsonl) |
+| `arrow` | Datetime | 10 | [arrow-blind.jsonl](examples/eval/arrow-blind.jsonl) |
+| `pendulum` | Datetime | 10 | [pendulum-blind.jsonl](examples/eval/pendulum-blind.jsonl) |
+| `toolz` | Functional util | 10 | [toolz-blind.jsonl](examples/eval/toolz-blind.jsonl) |
+| `returns` | Result monad | 10 | [returns-blind.jsonl](examples/eval/returns-blind.jsonl) |
+| `msgspec` | Serde | 10 | [msgspec-blind.jsonl](examples/eval/msgspec-blind.jsonl) |
+| `more_itertools` | Itertools | 10 | [more_itertools-blind.jsonl](examples/eval/more_itertools-blind.jsonl) |
 
 Predictions are calibrated against the polars +40pp result. They
 will move once measured; the point is the *direction* and the
@@ -641,7 +615,7 @@ Wall time ~2h.
 
 ### Phase 3: BFCL submission + scientific corpus
 
-After v0.2 ships, three follow-on tracks:
+After the expansion ships, three follow-on tracks:
 
 - Convert pip-skill into a BFCL submission (each pip package = one
   "API class" in BFCL terms). Validates the harness against external
@@ -659,13 +633,13 @@ After v0.2 ships, three follow-on tracks:
 Estimated Phase 3 budget: 5,000+ calls across multi-vendor models.
 Multi-day wall time.
 
-### Recommendation: ship v0.2 with Phase 1 inline
+### Recommendation: ship Phase 1 inline, Phase 2 in a follow-up
 
 Phase 1 alone covers three new archetypes (protocol SDK, geospatial
 indexing, idiomatic-collision functional utils) at zero API-token
-cost. That is enough new evidence to justify v0.2 and a 1h harness
-run from the author's laptop. Phase 2 ships as v0.2.1 two weeks
-later, by which point the post-cutoff agent SDKs (`claude-agent-sdk`,
+cost. That is enough new evidence to justify a release and a 1h
+harness run from the author's laptop. Phase 2 ships two weeks later,
+by which point the post-cutoff agent SDKs (`claude-agent-sdk`,
 `openai-agents`, `agent-framework`) will have stabilized enough to
 add to the corpus as the strongest possible "the LLM literally
 cannot have known this API" story.

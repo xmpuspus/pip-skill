@@ -17,6 +17,9 @@ jobs:
         with:
           fetch-depth: 0
       - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
       - run: uv python install ${{ matrix.python-version }}
       - run: uv sync --all-extras --dev
       - run: uv run ruff check .
@@ -53,3 +56,29 @@ jobs:
           name: dist
           path: dist/
       - uses: pypa/gh-action-pypi-publish@release/v1
+
+  smoke:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Wait for PyPI to index the release
+        run: sleep 60
+      - name: Fresh-venv install + CLI smoke
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euxo pipefail
+          python -m venv /tmp/verify
+          # Strip leading "v" from the tag for the pip pin (v0.1.0 -> 0.1.0).
+          VERSION="${TAG#v}"
+          /tmp/verify/bin/pip install --upgrade pip
+          /tmp/verify/bin/pip install "pip-skill==$VERSION"
+          /tmp/verify/bin/pip install jinja2
+          /tmp/verify/bin/pip-skill --version
+          /tmp/verify/bin/pip-skill info jinja2
+          /tmp/verify/bin/pip-skill convert jinja2 --output /tmp/sk --force
+          /tmp/verify/bin/pip-skill validate /tmp/sk
+          /tmp/verify/bin/pip-skill test /tmp/sk

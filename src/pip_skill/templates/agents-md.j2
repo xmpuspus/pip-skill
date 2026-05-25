@@ -29,7 +29,7 @@ pip install {{ package.name }}
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 {% for param in tool.parameters %}
-| `{{ param.name }}` | `{{ param.type_str or 'any' }}` | {{ 'Yes' if param.required else 'No' }} | {{ param.default or '—' }} | {{ (param.description | sanitize) or '—' }} |
+| `{{ param.name }}` | `{{ param.type_str or 'any' }}` | {{ 'Yes' if param.required else 'No' }} | {{ param.default or '-' }} | {{ (param.description | sanitize) or '-' }} |
 {% endfor %}
 
 {% endif %}

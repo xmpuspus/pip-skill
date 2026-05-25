@@ -1,0 +1,416 @@
+{
+  "name": "requests",
+  "version": "2.32.5",
+  "description": "Python HTTP for Humans.",
+  "author": "Kenneth Reitz",
+  "homepage": "https://requests.readthedocs.io",
+  "license": "Apache-2.0",
+  "generatedBy": "pip-skill v0.1.1.dev4+gb29a5d18a.d20260525",
+  "generatedAt": "1970-01-01T00:00:00+00:00",
+  "sourcePackage": "requests",
+  "sourceVersion": "2.32.5",
+  "importName": "requests",
+  "toolCount": 20,
+  "tools": [
+    {
+      "name": "Request",
+      "functionName": "Request",
+      "qualname": "requests.Request",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "method",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "url",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "headers",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "files",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "data",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "params",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "auth",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "cookies",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "hooks",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "json",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "PreparedRequest",
+      "functionName": "PreparedRequest",
+      "qualname": "requests.PreparedRequest",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+      ]
+    },
+    {
+      "name": "Session",
+      "functionName": "Session",
+      "qualname": "requests.Session",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+      ]
+    },
+    {
+      "name": "Response",
+      "functionName": "Response",
+      "qualname": "requests.Response",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+      ]
+    },
+    {
+      "name": "delete",
+      "functionName": "delete",
+      "qualname": "requests.delete",
+      "module": "requests",
+      "isDestructive": true,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "url",
+          "required": true,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "get",
+      "functionName": "get",
+      "qualname": "requests.get",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "url",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "params",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "patch",
+      "functionName": "patch",
+      "qualname": "requests.patch",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": true,
+      "parameters": [
+        {
+          "name": "url",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "data",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "post",
+      "functionName": "post",
+      "qualname": "requests.post",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": true,
+      "parameters": [
+        {
+          "name": "url",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "data",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "json",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "put",
+      "functionName": "put",
+      "qualname": "requests.put",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": true,
+      "parameters": [
+        {
+          "name": "url",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "data",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "functionName": "head",
+      "qualname": "requests.head",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "url",
+          "required": true,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "options",
+      "functionName": "options",
+      "qualname": "requests.options",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "url",
+          "required": true,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "ConnectTimeout",
+      "functionName": "ConnectTimeout",
+      "qualname": "requests.ConnectTimeout",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "ConnectionError",
+      "functionName": "ConnectionError",
+      "qualname": "requests.ConnectionError",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "FileModeWarning",
+      "functionName": "FileModeWarning",
+      "qualname": "requests.FileModeWarning",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": true,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "HTTPError",
+      "functionName": "HTTPError",
+      "qualname": "requests.HTTPError",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "JSONDecodeError",
+      "functionName": "JSONDecodeError",
+      "qualname": "requests.JSONDecodeError",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "ReadTimeout",
+      "functionName": "ReadTimeout",
+      "qualname": "requests.ReadTimeout",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "RequestException",
+      "functionName": "RequestException",
+      "qualname": "requests.RequestException",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "RequestsDependencyWarning",
+      "functionName": "RequestsDependencyWarning",
+      "qualname": "requests.RequestsDependencyWarning",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": true,
+          "type": "any"
+        }
+      ]
+    },
+    {
+      "name": "Timeout",
+      "functionName": "Timeout",
+      "qualname": "requests.Timeout",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "kwargs",
+          "required": false,
+          "type": "any"
+        }
+      ]
+    }
+  ]
+}

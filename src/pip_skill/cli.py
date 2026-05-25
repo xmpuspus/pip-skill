@@ -713,7 +713,11 @@ def cmd_search(args) -> int:
 
     results = registry.search_registry(args.query)
     if not results:
-        print("No skills found in registry.")
+        if args.query:
+            print(f"No skills matching '{args.query}'.")
+        else:
+            print("The pre-built skill registry is empty or not yet reachable.")
+            print("Generate any skill locally with: pip-skill convert <package>")
         return 0
 
     for entry in results:

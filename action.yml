@@ -38,24 +38,32 @@ runs:
 
     - name: Install pip-skill
       shell: bash
+      env:
+        VERSION: ${{ inputs.pip-skill-version }}
       run: |
-        if [ "${{ inputs.pip-skill-version }}" = "latest" ]; then
+        if [ "$VERSION" = "latest" ]; then
           uv tool install pip-skill
         else
-          uv tool install "pip-skill==${{ inputs.pip-skill-version }}"
+          uv tool install "pip-skill==$VERSION"
         fi
 
     - name: Generate skills
       shell: bash
+      env:
+        PACKAGES: ${{ inputs.packages }}
+        FORMAT: ${{ inputs.format }}
+        OUTPUT_DIR: ${{ inputs.output-dir }}
+        WORKERS: ${{ inputs.workers }}
+        MCP_FLAG: ${{ inputs.mcp }}
       run: |
-        ARGS="--format ${{ inputs.format }} --output-dir ${{ inputs.output-dir }} --workers ${{ inputs.workers }} --force"
-        if [ "${{ inputs.mcp }}" = "true" ]; then
+        ARGS="--format $FORMAT --output-dir $OUTPUT_DIR --workers $WORKERS --force"
+        if [ "$MCP_FLAG" = "true" ]; then
           ARGS="$ARGS --mcp"
         fi
         # If `packages` is a single token that names an existing file, treat it
         # as a requirements file; otherwise pass tokens as package names.
-        if [ -f "${{ inputs.packages }}" ]; then
-          uv tool run pip-skill batch "${{ inputs.packages }}" $ARGS
+        if [ -f "$PACKAGES" ]; then
+          uv tool run pip-skill batch "$PACKAGES" $ARGS
         else
-          uv tool run pip-skill batch ${{ inputs.packages }} $ARGS
+          uv tool run pip-skill batch $PACKAGES $ARGS
         fi

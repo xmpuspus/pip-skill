@@ -1,6 +1,6 @@
 <h1 align="center">pip-skill</h1>
-<p align="center"><strong>Hallucination-free AI skills for any installed Python package. One command. Offline.</strong></p>
-<p align="center">Generates Claude Code, Cursor, Windsurf, OpenCode, and MCP server skills directly from the installed API. No docs scraping, no API key, no LLM in the loop.</p>
+<p align="center"><strong>AI skills built from the installed Python API. One command. Offline. No fabricated function names.</strong></p>
+<p align="center">Generates Claude Code, Cursor, Windsurf, OpenCode, and MCP server skills directly from <code>inspect.signature</code>. No docs scraping, no API key, no LLM in the loop.</p>
 
 <p align="center">
   <a href="https://github.com/xmpuspus/pip-skill/stargazers"><img src="https://img.shields.io/github/stars/xmpuspus/pip-skill" alt="GitHub stars"></a>
@@ -34,14 +34,12 @@ Prefer a permanent install? `pip install pip-skill` and use the
 We measured it. See [`RESEARCH.md`](RESEARCH.md) for methodology and
 the per-package breakdown.
 
-### v0.3 corpus (9 packages, blind authoring, May 2026)
+### 9-package blind eval (May 2026)
 
 Items re-authored from each package's docs/README **without
-consulting the generated SKILL.md**. The v0.2 corpus was authored
-*against* the manifest, so coverage was 100% by construction — the
-+22pp/+24pp headline reported here previously was an upper bound. The
-v0.3 numbers measure what an end-user actually sees on a freshly
-generated skill they did not help shape.
+consulting the generated SKILL.md**, so the eval measures what an
+end-user actually sees on a freshly generated skill they did not help
+shape.
 
 | Model | Packages | Items | no-skill | **skill** | Lift |
 |---|---|---|---|---|---|
@@ -50,10 +48,11 @@ generated skill they did not help shape.
 
 Per-package on Sonnet (blind): mcp `+80pp`, returns / fastmcp `+60pp`
 each, msgspec / pendulum `+10pp`, h3 / toolz at ceiling, arrow /
-more_itertools `-20pp` (skill surfaces low-level alternatives —
-`arrow.parser.DateTimeParser.parse_iso` over `arrow.get`,
-`more_itertools.Stats` over `chunked` — and the model picks the
-specific one over the canonical). Coverage gap is the bigger story:
+more_itertools `-20pp`. The two regressions share a pattern: the
+skill surfaces low-level alternatives like
+`arrow.parser.DateTimeParser.parse_iso` over `arrow.get` and
+`more_itertools.Stats` over `chunked`, and the model picks the
+specific one over the canonical. Coverage gap is the bigger story:
 blind authoring shows `h3` 1/10 and `more_itertools` 1/10 in the
 manifest because the selector's annotation-bias rewards obscure
 well-typed helpers over Cython bindings and README-canonical names.
@@ -197,10 +196,10 @@ introspection pass:
 
 The generated `SKILL.md` follows the open
 [Agent Skills](https://agentskills.io) standard, so it works with
-30+ AI coding tools that consume the spec: Claude Code, Cursor,
+many AI coding tools that consume the spec: Claude Code, Cursor,
 Windsurf, OpenCode, GitHub Copilot, VS Code Copilot, OpenAI Codex,
 Gemini CLI, JetBrains Junie, Goose, Roo Code, Databricks Genie Code,
-and more.
+and others.
 
 ## Real-world examples
 
@@ -396,6 +395,9 @@ Options:
   --output-dir DIR     Base directory (default: cwd)
   --format FORMAT      Output format
   --mcp                Also generate MCP servers
+  --max-tools N        Maximum tools per skill (default: 20)
+  --include PATTERN    Include functions matching glob pattern
+  --exclude PATTERN    Exclude functions matching glob pattern
   --force              Overwrite per-package output dirs
 ```
 
@@ -448,7 +450,7 @@ keep generated skills current with `requirements.txt`:
 ```yaml
 - uses: xmpuspus/pip-skill@v0.1.0
   with:
-    requirements: requirements.txt
+    packages: requirements.txt
     output-dir: ./skills
     workers: 4
 ```
@@ -514,8 +516,9 @@ tokens with correct types and JSON Schema.
 It works for popular packages like `requests` (we measured 9/10
 no-skill on Sonnet). It fails on anything updated after the
 training cutoff, niche packages, and complex signatures. pip-skill
-reads the actual installed API at runtime, so hallucination is
-impossible. CloudAPIBench
+reads the actual installed API at runtime, so function names and
+type signatures come from `inspect.signature`, not the model.
+CloudAPIBench
 ([arXiv:2407.09726](https://arxiv.org/abs/2407.09726)) quantifies
 the training-cutoff gap on low-frequency APIs.
 

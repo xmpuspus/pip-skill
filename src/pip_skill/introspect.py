@@ -632,10 +632,8 @@ def introspect_package(pip_name: str, deterministic: bool = False) -> PackageInf
     """
     logger.info("Introspecting package %s", pip_name)
 
-    # Step 1: Resolve import name
     import_name = resolve_import_name(pip_name)
 
-    # Step 2: Read metadata
     try:
         meta = get_package_metadata(pip_name)
     except Exception:
@@ -649,13 +647,11 @@ def introspect_package(pip_name: str, deterministic: bool = False) -> PackageInf
             "license": "",
         }
 
-    # Step 3: Get dependencies
     try:
         deps = get_required_dependencies(pip_name)
     except Exception:
         deps = []
 
-    # Step 4-6: Walk modules and enumerate API
     def _progress(mod_name):
         print(f"  Scanning {mod_name}...", file=sys.stderr, end="\r", flush=True)
 
@@ -701,7 +697,6 @@ def introspect_package(pip_name: str, deterministic: bool = False) -> PackageInf
             )
         )
 
-    # Step 7: Detect tier
     tier, coverage = detect_tier(modules)
 
     return PackageInfo(

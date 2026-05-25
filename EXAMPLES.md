@@ -34,7 +34,6 @@ u_1033           412 events   $  891.20
 u_7718           203 events   $  650.00
 ```
 
-<img src="demos/google-cloud-bigquery.gif" alt="pip-skill convert google-cloud-bigquery" width="640">
 
 ---
 
@@ -64,7 +63,6 @@ data-eng-shared              4 workers   ~32 DBU/hr
 analytics-dev                2 workers   ~16 DBU/hr
 ```
 
-<img src="demos/databricks-sdk.gif" alt="pip-skill convert databricks-sdk" width="640">
 
 ---
 
@@ -79,10 +77,12 @@ pip install anthropic && pip-skill convert anthropic
 > *"batch summarize these 50 support tickets into one-line descriptions"*
 
 ```python
-import anthropic, json
+import json
+import anthropic
 
 client = anthropic.Anthropic()
-tickets = json.load(open("tickets.json"))
+with open("tickets.json") as f:
+    tickets = json.load(f)
 
 for ticket in tickets:
     msg = client.messages.create(
@@ -99,7 +99,6 @@ for ticket in tickets:
 [T-1044] Webhook retry logic not respecting exponential backoff config
 ```
 
-<img src="demos/anthropic.gif" alt="pip-skill convert anthropic" width="640">
 
 ---
 
@@ -138,7 +137,6 @@ encrypted: services/api/.env
 encrypted: services/worker/.env
 ```
 
-<img src="demos/cryptography.gif" alt="pip-skill convert cryptography" width="640">
 
 ---
 
@@ -177,7 +175,6 @@ worker-01      34%
 worker-02      55%
 ```
 
-<img src="demos/paramiko.gif" alt="pip-skill convert paramiko" width="640">
 
 ---
 
@@ -215,7 +212,6 @@ photo_003.jpg -> photo_003.webp
 12 files processed
 ```
 
-<img src="demos/Pillow.gif" alt="pip-skill convert Pillow" width="640">
 
 ---
 
@@ -232,7 +228,13 @@ Formulas, merged cells, charts, conditional formatting, named ranges, actual `.x
 ```python
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font
-from openpyxl.utils import get_column_letter
+
+sales_data = [
+    ("APAC",     128_000, 142_000, 165_000, 180_000),
+    ("EMEA",      92_000, 105_000, 118_000, 124_000),
+    ("Americas", 240_000, 261_000, 275_000, 298_000),
+    ("Other",     18_000,  21_000,  24_000,  26_000),
+]
 
 wb = Workbook()
 ws = wb.active
@@ -258,7 +260,6 @@ print("saved sales_report.xlsx")
 saved sales_report.xlsx -- 4 regions, 16 rows, formulas applied
 ```
 
-<img src="demos/openpyxl.gif" alt="pip-skill convert openpyxl" width="640">
 
 ---
 
@@ -292,7 +293,6 @@ with open("receipts.csv", "w", newline="") as f:
 receipts.csv written -- 6 files, 43 line items extracted
 ```
 
-<img src="demos/pytesseract.gif" alt="pip-skill convert pytesseract" width="640">
 
 ---
 
@@ -329,7 +329,6 @@ segment_003.mp3   91.2s
 8 segments exported
 ```
 
-<img src="demos/pydub.gif" alt="pip-skill convert pydub" width="640">
 
 ---
 
@@ -344,8 +343,9 @@ Outbound SMS, WhatsApp, voice calls, number lookup, the whole Twilio API without
 > *"text everyone on this list that their appointment is confirmed for tomorrow 10am"*
 
 ```python
-from twilio.rest import Client
+import os
 import csv
+from twilio.rest import Client
 
 client = Client(os.environ["TWILIO_SID"], os.environ["TWILIO_TOKEN"])
 
@@ -369,7 +369,6 @@ failed: Alex Rivera -- Invalid phone number
 24 sent, 1 failed
 ```
 
-<img src="demos/twilio.gif" alt="pip-skill convert twilio" width="640">
 
 ---
 
@@ -384,10 +383,14 @@ Tables, charts, headers, footers, embedded images, custom fonts, contracts, invo
 > *"produce a professional invoice PDF from this JSON data"*
 
 ```python
+import json
 from reportlab.lib.pagesizes import LETTER
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
+
+with open("invoice.json") as f:
+    invoice = json.load(f)
 
 doc = SimpleDocTemplate("invoice.pdf", pagesize=LETTER)
 styles = getSampleStyleSheet()
@@ -412,7 +415,6 @@ print("invoice.pdf written")
 invoice.pdf written -- 1 page, 8 line items, $4,320.00 total
 ```
 
-<img src="demos/reportlab.gif" alt="pip-skill convert reportlab" width="640">
 
 ---
 
@@ -446,7 +448,6 @@ filtered: 4,821 rows matched out of 18,432,901
 top 20 written to apac_top20.parquet
 ```
 
-<img src="demos/pyarrow.gif" alt="pip-skill convert pyarrow" width="640">
 
 ---
 
