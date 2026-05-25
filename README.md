@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/xmpuspus/pip-skill/stargazers"><img src="https://img.shields.io/github/stars/xmpuspus/pip-skill" alt="GitHub stars"></a>
-  <a href="https://pypi.org/project/pip-skill/"><img src="https://img.shields.io/pypi/v/pip-skill.svg" alt="PyPI"></a>
+  <a href="https://pypi.org/project/pip-skill/"><img src="https://img.shields.io/pypi/v/pip-skill.svg?cacheSeconds=300" alt="PyPI"></a>
   <img src="https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue.svg" alt="Python 3.11/3.12/3.13">
   <img src="https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey.svg" alt="Linux | macOS | Windows">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
