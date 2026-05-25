@@ -381,7 +381,12 @@ def test_test_command_nonexistent_dir(tmp_path):
 
 def test_test_command_validates_skill(tmp_path):
     """pip-skill test should validate a generated skill directory by reading
-    the structured `tools` manifest (not by regex-scraping markdown)."""
+    the structured `tools` manifest (not by regex-scraping markdown).
+
+    `requests` is in dev extras (see pyproject.toml) because this test
+    exercises the import path that pip-skill test takes against a real
+    installed package.
+    """
     import json
 
     (tmp_path / ".claude-plugin").mkdir()

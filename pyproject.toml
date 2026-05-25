@@ -43,6 +43,7 @@ dev = [
     "ruff>=0.15,<0.16",
     "pyright>=1.1",
     "PyYAML>=6.0",
+    "requests>=2.32",
 ]
 
 [project.scripts]
