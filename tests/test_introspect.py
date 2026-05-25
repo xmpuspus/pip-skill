@@ -37,6 +37,21 @@ def test_walk_modules_returns_triples(fake_package_on_path):
         assert isinstance(name, str)
 
 
+def test_walk_modules_skips_dunder_main(fake_package_on_path, capsys):
+    """Regression: *.__main__ must be skipped to avoid CLI-parser side effects.
+
+    Real packages (flask, django, uvicorn) execute Click/argparse at
+    __main__ import time, which pollutes stderr with errors like
+    'No such command'. The skip prevents both the noise and the
+    pointless work — __main__ never exports useful API.
+    """
+    results = walk_package_modules("fake_package")
+    names = [name for name, _, _ in results]
+    assert "fake_package.__main__" not in names
+    out = capsys.readouterr().out
+    assert "FAKE_PACKAGE_MAIN_EXECUTED" not in out
+
+
 def test_public_api_with_all(fake_package_on_path):
     mod = importlib.import_module("fake_package")
     functions, classes, has_all = get_public_api(mod)

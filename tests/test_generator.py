@@ -60,6 +60,48 @@ def test_render_skill_md_frontmatter(tmp_path, fake_package_info, fake_package_o
     assert any("tool-count:" in line for line in lines)
 
 
+def test_render_skill_md_frontmatter_is_valid_yaml(
+    tmp_path, fake_package_info, fake_package_on_path
+):
+    """Regression: frontmatter must yaml.safe_load.
+
+    A bare unquoted scalar with an embedded ': ' (e.g.
+    `compatibility: Install with: pip install X`) is parsed by PyYAML as
+    a nested mapping key and raises ScannerError, breaking any consumer
+    that reads the frontmatter.
+    """
+    import yaml
+
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(fake_package_info, [tool], {"mcp": False}, tmp_path)
+
+    content = (tmp_path / "skills" / "fake-package" / "SKILL.md").read_text()
+    assert content.startswith("---\n")
+    _, fm, _ = content.split("---", 2)
+    data = yaml.safe_load(fm)
+    assert data["name"] == "fake-package"
+    assert "compatibility" in data
+    assert data["compatibility"].startswith("Requires python3 and pip")
+
+
+def test_render_skill_md_frontmatter_yaml_with_colon_in_license(
+    tmp_path, fake_package_info, fake_package_on_path
+):
+    """A license string containing a colon must not break frontmatter parsing."""
+    import yaml
+
+    info = fake_package_info
+    info.license = "Custom: see LICENSE for terms"
+
+    tool = _fetch_tool(fake_package_on_path)
+    render_templates(info, [tool], {"mcp": False}, tmp_path)
+
+    content = (tmp_path / "skills" / "fake-package" / "SKILL.md").read_text()
+    _, fm, _ = content.split("---", 2)
+    data = yaml.safe_load(fm)
+    assert data["license"] == "Custom: see LICENSE for terms"
+
+
 def test_render_api_reference(tmp_path, fake_package_info, fake_package_on_path):
     tool = _fetch_tool(fake_package_on_path)
     render_templates(fake_package_info, [tool], {"mcp": False}, tmp_path)

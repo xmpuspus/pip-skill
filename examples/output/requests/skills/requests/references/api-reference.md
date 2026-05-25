@@ -1,78 +1,64 @@
 # requests API Reference
 
-Package: requests v2.32.5
+Package: requests v2.34.2
 Import: `import requests`
-Homepage: https://requests.readthedocs.io
 
 ---
 
-## `requests.Request`
-
-Used to prepare a :class:`PreparedRequest <PreparedRequest>`, which is sent to the server.
+## `requests.request`
 
 Parameters:
-  method: HTTP method to use.
-  url: URL to send.
-  headers: dictionary of headers to send.
-  files: dictionary of {filename: fileobject} files to multipart upload.
-  data: the body to attach to the request. If a dictionary or
-list of tuples ``[(key, value)]`` is provided, form-encoding will
-take place.
-  json: json for the body to attach to the request (if files or data is not specified).
-  params: URL parameters to append to the URL. If a dictionary or
-list of tuples ``[(key, value)]`` is provided, form-encoding will
-take place.
-  auth: Auth handler or (user, pass) tuple.
-  cookies: dictionary or CookieJar of cookies to attach to this request.
-  hooks: dictionary of callback hooks, for internal usage.
-Usage::
+  method: method for the new :class:`Request` object: ``GET``, ``OPTIONS``, ``HEAD``, ``POST``, ``PUT``, ``PATCH``, or ``DELETE``.
+  url: URL for the new :class:`Request` object.
+  params: (optional) Dictionary, list of tuples or bytes to send
+in the query string for the :class:`Request`.
+  data: (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`.
+  json: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
+  headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
+  cookies: (optional) Dict or CookieJar object to send with the :class:`Request`.
+  files: (optional) Dictionary of ``'name': file-like-objects`` (or ``{'name': file-tuple}``) for multipart encoding upload.
+``file-tuple`` can be a 2-tuple ``('filename', fileobj)``, 3-tuple ``('filename', fileobj, 'content_type')``
+or a 4-tuple ``('filename', fileobj, 'content_type', custom_headers)``, where ``'content_type'`` is a string
+defining the content type of the given file and ``custom_headers`` a dict-like object containing additional headers
+to add for the file.
+  auth: (optional) Auth tuple to enable Basic/Digest/Custom HTTP Auth.
+  timeout (float or tuple): (optional) How many seconds to wait for the server to send data
+before giving up, as a float, or a :ref:`(connect timeout, read
+timeout) <timeouts>` tuple.
+  allow_redirects (bool): (optional) Boolean. Enable/disable GET/OPTIONS/POST/PUT/PATCH/DELETE/HEAD redirection. Defaults to ``True``.
+  proxies: (optional) Dictionary mapping protocol to the URL of the proxy.
+  verify: (optional) Either a boolean, in which case it controls whether we verify
+the server's TLS certificate, or a string, in which case it must be a path
+to a CA bundle to use. Defaults to ``True``.
+  stream: (optional) if ``False``, the response content will be immediately downloaded.
+  cert: (optional) if String, path to ssl client cert file (.pem). If Tuple, ('cert', 'key') pair.
 
-  >>> import requests
-  >>> req = requests.Request('GET', 'https://httpbin.org/get')
-  >>> req.prepare()
-  <PreparedRequest [GET]>
+Returns: :class:`Response <Response>` object
 
 ### Signature
 
 ```python
-requests.Request(method = None, url = None, headers = None, files = None, data = None, params = None, auth = None, cookies = None, hooks = None, json = None) -> Request
+requests.request(method: str, url: _t.UriType) -> Response
 ```
 
 ### Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `method` | `any` | No | None | HTTP method to use. |
-| `url` | `any` | No | None | URL to send. |
-| `headers` | `any` | No | None | dictionary of headers to send. |
-| `files` | `any` | No | None | dictionary of {filename: fileobject} files to multipart upload. |
-| `data` | `any` | No | None | the body to attach to the request. If a dictionary or
-list of tuples ``[(key, value)]`` is provided, form-encoding will
-take place. |
-| `params` | `any` | No | None | URL parameters to append to the URL. If a dictionary or
-list of tuples ``[(key, value)]`` is provided, form-encoding will
-take place. |
-| `auth` | `any` | No | None | Auth handler or (user, pass) tuple. |
-| `cookies` | `any` | No | None | dictionary or CookieJar of cookies to attach to this request. |
-| `hooks` | `any` | No | None | dictionary of callback hooks, for internal usage.
-Usage::
-
-  >>> import requests
-  >>> req = requests.Request('GET', 'https://httpbin.org/get')
-  >>> req.prepare()
-  <PreparedRequest [GET]> |
-| `json` | `any` | No | None | json for the body to attach to the request (if files or data is not specified). |
+| `method` | `str` | Yes | - | method for the new :class:`Request` object: ``GET``, ``OPTIONS``, ``HEAD``, ``POST``, ``PUT``, ``PATCH``, or ``DELETE``. |
+| `url` | `_t.UriType` | Yes | - | URL for the new :class:`Request` object. |
 
 ### Returns
 
-`Request`
+`Response`
 
 ### Example
 
 ```python
 import requests
-req = requests.Request('GET', 'https://httpbin.org/get')
-req.prepare()
+req = requests.request('GET', 'https://httpbin.org/get')
+req
 ```
 
 ### JSON Schema
@@ -80,37 +66,569 @@ req.prepare()
 ```json
 {
   "properties": {
-    "auth": {
-      "description": "Auth handler or (user, pass) tuple."
-    },
-    "cookies": {
-      "description": "dictionary or CookieJar of cookies to attach to this request."
-    },
-    "data": {
-      "description": "the body to attach to the request. If a dictionary or\nlist of tuples ``[(key, value)]`` is provided, form-encoding will\ntake place."
-    },
-    "files": {
-      "description": "dictionary of {filename: fileobject} files to multipart upload."
-    },
-    "headers": {
-      "description": "dictionary of headers to send."
-    },
-    "hooks": {
-      "description": "dictionary of callback hooks, for internal usage.\nUsage::\n\n  \u003e\u003e\u003e import requests\n  \u003e\u003e\u003e req = requests.Request(\u0027GET\u0027, \u0027https://httpbin.org/get\u0027)\n  \u003e\u003e\u003e req.prepare()\n  \u003cPreparedRequest [GET]\u003e"
-    },
-    "json": {
-      "description": "json for the body to attach to the request (if files or data is not specified)."
+    "kwargs": {
+      "additionalProperties": true,
+      "description": "Additional keyword arguments (**kwargs)",
+      "type": "object"
     },
     "method": {
-      "description": "HTTP method to use."
-    },
-    "params": {
-      "description": "URL parameters to append to the URL. If a dictionary or\nlist of tuples ``[(key, value)]`` is provided, form-encoding will\ntake place."
+      "description": "method for the new :class:`Request` object: ``GET``, ``OPTIONS``, ``HEAD``, ``POST``, ``PUT``, ``PATCH``, or ``DELETE``.",
+      "type": "string"
     },
     "url": {
-      "description": "URL to send."
+      "description": "URL for the new :class:`Request` object.",
+      "type": "string"
     }
   },
+  "required": [
+    "method",
+    "url"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.delete`
+
+Parameters:
+  url: URL for the new :class:`Request` object.
+  \*\*kwargs: Optional arguments that ``request`` takes.
+
+Returns: :class:`Response <Response>` object
+
+### Signature
+
+```python
+requests.delete(url: _t.UriType) -> Response
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | `_t.UriType` | Yes | - | URL for the new :class:`Request` object. |
+
+### Returns
+
+`Response`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "kwargs": {
+      "additionalProperties": true,
+      "description": "Additional keyword arguments (**kwargs)",
+      "type": "object"
+    },
+    "url": {
+      "description": "URL for the new :class:`Request` object.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.get`
+
+Parameters:
+  url: URL for the new :class:`Request` object.
+  params: (optional) Dictionary, list of tuples or bytes to send
+in the query string for the :class:`Request`.
+  \*\*kwargs: Optional arguments that ``request`` takes.
+
+Returns: :class:`Response <Response>` object
+
+### Signature
+
+```python
+requests.get(url: _t.UriType, params: _t.ParamsType = None) -> Response
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | `_t.UriType` | Yes | - | URL for the new :class:`Request` object. |
+| `params` | `_t.ParamsType` | No | None | (optional) Dictionary, list of tuples or bytes to send
+in the query string for the :class:`Request`. |
+
+### Returns
+
+`Response`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "kwargs": {
+      "additionalProperties": true,
+      "description": "Additional keyword arguments (**kwargs)",
+      "type": "object"
+    },
+    "params": {
+      "description": "(optional) Dictionary, list of tuples or bytes to send\nin the query string for the :class:`Request`.",
+      "type": "string"
+    },
+    "url": {
+      "description": "URL for the new :class:`Request` object.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.patch`
+
+Parameters:
+  url: URL for the new :class:`Request` object.
+  data: (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`.
+  json: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
+  \*\*kwargs: Optional arguments that ``request`` takes.
+
+Returns: :class:`Response <Response>` object
+
+### Signature
+
+```python
+requests.patch(url: _t.UriType, data: _t.DataType = None) -> Response
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | `_t.UriType` | Yes | - | URL for the new :class:`Request` object. |
+| `data` | `_t.DataType` | No | None | (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`. |
+
+### Returns
+
+`Response`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "data": {
+      "description": "(optional) Dictionary, list of tuples, bytes, or file-like\nobject to send in the body of the :class:`Request`.",
+      "type": "string"
+    },
+    "kwargs": {
+      "additionalProperties": true,
+      "description": "Additional keyword arguments (**kwargs)",
+      "type": "object"
+    },
+    "url": {
+      "description": "URL for the new :class:`Request` object.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.post`
+
+Parameters:
+  url: URL for the new :class:`Request` object.
+  data: (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`.
+  json: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
+  \*\*kwargs: Optional arguments that ``request`` takes.
+
+Returns: :class:`Response <Response>` object
+
+### Signature
+
+```python
+requests.post(url: _t.UriType, data: _t.DataType = None, json: _t.JsonType = None) -> Response
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | `_t.UriType` | Yes | - | URL for the new :class:`Request` object. |
+| `data` | `_t.DataType` | No | None | (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`. |
+| `json` | `_t.JsonType` | No | None | (optional) A JSON serializable Python object to send in the body of the :class:`Request`. |
+
+### Returns
+
+`Response`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "data": {
+      "description": "(optional) Dictionary, list of tuples, bytes, or file-like\nobject to send in the body of the :class:`Request`.",
+      "type": "string"
+    },
+    "json": {
+      "description": "(optional) A JSON serializable Python object to send in the body of the :class:`Request`.",
+      "type": "string"
+    },
+    "kwargs": {
+      "additionalProperties": true,
+      "description": "Additional keyword arguments (**kwargs)",
+      "type": "object"
+    },
+    "url": {
+      "description": "URL for the new :class:`Request` object.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.put`
+
+Parameters:
+  url: URL for the new :class:`Request` object.
+  data: (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`.
+  json: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
+  \*\*kwargs: Optional arguments that ``request`` takes.
+
+Returns: :class:`Response <Response>` object
+
+### Signature
+
+```python
+requests.put(url: _t.UriType, data: _t.DataType = None) -> Response
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | `_t.UriType` | Yes | - | URL for the new :class:`Request` object. |
+| `data` | `_t.DataType` | No | None | (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`. |
+
+### Returns
+
+`Response`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "data": {
+      "description": "(optional) Dictionary, list of tuples, bytes, or file-like\nobject to send in the body of the :class:`Request`.",
+      "type": "string"
+    },
+    "kwargs": {
+      "additionalProperties": true,
+      "description": "Additional keyword arguments (**kwargs)",
+      "type": "object"
+    },
+    "url": {
+      "description": "URL for the new :class:`Request` object.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.head`
+
+Parameters:
+  url: URL for the new :class:`Request` object.
+  \*\*kwargs: Optional arguments that ``request`` takes. If
+`allow_redirects` is not provided, it will be set to `False` (as
+opposed to the default :meth:`request` behavior).
+
+Returns: :class:`Response <Response>` object
+
+### Signature
+
+```python
+requests.head(url: _t.UriType) -> Response
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | `_t.UriType` | Yes | - | URL for the new :class:`Request` object. |
+
+### Returns
+
+`Response`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "kwargs": {
+      "additionalProperties": true,
+      "description": "Additional keyword arguments (**kwargs)",
+      "type": "object"
+    },
+    "url": {
+      "description": "URL for the new :class:`Request` object.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.options`
+
+Parameters:
+  url: URL for the new :class:`Request` object.
+  \*\*kwargs: Optional arguments that ``request`` takes.
+
+Returns: :class:`Response <Response>` object
+
+### Signature
+
+```python
+requests.options(url: _t.UriType) -> Response
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `url` | `_t.UriType` | Yes | - | URL for the new :class:`Request` object. |
+
+### Returns
+
+`Response`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "kwargs": {
+      "additionalProperties": true,
+      "description": "Additional keyword arguments (**kwargs)",
+      "type": "object"
+    },
+    "url": {
+      "description": "URL for the new :class:`Request` object.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.ConnectTimeout`
+
+Requests that produced this error are safe to retry.
+
+### Signature
+
+```python
+requests.ConnectTimeout(args: Any, kwargs: Any) -> ConnectTimeout
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`ConnectTimeout`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.ConnectionError`
+
+A Connection error occurred.
+
+### Signature
+
+```python
+requests.ConnectionError(args: Any, kwargs: Any) -> ConnectionError
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`ConnectionError`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.HTTPError`
+
+An HTTP error occurred.
+
+### Signature
+
+```python
+requests.HTTPError(args: Any, kwargs: Any) -> HTTPError
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`HTTPError`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.JSONDecodeError`
+
+Couldn't decode the text into json
+
+### Signature
+
+```python
+requests.JSONDecodeError(args: Any, kwargs: Any) -> JSONDecodeError
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`JSONDecodeError`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
   "type": "object"
 }
 ```
@@ -172,6 +690,86 @@ r
 
 ---
 
+## `requests.ReadTimeout`
+
+The server did not send any data in the allotted amount of time.
+
+### Signature
+
+```python
+requests.ReadTimeout(args: Any, kwargs: Any) -> ReadTimeout
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`ReadTimeout`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.RequestException`
+
+request.
+
+### Signature
+
+```python
+requests.RequestException(args: Any, kwargs: Any) -> RequestException
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`RequestException`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
+  "type": "object"
+}
+```
+
+---
+
 ## `requests.Session`
 
 Provides cookie persistence, connection-pooling, and configuration.
@@ -223,6 +821,126 @@ s.get('https://httpbin.org/get')
 
 ---
 
+## `requests.Timeout`
+
+Catching this error will catch both
+
+### Signature
+
+```python
+requests.Timeout(args: Any, kwargs: Any) -> Timeout
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`Timeout`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.TooManyRedirects`
+
+Too many redirects.
+
+### Signature
+
+```python
+requests.TooManyRedirects(args: Any, kwargs: Any) -> TooManyRedirects
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`TooManyRedirects`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
+  "type": "object"
+}
+```
+
+---
+
+## `requests.URLRequired`
+
+A valid URL is required to make a request.
+
+### Signature
+
+```python
+requests.URLRequired(args: Any, kwargs: Any) -> URLRequired
+```
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `args` | `Any` | Yes | - | - |
+| `kwargs` | `Any` | Yes | - | - |
+
+### Returns
+
+`URLRequired`
+
+
+### JSON Schema
+
+```json
+{
+  "properties": {
+    "args": {},
+    "kwargs": {}
+  },
+  "required": [
+    "args",
+    "kwargs"
+  ],
+  "type": "object"
+}
+```
+
+---
+
 ## `requests.Response`
 
 server's response to an HTTP request.
@@ -254,683 +972,5 @@ requests.Response() -> Response
 
 ---
 
-## `requests.delete`
 
-Parameters:
-  url: URL for the new :class:`Request` object.
-  \*\*kwargs: Optional arguments that ``request`` takes.
-
-Returns: :class:`Response <Response>` object
-
-### Signature
-
-```python
-requests.delete(url)
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `url` | `any` | Yes | - | URL for the new :class:`Request` object. |
-
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "kwargs": {
-      "additionalProperties": true,
-      "description": "Additional keyword arguments (**kwargs)",
-      "type": "object"
-    },
-    "url": {
-      "description": "URL for the new :class:`Request` object.",
-      "type": "string"
-    }
-  },
-  "required": [
-    "url"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.get`
-
-Parameters:
-  url: URL for the new :class:`Request` object.
-  params: (optional) Dictionary, list of tuples or bytes to send
-in the query string for the :class:`Request`.
-  \*\*kwargs: Optional arguments that ``request`` takes.
-
-Returns: :class:`Response <Response>` object
-
-### Signature
-
-```python
-requests.get(url, params = None)
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `url` | `any` | Yes | - | URL for the new :class:`Request` object. |
-| `params` | `any` | No | None | (optional) Dictionary, list of tuples or bytes to send
-in the query string for the :class:`Request`. |
-
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "kwargs": {
-      "additionalProperties": true,
-      "description": "Additional keyword arguments (**kwargs)",
-      "type": "object"
-    },
-    "params": {
-      "description": "(optional) Dictionary, list of tuples or bytes to send\nin the query string for the :class:`Request`."
-    },
-    "url": {
-      "description": "URL for the new :class:`Request` object.",
-      "type": "string"
-    }
-  },
-  "required": [
-    "url"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.patch`
-
-Parameters:
-  url: URL for the new :class:`Request` object.
-  data: (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`.
-  json: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
-  \*\*kwargs: Optional arguments that ``request`` takes.
-
-Returns: :class:`Response <Response>` object
-
-### Signature
-
-```python
-requests.patch(url, data = None)
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `url` | `any` | Yes | - | URL for the new :class:`Request` object. |
-| `data` | `any` | No | None | (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`. |
-
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "data": {
-      "description": "(optional) Dictionary, list of tuples, bytes, or file-like\nobject to send in the body of the :class:`Request`."
-    },
-    "kwargs": {
-      "additionalProperties": true,
-      "description": "Additional keyword arguments (**kwargs)",
-      "type": "object"
-    },
-    "url": {
-      "description": "URL for the new :class:`Request` object.",
-      "type": "string"
-    }
-  },
-  "required": [
-    "url"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.post`
-
-Parameters:
-  url: URL for the new :class:`Request` object.
-  data: (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`.
-  json: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
-  \*\*kwargs: Optional arguments that ``request`` takes.
-
-Returns: :class:`Response <Response>` object
-
-### Signature
-
-```python
-requests.post(url, data = None, json = None)
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `url` | `any` | Yes | - | URL for the new :class:`Request` object. |
-| `data` | `any` | No | None | (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`. |
-| `json` | `any` | No | None | (optional) A JSON serializable Python object to send in the body of the :class:`Request`. |
-
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "data": {
-      "description": "(optional) Dictionary, list of tuples, bytes, or file-like\nobject to send in the body of the :class:`Request`."
-    },
-    "json": {
-      "description": "(optional) A JSON serializable Python object to send in the body of the :class:`Request`."
-    },
-    "kwargs": {
-      "additionalProperties": true,
-      "description": "Additional keyword arguments (**kwargs)",
-      "type": "object"
-    },
-    "url": {
-      "description": "URL for the new :class:`Request` object.",
-      "type": "string"
-    }
-  },
-  "required": [
-    "url"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.put`
-
-Parameters:
-  url: URL for the new :class:`Request` object.
-  data: (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`.
-  json: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
-  \*\*kwargs: Optional arguments that ``request`` takes.
-
-Returns: :class:`Response <Response>` object
-
-### Signature
-
-```python
-requests.put(url, data = None)
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `url` | `any` | Yes | - | URL for the new :class:`Request` object. |
-| `data` | `any` | No | None | (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`. |
-
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "data": {
-      "description": "(optional) Dictionary, list of tuples, bytes, or file-like\nobject to send in the body of the :class:`Request`."
-    },
-    "kwargs": {
-      "additionalProperties": true,
-      "description": "Additional keyword arguments (**kwargs)",
-      "type": "object"
-    },
-    "url": {
-      "description": "URL for the new :class:`Request` object.",
-      "type": "string"
-    }
-  },
-  "required": [
-    "url"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.head`
-
-Parameters:
-  url: URL for the new :class:`Request` object.
-  \*\*kwargs: Optional arguments that ``request`` takes. If
-`allow_redirects` is not provided, it will be set to `False` (as
-opposed to the default :meth:`request` behavior).
-
-Returns: :class:`Response <Response>` object
-
-### Signature
-
-```python
-requests.head(url)
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `url` | `any` | Yes | - | URL for the new :class:`Request` object. |
-
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "kwargs": {
-      "additionalProperties": true,
-      "description": "Additional keyword arguments (**kwargs)",
-      "type": "object"
-    },
-    "url": {
-      "description": "URL for the new :class:`Request` object.",
-      "type": "string"
-    }
-  },
-  "required": [
-    "url"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.options`
-
-Parameters:
-  url: URL for the new :class:`Request` object.
-  \*\*kwargs: Optional arguments that ``request`` takes.
-
-Returns: :class:`Response <Response>` object
-
-### Signature
-
-```python
-requests.options(url)
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `url` | `any` | Yes | - | URL for the new :class:`Request` object. |
-
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "kwargs": {
-      "additionalProperties": true,
-      "description": "Additional keyword arguments (**kwargs)",
-      "type": "object"
-    },
-    "url": {
-      "description": "URL for the new :class:`Request` object.",
-      "type": "string"
-    }
-  },
-  "required": [
-    "url"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.ConnectTimeout`
-
-Requests that produced this error are safe to retry.
-
-### Signature
-
-```python
-requests.ConnectTimeout(args = None, kwargs = None) -> ConnectTimeout
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | No | - | - |
-| `kwargs` | `any` | No | - | - |
-
-### Returns
-
-`ConnectTimeout`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {},
-  "type": "object"
-}
-```
-
----
-
-## `requests.ConnectionError`
-
-A Connection error occurred.
-
-### Signature
-
-```python
-requests.ConnectionError(args = None, kwargs = None) -> ConnectionError
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | No | - | - |
-| `kwargs` | `any` | No | - | - |
-
-### Returns
-
-`ConnectionError`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {},
-  "type": "object"
-}
-```
-
----
-
-## `requests.FileModeWarning`
-
-A file was opened in text mode, but Requests determined its binary length.
-
-### Signature
-
-```python
-requests.FileModeWarning(args, kwargs) -> FileModeWarning
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | Yes | - | - |
-| `kwargs` | `any` | Yes | - | - |
-
-### Returns
-
-`FileModeWarning`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "args": {
-      "type": "string"
-    },
-    "kwargs": {
-      "type": "string"
-    }
-  },
-  "required": [
-    "args",
-    "kwargs"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.HTTPError`
-
-An HTTP error occurred.
-
-### Signature
-
-```python
-requests.HTTPError(args = None, kwargs = None) -> HTTPError
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | No | - | - |
-| `kwargs` | `any` | No | - | - |
-
-### Returns
-
-`HTTPError`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {},
-  "type": "object"
-}
-```
-
----
-
-## `requests.JSONDecodeError`
-
-Couldn't decode the text into json
-
-### Signature
-
-```python
-requests.JSONDecodeError(args = None, kwargs = None) -> JSONDecodeError
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | No | - | - |
-| `kwargs` | `any` | No | - | - |
-
-### Returns
-
-`JSONDecodeError`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {},
-  "type": "object"
-}
-```
-
----
-
-## `requests.ReadTimeout`
-
-The server did not send any data in the allotted amount of time.
-
-### Signature
-
-```python
-requests.ReadTimeout(args = None, kwargs = None) -> ReadTimeout
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | No | - | - |
-| `kwargs` | `any` | No | - | - |
-
-### Returns
-
-`ReadTimeout`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {},
-  "type": "object"
-}
-```
-
----
-
-## `requests.RequestException`
-
-request.
-
-### Signature
-
-```python
-requests.RequestException(args = None, kwargs = None) -> RequestException
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | No | - | - |
-| `kwargs` | `any` | No | - | - |
-
-### Returns
-
-`RequestException`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {},
-  "type": "object"
-}
-```
-
----
-
-## `requests.RequestsDependencyWarning`
-
-An imported dependency doesn't match the expected version range.
-
-### Signature
-
-```python
-requests.RequestsDependencyWarning(args, kwargs) -> RequestsDependencyWarning
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | Yes | - | - |
-| `kwargs` | `any` | Yes | - | - |
-
-### Returns
-
-`RequestsDependencyWarning`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {
-    "args": {
-      "type": "string"
-    },
-    "kwargs": {
-      "type": "string"
-    }
-  },
-  "required": [
-    "args",
-    "kwargs"
-  ],
-  "type": "object"
-}
-```
-
----
-
-## `requests.Timeout`
-
-Catching this error will catch both
-
-### Signature
-
-```python
-requests.Timeout(args = None, kwargs = None) -> Timeout
-```
-
-### Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `args` | `any` | No | - | - |
-| `kwargs` | `any` | No | - | - |
-
-### Returns
-
-`Timeout`
-
-
-### JSON Schema
-
-```json
-{
-  "properties": {},
-  "type": "object"
-}
-```
-
----
-
-
-*Generated by pip-skill v0.1.1.dev4+gb29a5d18a.d20260525 on 1970-01-01T00:00:00+00:00*
+*Generated by pip-skill v0.1.1.dev0+g2ace04cc9.d20260525 on 1970-01-01T00:00:00+00:00*

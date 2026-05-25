@@ -292,6 +292,12 @@ def walk_package_modules(
         prefix=pkg.__name__ + ".",
         onerror=lambda name: None,
     ):
+        # Skip *.__main__ — these are CLI entry points (flask, django,
+        # uvicorn, etc.) whose top-level code parses sys.argv at import
+        # time, polluting stderr with "no such command" errors and never
+        # contributing a useful API surface.
+        if modinfo.name.rsplit(".", 1)[-1] == "__main__":
+            continue
         if progress_callback:
             progress_callback(modinfo.name)
         try:

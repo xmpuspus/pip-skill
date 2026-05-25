@@ -3,13 +3,12 @@ name: requests
 description: >-
   Python HTTP for Humans.
   Use when working with the requests Python package.
-license: Apache-2.0
-compatibility: Requires python3 and pip. Install with: pip install requests
+license: "Apache-2.0"
+compatibility: "Requires python3 and pip. Install with: pip install requests"
 metadata:
-  version: "2.32.5"
+  version: "2.34.2"
   tool-count: "20"
   generated-by: pip-skill
-  homepage: "https://requests.readthedocs.io"
 ---
 
 # requests
@@ -30,44 +29,146 @@ This package requires: charset_normalizer, idna, urllib3, certifi
 import requests
 
 import requests
-req = requests.Request('GET', 'https://httpbin.org/get')
-req.prepare()
+req = requests.request('GET', 'https://httpbin.org/get')
+req
 ```
 
 ## Available Functions
 
-### `requests.Request`
+### `requests.request`
 
-A user-created :class:`Request <Request>` object.
+Constructs and sends a :class:`Request <Request>`.
 
 **Parameters:**
-- `method`, optional: HTTP method to use.
-- `url`, optional: URL to send.
-- `headers`, optional: dictionary of headers to send.
-- `files`, optional: dictionary of {filename: fileobject} files to multipart upload.
-- `data`, optional: the body to attach to the request. If a dictionary or
-list of tuples ``[(key, value)]`` is provided, form-encoding will
-take place.
-- `params`, optional: URL parameters to append to the URL. If a dictionary or
-list of tuples ``[(key, value)]`` is provided, form-encoding will
-take place.
-- `auth`, optional: Auth handler or (user, pass) tuple.
-- `cookies`, optional: dictionary or CookieJar of cookies to attach to this request.
-- `hooks`, optional: dictionary of callback hooks, for internal usage.
-Usage::
-
-  >>> import requests
-  >>> req = requests.Request('GET', 'https://httpbin.org/get')
-  >>> req.prepare()
-  <PreparedRequest [GET]>
-- `json`, optional: json for the body to attach to the request (if files or data is not specified).
-**Returns:** Request
+- `method` (str): method for the new :class:`Request` object: ``GET``, ``OPTIONS``, ``HEAD``, ``POST``, ``PUT``, ``PATCH``, or ``DELETE``.
+- `url` (_t.UriType): URL for the new :class:`Request` object.
+**Returns:** Response
 
 ```python
 import requests
-req = requests.Request('GET', 'https://httpbin.org/get')
-req.prepare()
+req = requests.request('GET', 'https://httpbin.org/get')
+req
 ```
+
+### `requests.delete`
+
+> [CAUTION] This function modifies or deletes data. Confirm with the user before calling.
+
+Sends a DELETE request.
+
+**Parameters:**
+- `url` (_t.UriType): URL for the new :class:`Request` object.
+**Returns:** Response
+
+
+### `requests.get`
+
+Sends a GET request.
+
+**Parameters:**
+- `url` (_t.UriType): URL for the new :class:`Request` object.
+- `params` (_t.ParamsType), optional: (optional) Dictionary, list of tuples or bytes to send
+in the query string for the :class:`Request`.
+**Returns:** Response
+
+
+### `requests.patch`
+
+> [NOTE] This function writes or sends data. Verify parameters before calling.
+
+Sends a PATCH request.
+
+**Parameters:**
+- `url` (_t.UriType): URL for the new :class:`Request` object.
+- `data` (_t.DataType), optional: (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`.
+**Returns:** Response
+
+
+### `requests.post`
+
+> [NOTE] This function writes or sends data. Verify parameters before calling.
+
+Sends a POST request.
+
+**Parameters:**
+- `url` (_t.UriType): URL for the new :class:`Request` object.
+- `data` (_t.DataType), optional: (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`.
+- `json` (_t.JsonType), optional: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
+**Returns:** Response
+
+
+### `requests.put`
+
+> [NOTE] This function writes or sends data. Verify parameters before calling.
+
+Sends a PUT request.
+
+**Parameters:**
+- `url` (_t.UriType): URL for the new :class:`Request` object.
+- `data` (_t.DataType), optional: (optional) Dictionary, list of tuples, bytes, or file-like
+object to send in the body of the :class:`Request`.
+**Returns:** Response
+
+
+### `requests.head`
+
+Sends a HEAD request.
+
+**Parameters:**
+- `url` (_t.UriType): URL for the new :class:`Request` object.
+**Returns:** Response
+
+
+### `requests.options`
+
+Sends an OPTIONS request.
+
+**Parameters:**
+- `url` (_t.UriType): URL for the new :class:`Request` object.
+**Returns:** Response
+
+
+### `requests.ConnectTimeout`
+
+The request timed out while trying to connect to the remote server.
+
+**Parameters:**
+- `args` (Any)
+- `kwargs` (Any)
+**Returns:** ConnectTimeout
+
+
+### `requests.ConnectionError`
+
+A Connection error occurred.
+
+**Parameters:**
+- `args` (Any)
+- `kwargs` (Any)
+**Returns:** ConnectionError
+
+
+### `requests.HTTPError`
+
+An HTTP error occurred.
+
+**Parameters:**
+- `args` (Any)
+- `kwargs` (Any)
+**Returns:** HTTPError
+
+
+### `requests.JSONDecodeError`
+
+Couldn't decode the text into json
+
+**Parameters:**
+- `args` (Any)
+- `kwargs` (Any)
+**Returns:** JSONDecodeError
+
 
 ### `requests.PreparedRequest`
 
@@ -82,6 +183,26 @@ r = req.prepare()
 r
 ```
 
+### `requests.ReadTimeout`
+
+The server did not send any data in the allotted amount of time.
+
+**Parameters:**
+- `args` (Any)
+- `kwargs` (Any)
+**Returns:** ReadTimeout
+
+
+### `requests.RequestException`
+
+There was an ambiguous exception that occurred while handling your
+
+**Parameters:**
+- `args` (Any)
+- `kwargs` (Any)
+**Returns:** RequestException
+
+
 ### `requests.Session`
 
 A Requests session.
@@ -94,174 +215,41 @@ s = requests.Session()
 s.get('https://httpbin.org/get')
 ```
 
-### `requests.Response`
-
-The :class:`Response <Response>` object, which contains a
-
-**Returns:** Response
-
-
-### `requests.delete`
-
-> [CAUTION] This function modifies or deletes data. Confirm with the user before calling.
-
-Sends a DELETE request.
-
-**Parameters:**
-- `url`: URL for the new :class:`Request` object.
-
-
-### `requests.get`
-
-Sends a GET request.
-
-**Parameters:**
-- `url`: URL for the new :class:`Request` object.
-- `params`, optional: (optional) Dictionary, list of tuples or bytes to send
-in the query string for the :class:`Request`.
-
-
-### `requests.patch`
-
-> [NOTE] This function writes or sends data. Verify parameters before calling.
-
-Sends a PATCH request.
-
-**Parameters:**
-- `url`: URL for the new :class:`Request` object.
-- `data`, optional: (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`.
-
-
-### `requests.post`
-
-> [NOTE] This function writes or sends data. Verify parameters before calling.
-
-Sends a POST request.
-
-**Parameters:**
-- `url`: URL for the new :class:`Request` object.
-- `data`, optional: (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`.
-- `json`, optional: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
-
-
-### `requests.put`
-
-> [NOTE] This function writes or sends data. Verify parameters before calling.
-
-Sends a PUT request.
-
-**Parameters:**
-- `url`: URL for the new :class:`Request` object.
-- `data`, optional: (optional) Dictionary, list of tuples, bytes, or file-like
-object to send in the body of the :class:`Request`.
-
-
-### `requests.head`
-
-Sends a HEAD request.
-
-**Parameters:**
-- `url`: URL for the new :class:`Request` object.
-
-
-### `requests.options`
-
-Sends an OPTIONS request.
-
-**Parameters:**
-- `url`: URL for the new :class:`Request` object.
-
-
-### `requests.ConnectTimeout`
-
-The request timed out while trying to connect to the remote server.
-
-**Parameters:**
-- `args`, optional
-- `kwargs`, optional
-**Returns:** ConnectTimeout
-
-
-### `requests.ConnectionError`
-
-A Connection error occurred.
-
-**Parameters:**
-- `args`, optional
-- `kwargs`, optional
-**Returns:** ConnectionError
-
-
-### `requests.FileModeWarning`
-
-A file was opened in text mode, but Requests determined its binary length.
-
-**Parameters:**
-- `args`
-- `kwargs`
-**Returns:** FileModeWarning
-
-
-### `requests.HTTPError`
-
-An HTTP error occurred.
-
-**Parameters:**
-- `args`, optional
-- `kwargs`, optional
-**Returns:** HTTPError
-
-
-### `requests.JSONDecodeError`
-
-Couldn't decode the text into json
-
-**Parameters:**
-- `args`, optional
-- `kwargs`, optional
-**Returns:** JSONDecodeError
-
-
-### `requests.ReadTimeout`
-
-The server did not send any data in the allotted amount of time.
-
-**Parameters:**
-- `args`, optional
-- `kwargs`, optional
-**Returns:** ReadTimeout
-
-
-### `requests.RequestException`
-
-There was an ambiguous exception that occurred while handling your
-
-**Parameters:**
-- `args`, optional
-- `kwargs`, optional
-**Returns:** RequestException
-
-
-### `requests.RequestsDependencyWarning`
-
-An imported dependency doesn't match the expected version range.
-
-**Parameters:**
-- `args`
-- `kwargs`
-**Returns:** RequestsDependencyWarning
-
-
 ### `requests.Timeout`
 
 The request timed out.
 
 **Parameters:**
-- `args`, optional
-- `kwargs`, optional
+- `args` (Any)
+- `kwargs` (Any)
 **Returns:** Timeout
+
+
+### `requests.TooManyRedirects`
+
+Too many redirects.
+
+**Parameters:**
+- `args` (Any)
+- `kwargs` (Any)
+**Returns:** TooManyRedirects
+
+
+### `requests.URLRequired`
+
+A valid URL is required to make a request.
+
+**Parameters:**
+- `args` (Any)
+- `kwargs` (Any)
+**Returns:** URLRequired
+
+
+### `requests.Response`
+
+The :class:`Response <Response>` object, which contains a
+
+**Returns:** Response
 
 
 
@@ -287,6 +275,3 @@ import requests
 For detailed API documentation including all parameters, types, and examples,
 read the file `references/api-reference.md` in this skill directory.
 
-## External Documentation
-
-Official docs: https://requests.readthedocs.io

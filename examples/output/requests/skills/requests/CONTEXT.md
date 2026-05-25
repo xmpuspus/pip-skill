@@ -24,9 +24,3 @@
 - `ImportError`: Package not installed. Run `pip install requests`
 - `AttributeError`: Function may have moved between versions. Check `requests.__version__`
 - `TypeError`: Wrong argument types. Check parameter types in SKILL.md
-
-## Dynamic Package Note
-
-requests has low annotation coverage (0%).
-Some functions may accept types not reflected in the schema.
-When in doubt, pass strings and let the package handle conversion.

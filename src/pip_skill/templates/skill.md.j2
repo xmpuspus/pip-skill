@@ -4,9 +4,9 @@ description: >-
   {{ package.description | sanitize | truncate(400) }}
   Use when working with the {{ package.name }} Python package.
 {% if package.license %}
-license: {{ package.license | sanitize }}
+license: {{ package.license | sanitize | tojson }}
 {% endif %}
-compatibility: Requires python3 and pip. Install with: pip install {{ package.name }}
+compatibility: "Requires python3 and pip. Install with: pip install {{ package.name }}"
 metadata:
   version: "{{ package.version }}"
   tool-count: "{{ tools | length }}"

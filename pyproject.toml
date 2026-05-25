@@ -40,8 +40,9 @@ all = ["pip-skill[mcp,llm,tui]"]
 dev = [
     "pytest>=8.0",
     "pytest-tmp-files>=0.0.2",
-    "ruff>=0.8",
+    "ruff>=0.15,<0.16",
     "pyright>=1.1",
+    "PyYAML>=6.0",
 ]
 
 [project.scripts]

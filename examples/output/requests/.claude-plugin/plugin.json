@@ -1,105 +1,35 @@
 {
   "name": "requests",
-  "version": "2.32.5",
+  "version": "2.34.2",
   "description": "Python HTTP for Humans.",
-  "author": "Kenneth Reitz",
-  "homepage": "https://requests.readthedocs.io",
+  "author": "Kenneth Reitz \u003cme@kennethreitz.org\u003e",
+  "homepage": "",
   "license": "Apache-2.0",
-  "generatedBy": "pip-skill v0.1.1.dev4+gb29a5d18a.d20260525",
+  "generatedBy": "pip-skill v0.1.1.dev0+g2ace04cc9.d20260525",
   "generatedAt": "1970-01-01T00:00:00+00:00",
   "sourcePackage": "requests",
-  "sourceVersion": "2.32.5",
+  "sourceVersion": "2.34.2",
   "importName": "requests",
   "toolCount": 20,
   "tools": [
     {
-      "name": "Request",
-      "functionName": "Request",
-      "qualname": "requests.Request",
+      "name": "request",
+      "functionName": "request",
+      "qualname": "requests.request",
       "module": "requests",
       "isDestructive": false,
       "isWrite": false,
       "parameters": [
         {
           "name": "method",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "str"
         },
         {
           "name": "url",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "headers",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "files",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "data",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "params",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "auth",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "cookies",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "hooks",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "json",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "_t.UriType"
         }
-      ]
-    },
-    {
-      "name": "PreparedRequest",
-      "functionName": "PreparedRequest",
-      "qualname": "requests.PreparedRequest",
-      "module": "requests",
-      "isDestructive": false,
-      "isWrite": false,
-      "parameters": [
-      ]
-    },
-    {
-      "name": "Session",
-      "functionName": "Session",
-      "qualname": "requests.Session",
-      "module": "requests",
-      "isDestructive": false,
-      "isWrite": false,
-      "parameters": [
-      ]
-    },
-    {
-      "name": "Response",
-      "functionName": "Response",
-      "qualname": "requests.Response",
-      "module": "requests",
-      "isDestructive": false,
-      "isWrite": false,
-      "parameters": [
       ]
     },
     {
@@ -113,7 +43,7 @@
         {
           "name": "url",
           "required": true,
-          "type": "any"
+          "type": "_t.UriType"
         }
       ]
     },
@@ -128,12 +58,12 @@
         {
           "name": "url",
           "required": true,
-          "type": "any"
+          "type": "_t.UriType"
         },
         {
           "name": "params",
           "required": false,
-          "type": "any"
+          "type": "_t.ParamsType"
         }
       ]
     },
@@ -148,12 +78,12 @@
         {
           "name": "url",
           "required": true,
-          "type": "any"
+          "type": "_t.UriType"
         },
         {
           "name": "data",
           "required": false,
-          "type": "any"
+          "type": "_t.DataType"
         }
       ]
     },
@@ -168,17 +98,17 @@
         {
           "name": "url",
           "required": true,
-          "type": "any"
+          "type": "_t.UriType"
         },
         {
           "name": "data",
           "required": false,
-          "type": "any"
+          "type": "_t.DataType"
         },
         {
           "name": "json",
           "required": false,
-          "type": "any"
+          "type": "_t.JsonType"
         }
       ]
     },
@@ -193,12 +123,12 @@
         {
           "name": "url",
           "required": true,
-          "type": "any"
+          "type": "_t.UriType"
         },
         {
           "name": "data",
           "required": false,
-          "type": "any"
+          "type": "_t.DataType"
         }
       ]
     },
@@ -213,7 +143,7 @@
         {
           "name": "url",
           "required": true,
-          "type": "any"
+          "type": "_t.UriType"
         }
       ]
     },
@@ -228,7 +158,7 @@
         {
           "name": "url",
           "required": true,
-          "type": "any"
+          "type": "_t.UriType"
         }
       ]
     },
@@ -242,13 +172,13 @@
       "parameters": [
         {
           "name": "args",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         },
         {
           "name": "kwargs",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         }
       ]
     },
@@ -262,33 +192,13 @@
       "parameters": [
         {
           "name": "args",
-          "required": false,
-          "type": "any"
-        },
-        {
-          "name": "kwargs",
-          "required": false,
-          "type": "any"
-        }
-      ]
-    },
-    {
-      "name": "FileModeWarning",
-      "functionName": "FileModeWarning",
-      "qualname": "requests.FileModeWarning",
-      "module": "requests",
-      "isDestructive": false,
-      "isWrite": false,
-      "parameters": [
-        {
-          "name": "args",
           "required": true,
-          "type": "any"
+          "type": "Any"
         },
         {
           "name": "kwargs",
           "required": true,
-          "type": "any"
+          "type": "Any"
         }
       ]
     },
@@ -302,13 +212,13 @@
       "parameters": [
         {
           "name": "args",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         },
         {
           "name": "kwargs",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         }
       ]
     },
@@ -322,14 +232,24 @@
       "parameters": [
         {
           "name": "args",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         },
         {
           "name": "kwargs",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         }
+      ]
+    },
+    {
+      "name": "PreparedRequest",
+      "functionName": "PreparedRequest",
+      "qualname": "requests.PreparedRequest",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
       ]
     },
     {
@@ -342,13 +262,13 @@
       "parameters": [
         {
           "name": "args",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         },
         {
           "name": "kwargs",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         }
       ]
     },
@@ -362,34 +282,24 @@
       "parameters": [
         {
           "name": "args",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         },
         {
           "name": "kwargs",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         }
       ]
     },
     {
-      "name": "RequestsDependencyWarning",
-      "functionName": "RequestsDependencyWarning",
-      "qualname": "requests.RequestsDependencyWarning",
+      "name": "Session",
+      "functionName": "Session",
+      "qualname": "requests.Session",
       "module": "requests",
       "isDestructive": false,
       "isWrite": false,
       "parameters": [
-        {
-          "name": "args",
-          "required": true,
-          "type": "any"
-        },
-        {
-          "name": "kwargs",
-          "required": true,
-          "type": "any"
-        }
       ]
     },
     {
@@ -402,14 +312,64 @@
       "parameters": [
         {
           "name": "args",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         },
         {
           "name": "kwargs",
-          "required": false,
-          "type": "any"
+          "required": true,
+          "type": "Any"
         }
+      ]
+    },
+    {
+      "name": "TooManyRedirects",
+      "functionName": "TooManyRedirects",
+      "qualname": "requests.TooManyRedirects",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": true,
+          "type": "Any"
+        },
+        {
+          "name": "kwargs",
+          "required": true,
+          "type": "Any"
+        }
+      ]
+    },
+    {
+      "name": "URLRequired",
+      "functionName": "URLRequired",
+      "qualname": "requests.URLRequired",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
+        {
+          "name": "args",
+          "required": true,
+          "type": "Any"
+        },
+        {
+          "name": "kwargs",
+          "required": true,
+          "type": "Any"
+        }
+      ]
+    },
+    {
+      "name": "Response",
+      "functionName": "Response",
+      "qualname": "requests.Response",
+      "module": "requests",
+      "isDestructive": false,
+      "isWrite": false,
+      "parameters": [
       ]
     }
   ]

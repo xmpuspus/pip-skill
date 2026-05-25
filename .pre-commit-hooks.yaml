@@ -1,24 +1,29 @@
 - id: pip-skill-sync
-  name: Regenerate AI skills from pinned dependencies
+  name: Regenerate AI skills from requirements.txt
   description: |
-    On every commit that changes requirements.txt / pyproject.toml,
-    regenerate the AI assistant skills under ./skills/ from the currently
-    installed package versions. Skills are committed alongside the
-    dependency change so reviewers see exactly what the AI will see.
+    When requirements.txt changes, regenerate the AI assistant skills
+    under ./skills/ for the packages it lists. Skills are committed
+    alongside the dependency change so reviewers see exactly what the
+    AI will see. Reads packages from the changed requirements file
+    (passed by pre-commit as a positional argument).
+
+    Uses language: system so pip-skill runs in your project venv,
+    where the target packages are actually installed. Prerequisite:
+    `pip install pip-skill` (and the packages listed in requirements.txt)
+    in the same venv your editor uses.
   entry: pip-skill batch
-  language: python
-  additional_dependencies: [pip-skill]
-  files: '(requirements.*\.txt|pyproject\.toml)$'
+  language: system
+  files: '^requirements.*\.txt$'
   args: [--force, --output-dir, skills]
-  pass_filenames: false
+  pass_filenames: true
 
 - id: pip-skill-test
   name: Verify generated skills are still in sync
   description: |
     Run pip-skill test on every plugin directory under ./skills/ to
     detect skills that have drifted from the installed package version.
-  entry: bash -c 'for d in skills/*/; do pip-skill test "$d"; done'
-  language: python
-  additional_dependencies: [pip-skill]
-  files: '(requirements.*\.txt|pyproject\.toml|skills/.*)$'
+    Uses language: system; requires pip-skill in your venv.
+  entry: bash -c 'for d in skills/*/; do pip-skill test "$d" || exit 1; done'
+  language: system
+  files: '^(requirements.*\.txt|skills/.*)$'
   pass_filenames: false
