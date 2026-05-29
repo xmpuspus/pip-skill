@@ -317,6 +317,19 @@ def cmd_convert(args) -> int:
         print(f"Error: No usable functions found in '{args.package}'.", file=sys.stderr)
         return 2
 
+    # Sprawling-SDK hint: heuristic ranking can't reliably surface the handful
+    # of canonical calls out of a huge public surface (e.g. pandas exposes
+    # 500+ candidates; read_csv competes with dozens of obscure readers).
+    # LLM curation (--select) is the intended path for these. Advisory only.
+    n_candidates = sum(len(m.callables) + len(m.classes) for m in package_info.modules)
+    if n_candidates > 300 and not args.select:
+        print(
+            f"Note: '{args.package}' exposes {n_candidates} public callables. "
+            f"Heuristic selection is best-effort at this scale; for sharper "
+            f"results on a large library, re-run with --select (LLM curation).",
+            file=sys.stderr,
+        )
+
     t_select = time.perf_counter()
 
     # Phase 3: Schema
