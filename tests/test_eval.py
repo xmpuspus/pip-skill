@@ -302,3 +302,26 @@ def test_run_eval_coverage_passes_when_any_alternate_in_manifest(tmp_path, fake_
     summary = run_eval(bundle.bundle_dir, eval_path, ["coverage"])
     # The second alternate exists in the manifest — coverage passes.
     assert summary.per_condition_pass["coverage"] == 1
+
+
+def test_extract_qualnames_resolves_local_variable_binding():
+    """Two-line SDK idiom: `client = pkg.X(); client.m()` resolves the method.
+
+    Without variable-binding tracking the method call's root (`client`) is
+    unknown and only the constructor is recovered. This is the form every
+    real anthropic/openai/langgraph/crewai example uses.
+    """
+    code = (
+        'client = anthropic.Anthropic(api_key="x")\n'
+        'resp = client.messages.create(model="m", messages=[])\n'
+    )
+    quals = extract_qualnames(code, "anthropic")
+    assert "anthropic.Anthropic.messages.create" in quals
+    assert "anthropic.Anthropic" in quals
+
+
+def test_extract_qualnames_binding_free_output_unchanged():
+    """Snippets with no import-rooted binding behave exactly as before."""
+    assert extract_qualnames('requests.get("u")', "requests") == ["requests.get"]
+    # Inline instantiation still resolves through calls without bindings.
+    assert "requests.Session.get" in extract_qualnames('requests.Session().get("u")', "requests")

@@ -283,3 +283,22 @@ def test_tier_detection_with_lazy_imports():
     # pydantic uses __getattr__ for lazy imports — should be detected
     # Tier depends on annotation coverage, but the detection itself should not crash
     assert pkg.tier in (1, 2, 3)
+
+
+@pytest.mark.integration
+def test_requests_get_ranks_in_top_handful():
+    """Selection *quality*: the canonical call must rank high, not merely appear.
+
+    Guards the source of the eval lift — a regression that buries
+    `requests.get` at rank 18 behind noise would pass a 'present in top-20'
+    check but fail here.
+    """
+    pytest.importorskip("requests")
+
+    from pip_skill.introspect import introspect_package
+    from pip_skill.selector import select_functions
+
+    pkg = introspect_package("requests")
+    selected = select_functions(pkg, max_tools=20)
+    names = [fn.name for fn, _ in selected]
+    assert "get" in names[:5], f"requests.get should rank top-5, got order: {names[:8]}"

@@ -287,28 +287,46 @@ def walk_package_modules(
     if not hasattr(pkg, "__path__"):
         return results
 
-    for modinfo in pkgutil.walk_packages(
-        path=pkg.__path__,
-        prefix=pkg.__name__ + ".",
-        onerror=lambda name: None,
-    ):
-        # Skip *.__main__ — these are CLI entry points (flask, django,
-        # uvicorn, etc.) whose top-level code parses sys.argv at import
-        # time, polluting stderr with "no such command" errors and never
-        # contributing a useful API surface.
-        if modinfo.name.rsplit(".", 1)[-1] == "__main__":
-            continue
-        if progress_callback:
-            progress_callback(modinfo.name)
-        try:
-            mod = importlib.import_module(modinfo.name)
-            results.append((modinfo.name, mod, None))
-        except BaseException as e:
-            # BaseException catches pytest.importorskip's `Skipped`, GeneratorExit,
-            # SystemExit, etc. that some packages raise at import time.
-            logger.debug("Skipping module %s: %s", modinfo.name, e)
-            results.append((modinfo.name, None, str(e)))
+    # We intentionally do NOT use pkgutil.walk_packages: it imports each
+    # subpackage *internally* (to recurse) and only routes ImportError to
+    # `onerror` — a subpackage whose top-level code raises SystemExit (a
+    # BaseException, e.g. mcp.cli does `sys.exit()` when an optional dep is
+    # missing) propagates straight out of the generator and aborts the whole
+    # walk. pkgutil.iter_modules does NOT import, so every import stays under
+    # our own per-module BaseException guard and one poisoned submodule only
+    # loses itself, not the entire package. The traversal order (pre-order
+    # DFS, siblings in iter_modules order) is kept identical to
+    # walk_packages so selection tie-breaks are unchanged.
+    seen: set[str] = {import_name}
 
+    def _walk(parent) -> None:
+        for modinfo in pkgutil.iter_modules(parent.__path__, prefix=parent.__name__ + "."):
+            name = modinfo.name
+            if name in seen:
+                continue
+            seen.add(name)
+            # Skip *.__main__ — these are CLI entry points (flask, django,
+            # uvicorn, etc.) whose top-level code parses sys.argv at import
+            # time, polluting stderr with "no such command" errors and never
+            # contributing a useful API surface.
+            if name.rsplit(".", 1)[-1] == "__main__":
+                continue
+            if progress_callback:
+                progress_callback(name)
+            try:
+                mod = importlib.import_module(name)
+            except BaseException as e:
+                # BaseException catches pytest.importorskip's `Skipped`,
+                # GeneratorExit, SystemExit, etc. raised at import time.
+                logger.debug("Skipping module %s: %s", name, e)
+                results.append((name, None, str(e)))
+                continue
+            results.append((name, mod, None))
+            # Recurse only into subpackages we successfully imported.
+            if modinfo.ispkg and hasattr(mod, "__path__"):
+                _walk(mod)
+
+    _walk(pkg)
     return results
 
 

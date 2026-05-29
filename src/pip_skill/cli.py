@@ -238,8 +238,26 @@ def cmd_convert(args) -> int:
     from pip_skill.schema import build_tool_schemas
     from pip_skill.selector import select_functions
     from pip_skill.utils import normalize_skill_name
+    from pip_skill.utils import normalize_skill_name as _normalize
 
     # Fail-fast pre-flight checks BEFORE we spend seconds importing huge packages.
+    if args.max_tools < 1:
+        # Bare `type=int` lets through 0 (misreported as "no functions") and
+        # negatives (which become a `[:negative]` slice that selects almost
+        # everything — the opposite of a cap).
+        print("Error: --max-tools must be >= 1.", file=sys.stderr)
+        return 1
+
+    # Early output-collision guard, before the multi-second introspect+select
+    # pass — but never block a --dry-run (which writes nothing).
+    early_output_dir = args.output or Path(_normalize(args.package))
+    if early_output_dir.exists() and not args.force and not args.dry_run:
+        print(
+            f"Error: '{early_output_dir}' already exists. Use --force to overwrite.",
+            file=sys.stderr,
+        )
+        return 3
+
     api_key = None
     if args.select:
         api_key = os.environ.get("ANTHROPIC_API_KEY")
@@ -308,13 +326,15 @@ def cmd_convert(args) -> int:
 
     # Phase 4: Generate
     output_dir = args.output or Path(normalize_skill_name(args.package))
-    if output_dir.exists() and not args.force:
+    if output_dir.exists() and not args.force and not args.dry_run:
+        # Normally caught by the early guard above; kept as a safety net for
+        # paths that reach here (e.g. a default output name resolved late).
         print(f"Error: '{output_dir}' already exists. Use --force to overwrite.", file=sys.stderr)
         return 3
-    if output_dir.exists() and args.force:
+    if output_dir.exists() and args.force and not args.dry_run:
         # --force should produce a clean output dir, not coexisting files from a
         # prior run with a different --format (e.g. claude artifacts left over
-        # when the user re-runs with --format cursor).
+        # when the user re-runs with --format cursor). Never delete on dry-run.
         import shutil
 
         shutil.rmtree(output_dir)
@@ -336,6 +356,21 @@ def cmd_convert(args) -> int:
     written = render_templates(package_info, tool_schemas, options, output_dir)
 
     t_end = time.perf_counter()
+
+    # Advisory SKILL.md token-budget check (claude format). SKILL.md loads on
+    # every agent turn, so flag when a sprawling SDK pushes it over budget —
+    # the user can lower --max-tools. We warn, never truncate.
+    from pip_skill.generator import SKILL_TOKEN_BUDGET, estimate_tokens
+
+    skill_md = next((p for p in written if p.name == "SKILL.md"), None)
+    if skill_md is not None and skill_md.exists():
+        tokens = estimate_tokens(skill_md.read_text(encoding="utf-8"))
+        if tokens > SKILL_TOKEN_BUDGET:
+            print(
+                f"Warning: SKILL.md is ~{tokens} tokens (budget {SKILL_TOKEN_BUDGET}). "
+                f"Consider a lower --max-tools; detail stays in references/api-reference.md.",
+                file=sys.stderr,
+            )
 
     print(f"Generated skill in: {output_dir}/")
     for path in written:
@@ -631,7 +666,11 @@ def cmd_test(args) -> int:
         print(f"Error: No plugin.json found in {plugin_dir}", file=sys.stderr)
         return 1
 
-    meta = json.loads(plugin_json.read_text())
+    try:
+        meta = json.loads(plugin_json.read_text())
+    except json.JSONDecodeError:
+        print(f"Error: {plugin_json} is not valid JSON.", file=sys.stderr)
+        return 1
     pkg_name = meta.get("sourcePackage", "")
     pkg_version = meta.get("sourceVersion", "")
 

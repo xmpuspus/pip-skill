@@ -20,7 +20,12 @@ def test_scoring_top_level(fake_package_info):
 def test_deprecated_penalized(fake_package_info):
     selected = select_functions(fake_package_info)
     names = [fn.name for fn, _ in selected]
-    if "deprecated_func" in names and "fetch" in names:
+    # `fetch` is canonical and must be selected; the deprecated variant must
+    # either be dropped entirely or rank strictly below it. Asserting the
+    # contract unconditionally (not gated behind an `if`) so the test can't
+    # pass vacuously if the fixture changes.
+    assert "fetch" in names
+    if "deprecated_func" in names:
         assert names.index("deprecated_func") > names.index("fetch")
 
 

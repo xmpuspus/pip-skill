@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import keyword
 import logging
 import re
 import shutil
@@ -14,11 +15,23 @@ import jinja2
 from pip_skill import __version__
 from pip_skill.introspect import PackageInfo
 from pip_skill.schema import ToolSchema
-from pip_skill.utils import normalize_skill_name
+from pip_skill.utils import eval_default_safely, normalize_skill_name
 
 # Stable placeholder used when --deterministic is set so the rendered
 # plugin.json hashes to the same SHA-256 across machines and runs.
 DETERMINISTIC_TIMESTAMP = "1970-01-01T00:00:00+00:00"
+
+# Soft token budget for SKILL.md. SKILL.md is what the agent loads on every
+# turn, so it should stay lean (detail lives in references/api-reference.md).
+# This is advisory: sprawling SDKs with long docstrings can exceed it, and we
+# warn rather than truncate so nothing is silently dropped.
+SKILL_TOKEN_BUDGET = 5000
+
+
+def estimate_tokens(text: str) -> int:
+    """Rough token estimate for a string (~4 chars/token, as for English/code)."""
+    return len(text) // 4
+
 
 logger = logging.getLogger("pip_skill.generator")
 
@@ -30,6 +43,21 @@ _INJECTION_TAGS = re.compile(
     re.IGNORECASE,
 )
 _PY_IDENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+# reST/Sphinx markup that leaks from docstrings into the rendered skill as
+# noise an agent has to read past. `:role:`target`` -> `target`; the
+# `:role:`text <target>`` form keeps the human-readable text.
+_REST_ROLE_WITH_TARGET = re.compile(r":[a-zA-Z:]+:`([^`<]+?)\s*<[^`>]+>`")
+_REST_ROLE = re.compile(r":[a-zA-Z:]+:`([^`]+?)`")
+_REST_DOUBLE_BACKTICK = re.compile(r"``([^`]+?)``")
+
+
+def clean_rest_markup(text: str) -> str:
+    """Convert leftover reST roles and double-backtick literals to plain text."""
+    text = _REST_ROLE_WITH_TARGET.sub(r"`\1`", text)
+    text = _REST_ROLE.sub(r"`\1`", text)
+    text = _REST_DOUBLE_BACKTICK.sub(r"`\1`", text)
+    return text
 
 
 def sanitize_prose(text) -> str:
@@ -47,18 +75,75 @@ def sanitize_prose(text) -> str:
     s = str(text)
     s = _INJECTION_TAGS.sub(lambda m: "[" + re.sub(r"[^a-zA-Z]", "", m.group(0)) + "]", s)
     s = re.sub(r"^---+\s*$", "———", s, flags=re.MULTILINE)
+    s = clean_rest_markup(s)
     return s
 
 
-def safe_identifier(name) -> bool:
-    """True iff `name` is a valid Python identifier or dotted path of identifiers.
+def is_safe_attr(name) -> bool:
+    """True iff `name` is a single, non-keyword Python identifier.
 
-    Used to guard against attribute-name injection into the generated MCP
-    server (which interpolates names directly into Python source).
+    Used for the MCP `def <function_name>(...)` name and every parameter
+    name — each must be exactly one identifier (no dots) and not a
+    reserved word, or the generated `def class(...)` / `def a.b(...)` is a
+    SyntaxError that breaks the whole server.
     """
     if not name:
         return False
-    return all(_PY_IDENT.match(part) for part in str(name).split("."))
+    s = str(name)
+    return bool(_PY_IDENT.match(s)) and not keyword.iskeyword(s)
+
+
+def safe_identifier(name) -> bool:
+    """True iff `name` is a non-keyword Python identifier or dotted path of them.
+
+    Used to guard against attribute-name injection into the generated MCP
+    server (which interpolates names directly into Python source). The
+    dotted form is for `qualname` (``module.func``); single identifiers
+    (function/param names) should use :func:`is_safe_attr`.
+    """
+    if not name:
+        return False
+    parts = str(name).split(".")
+    return all(_PY_IDENT.match(part) and not keyword.iskeyword(part) for part in parts)
+
+
+def tool_is_safe(tool: ToolSchema) -> bool:
+    """True iff every name `tool` interpolates into Python source is safe.
+
+    Guards the full set of names the MCP template emits into source: the
+    function definition name, the dotted call target (`qualname`), and
+    every parameter name (emitted both as a typed parameter and forwarded
+    as `name=name`). Any unsafe name means the tool is skipped entirely
+    rather than producing broken or injectable Python.
+    """
+    if not is_safe_attr(tool.function_name):
+        return False
+    if not safe_identifier(tool.qualname):
+        return False
+    return all(is_safe_attr(p.name) for p in tool.parameters)
+
+
+def safe_default(default_repr) -> str:
+    """Return `default_repr` only if it is a pure Python literal, else 'None'.
+
+    Parameter defaults come from `repr(value)` of arbitrary package
+    objects. A malicious package can ship a default whose `__repr__`
+    returns executable code (``__import__('os').system(...)``); emitting
+    that raw into a generated function signature is remote code execution
+    the instant the server is imported. ``ast.literal_eval`` accepts only
+    literals, so anything that isn't a plain str/int/float/bool/None/
+    list/dict/tuple collapses to ``None``.
+    """
+    if default_repr is None:
+        return "None"
+    s = str(default_repr)
+    if s == "None":
+        return "None"
+    try:
+        eval_default_safely(s)
+    except Exception:
+        return "None"
+    return s
 
 
 def tools_signature(tool: ToolSchema) -> str:
@@ -76,7 +161,7 @@ def tools_signature(tool: ToolSchema) -> str:
         if param.type_str and param.type_str != "any":
             p += f": {param.type_str}"
         if not param.required:
-            p += f" = {param.default or 'None'}"
+            p += f" = {safe_default(param.default)}"
         parts.append(p)
     sig = ", ".join(parts)
     ret = f" -> {tool.output_hint}" if tool.output_hint and tool.output_hint != "unknown" else ""
@@ -107,7 +192,7 @@ def tool_params_with_types(tool: ToolSchema) -> str:
             py_type = f"{py_type} | None"
         p = f"{param.name}: {py_type}"
         if not param.required:
-            p += f" = {param.default or 'None'}"
+            p += f" = {safe_default(param.default)}"
         parts.append(p)
     return ", ".join(parts)
 
@@ -140,9 +225,12 @@ def _make_env() -> jinja2.Environment:
     env.filters["tools_signature"] = tools_signature
     env.filters["sanitize"] = sanitize_prose
     env.tests["safe_identifier"] = safe_identifier
+    env.tests["safe_attr"] = is_safe_attr
     env.globals["tool_params_with_types"] = tool_params_with_types
     env.globals["tool_call_args"] = tool_call_args
     env.globals["safe_identifier"] = safe_identifier
+    env.globals["is_safe_attr"] = is_safe_attr
+    env.globals["tool_is_safe"] = tool_is_safe
     return env
 
 
