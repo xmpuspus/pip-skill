@@ -198,12 +198,26 @@ def score_uniqueness(callable_info: CallableInfo, higher_scored: list[CallableIn
         Score from 0 to 10.
     """
     name = callable_info.name.lower().replace("_", "")
-    # Check name similarity first across all candidates
+
+    def _is_class(ci: CallableInfo) -> bool:
+        # Class pseudo-callables are built with return_type == their own name
+        # and no source. Functions and methods are not classes.
+        return (not ci.source_available) and ci.return_type == ci.name
+
+    my_is_class = _is_class(callable_info)
+    # Check name similarity first across all candidates — but never fold a
+    # function/method into a class (or vice versa). The canonical constructor
+    # `numpy.array` was being dropped because the class `numpy.ndarray` scores
+    # higher and SequenceMatcher("array","ndarray")=0.83 — a wrong dedup of two
+    # distinct, both-useful surfaces. Function-vs-method of the same verb (e.g.
+    # `requests.get` vs `requests.Session.get`) still folds as before.
     for other in higher_scored:
+        if _is_class(other) != my_is_class:
+            continue
         other_name = other.name.lower().replace("_", "")
         ratio = SequenceMatcher(None, name, other_name).ratio()
         if ratio > 0.8:
-            return 0  # very similar name — deduplicate
+            return 0  # very similar name, same class/non-class kind — deduplicate
     # Then check param similarity
     my_params = {p.name for p in callable_info.parameters if p.name != "self"}
     for other in higher_scored:

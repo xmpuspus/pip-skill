@@ -1,5 +1,6 @@
 """Tests for pip_skill.selector."""
 
+from pip_skill.introspect import CallableInfo
 from pip_skill.selector import (
     score_canonical,
     score_module_depth,
@@ -8,6 +9,46 @@ from pip_skill.selector import (
     score_uniqueness,
     select_functions,
 )
+
+
+def _ci(name, module, *, is_class=False):
+    """Minimal CallableInfo. Class pseudo-callables carry return_type==name
+    with no source (matching how select_functions builds them)."""
+    return CallableInfo(
+        name=name,
+        qualname=f"{module}.{name}",
+        module=module,
+        signature="(x)",
+        parameters=[],
+        return_type=(name if is_class else None),
+        docstring=None,
+        is_async=False,
+        is_method=False,
+        is_classmethod=False,
+        is_staticmethod=False,
+        is_property=False,
+        has_varargs=False,
+        has_varkw=False,
+        decorators=[],
+        source_available=(not is_class),
+    )
+
+
+def test_uniqueness_does_not_fold_function_into_class():
+    """`numpy.array` (function) must not be deduped against `numpy.ndarray`
+    (class) — SequenceMatcher('array','ndarray')=0.83 but they are distinct,
+    both-useful surfaces. Regression for the DS canonical-selection audit.
+    """
+    array_fn = _ci("array", "numpy")
+    ndarray_cls = _ci("ndarray", "numpy", is_class=True)
+    assert score_uniqueness(array_fn, [ndarray_cls]) != 0  # kept
+
+
+def test_uniqueness_still_folds_same_kind_near_names():
+    """Same-kind near-duplicates still deduplicate (the original behaviour)."""
+    get_fn = _ci("get", "requests")
+    get_variant = _ci("get_", "requests")  # normalizes to 'get' -> ratio 1.0
+    assert score_uniqueness(get_variant, [get_fn]) == 0  # folded
 
 
 def test_scoring_top_level(fake_package_info):

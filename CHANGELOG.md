@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.1] - 2026-05-29
+
+Data-science / data-engineering hardening, driven by a 16-package benchmark
+(numpy, pandas, polars, pyarrow, scikit-learn, xgboost, statsmodels,
+matplotlib, seaborn, plotly, sqlalchemy, duckdb, networkx, joblib, tqdm,
+scipy) measuring how much of each library's canonical API the generated
+skill actually surfaces.
+
+### Fixed
+- Introspection no longer walks test suites and benchmarks (`*.tests.*`,
+  `test_*`, `conftest`, `benchmarks`). `pandas.tests` alone is ~1,100 modules;
+  converting pandas dropped from minutes to ~9s, and test helpers can no
+  longer leak into the candidate pool.
+- Deduplication is now class-aware: a function is never folded into a
+  same-named class. `numpy.array` (the constructor) was being dropped because
+  `numpy.ndarray` (the class) scores higher and the names are 0.83-similar.
+  Function-vs-method of the same verb (`requests.get` / `requests.Session.get`)
+  still folds as before. Net eval-corpus coverage improved (msgspec +1).
+
+### Added
+- `convert` prints an advisory note for sprawling libraries (>300 public
+  callables) recommending `--select` (LLM curation), which is the intended
+  path when heuristic ranking can't surface a handful of canonical calls out
+  of hundreds.
+
+### Known limitation
+- Heuristic selection remains best-effort on very large libraries: the
+  canonical calls (`pandas.read_csv`, `matplotlib.pyplot.plot`,
+  `seaborn.scatterplot`) are structurally indistinguishable from dozens of
+  obscure siblings without a usage-frequency signal. Measured attempts to fix
+  this via scoring (param-count, README-frequency, exact-dedup) regressed the
+  eval corpus and were rejected. Use `--select` for these; a selector redesign
+  with a widened LLM candidate pool is tracked for a future release.
+
 ## [0.2.0] - 2026-05-29
 
 Audit-driven hardening release. Fixes a code-execution path in generated

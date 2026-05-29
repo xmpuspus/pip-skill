@@ -52,6 +52,18 @@ def test_walk_modules_skips_dunder_main(fake_package_on_path, capsys):
     assert "FAKE_PACKAGE_MAIN_EXECUTED" not in out
 
 
+def test_walk_modules_skips_test_suites(fake_package_on_path):
+    """Test suites must not be walked: they are never public API, are huge
+    (pandas.tests is ~1100 modules), and their helpers pollute candidates.
+    """
+    results = walk_package_modules("fake_package")
+    names = [name for name, _, _ in results]
+    assert "fake_package.tests" not in names
+    assert "fake_package.tests.test_helpers" not in names
+    # Real API modules are still walked.
+    assert "fake_package.api" in names
+
+
 def test_public_api_with_all(fake_package_on_path):
     mod = importlib.import_module("fake_package")
     functions, classes, has_all = get_public_api(mod)

@@ -305,11 +305,24 @@ def walk_package_modules(
             if name in seen:
                 continue
             seen.add(name)
+            leaf = name.rsplit(".", 1)[-1]
             # Skip *.__main__ — these are CLI entry points (flask, django,
             # uvicorn, etc.) whose top-level code parses sys.argv at import
             # time, polluting stderr with "no such command" errors and never
             # contributing a useful API surface.
-            if name.rsplit(".", 1)[-1] == "__main__":
+            if leaf == "__main__":
+                continue
+            # Skip test suites and benchmarks — never public API, enormous
+            # (pandas.tests alone is ~1100 modules), and their helpers pollute
+            # the candidate pool. We prune the whole subtree by `continue`ing
+            # before importing/recursing. Public test *utilities* like
+            # `numpy.testing` / `pandas.testing` (leaf `testing`) are kept.
+            segs = name.split(".")[1:]  # path below the top package
+            if (
+                leaf.startswith(("test_", "bench_"))
+                or leaf in ("conftest", "tests", "test", "benchmarks", "_pytest")
+                or any(s in ("tests", "test", "benchmarks") for s in segs)
+            ):
                 continue
             if progress_callback:
                 progress_callback(name)

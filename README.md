@@ -579,6 +579,27 @@ pip-skill works with any installed Python package. It handles:
 - `*args` / `**kwargs`: preserved as synthetic `args` / `kwargs`
   schema properties
 
+### Large data-science / data-engineering libraries
+
+pip-skill converts big libraries without choking — a 16-package sweep
+(numpy, pandas, polars, pyarrow, scikit-learn, xgboost, statsmodels,
+matplotlib, seaborn, plotly, sqlalchemy, duckdb, networkx, joblib, tqdm,
+scipy) all convert cleanly. Test suites and benchmarks (`*.tests.*`,
+`test_*`, `conftest`) are skipped during introspection, so a package like
+pandas (whose test tree is ~1,100 modules) converts in seconds instead of
+minutes.
+
+Heuristic selection is **best-effort on sprawling libraries**: the calls a
+data scientist reaches for (`pandas.read_csv`, `matplotlib.pyplot.plot`,
+`seaborn.scatterplot`) are structurally indistinguishable from dozens of
+obscure siblings in the same `__all__`, so the default ranking misses many
+of them. For these, run with `--select` (LLM curation) — `convert` prints a
+reminder when a library exposes more than 300 public callables:
+
+```bash
+pip-skill convert pandas --select        # Claude curates the 20 most useful calls
+```
+
 ## Contributing
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for development setup and
