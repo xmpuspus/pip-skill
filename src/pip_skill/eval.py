@@ -259,24 +259,61 @@ def extract_qualnames(emitted_python: str, import_name: str) -> list[str]:
     accepted = _accepted_roots(import_name)
     results: list[str] = []
 
-    def _accept(qual: str | None) -> None:
+    def _normalize(qual: str | None) -> str | None:
         if not qual:
-            return
+            return None
         root, _, rest = qual.partition(".")
         if root == import_name:
-            normalized = qual
-        elif root in accepted:
-            normalized = f"{import_name}.{rest}" if rest else import_name
-        else:
-            return
-        if normalized not in results:
+            return qual
+        if root in accepted:
+            return f"{import_name}.{rest}" if rest else import_name
+        return None
+
+    def _accept(qual: str | None) -> None:
+        normalized = _normalize(qual)
+        if normalized and normalized not in results:
             results.append(normalized)
+
+    # Symbol table for local-variable binding: `client = pkg.Client()` lets
+    # `client.messages.create(...)` resolve to `pkg.Client.messages.create`.
+    # Without this, every SDK example written in the idiomatic two-line form
+    # (anthropic/openai/langgraph/crewai) extracts only the constructor.
+    bindings: dict[str, str] = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Call):
+            bound = _normalize(_attr_chain_thru_calls(node.value.func))
+            if bound:
+                for tgt in node.targets:
+                    if isinstance(tgt, ast.Name):
+                        bindings[tgt.id] = bound
 
     for node in ast.walk(tree):
         if isinstance(node, ast.Call):
             _accept(_attr_chain(node.func))
             _accept(_attr_chain_thru_calls(node.func))
+            # Only resolve through bindings when some import-rooted binding
+            # exists, so output is unchanged for binding-free snippets.
+            if bindings:
+                _accept(_attr_chain_with_bindings(node.func, bindings))
     return results
+
+
+def _attr_chain_with_bindings(node: ast.AST, bindings: dict[str, str]) -> str | None:
+    """Like ``_attr_chain_thru_calls`` but substitutes bound local variables.
+
+    When a chain bottoms out at a ``Name`` that was assigned an
+    import-rooted call (recorded in ``bindings``), the bound qualname is
+    spliced in: ``client.messages.create`` with ``client -> pkg.Client``
+    becomes ``pkg.Client.messages.create``.
+    """
+    if isinstance(node, ast.Attribute):
+        left = _attr_chain_with_bindings(node.value, bindings)
+        return f"{left}.{node.attr}" if left else None
+    if isinstance(node, ast.Name):
+        return bindings.get(node.id, node.id)
+    if isinstance(node, ast.Call):
+        return _attr_chain_with_bindings(node.func, bindings)
+    return None
 
 
 def _attr_chain(node: ast.AST) -> str | None:

@@ -11,7 +11,7 @@ from mcp.server.fastmcp import FastMCP
 mcp = FastMCP({{ skill_name | tojson }})
 
 {% for tool in tools %}
-{% if (tool.function_name is safe_identifier) and (tool.qualname is safe_identifier) %}
+{% if tool_is_safe(tool) %}
 
 @mcp.tool()
 def {{ tool.function_name }}({{ tool_params_with_types(tool) }}) -> str:

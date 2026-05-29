@@ -168,7 +168,7 @@ requests/
 ├── .claude-plugin/
 │   └── plugin.json          # structured manifest: tools, qualnames, params, version
 ├── skills/requests/
-│   ├── SKILL.md             # what Claude reads (under 5,000 tokens)
+│   ├── SKILL.md             # what Claude reads (~5k tokens; larger for big SDKs)
 │   ├── CONTEXT.md           # agent guidelines for this package
 │   └── references/
 │       └── api-reference.md # full schemas, signatures, JSON Schema per tool

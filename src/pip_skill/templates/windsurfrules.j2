@@ -24,12 +24,17 @@ pip install {{ package.name }}
 
 {% if tool.parameters %}
 {% for param in tool.parameters %}
-- `{{ param.name }}`{% if param.type_str and param.type_str != 'any' %} ({{ param.type_str }}){% endif %}{% if not param.required %}, optional{% if param.default and param.default != 'None' %}, default={{ param.default }}{% endif %}{% endif %}{% if param.description %}: {{ param.description | sanitize }}{% endif %}
+- `{{ param.name }}`{% if param.type_str and param.type_str != 'any' %} ({{ param.type_str }}){% endif %}{% if not param.required %}, optional{% if param.default and param.default != 'None' %}, default={{ param.default | sanitize }}{% endif %}{% endif %}{% if param.description %}: {{ param.description | sanitize }}{% endif %}
 
 {% endfor %}
 {% endif %}
 {% if tool.output_hint and tool.output_hint != 'unknown' %}
 Returns: {{ tool.output_hint }}
+{% endif %}
+{% if tool.example %}
+```python
+{{ tool.example | sanitize }}
+```
 {% endif %}
 
 {% endfor %}

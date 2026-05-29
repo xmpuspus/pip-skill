@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] - 2026-05-29
+
+Audit-driven hardening release. Fixes a code-execution path in generated
+MCP servers, closes a prompt-injection sink, and restores conversion of
+packages with import-poisoned submodules.
+
+### Security
+- Generated MCP server no longer interpolates a package-supplied parameter
+  default `repr()` raw into Python source. A malicious package could ship a
+  default whose `__repr__` returns executable code, which fired the moment
+  the server was imported. Defaults now pass through `ast.literal_eval`;
+  non-literals render as `None`.
+- `tool.example` is now sanitized before it reaches SKILL.md and
+  api-reference.md, closing a prompt-injection path into content the agent
+  loads as authoritative.
+- Identifier validation now rejects Python keywords and validates every
+  parameter name (not just the function name and qualname) before emitting
+  generated source.
+
+### Fixed
+- `convert` no longer aborts on packages whose submodule raises at import
+  (e.g. `mcp`, whose `mcp.cli` calls `sys.exit()` when an optional dep is
+  missing). Introspection now walks with `iter_modules` and isolates each
+  import, so one bad submodule is skipped rather than killing the run.
+- `--max-tools` rejects values below 1 (previously `0` reported a misleading
+  "no functions" error and negative values selected nearly everything via a
+  list-slice bug).
+- `test` on a malformed `plugin.json` reports a clean error instead of an
+  uncaught traceback.
+- `--dry-run` on an existing output directory now previews instead of failing
+  with a collision error, and the collision check runs before the multi-second
+  introspection pass.
+
+### Added
+- Per-tool usage examples now render in the Cursor, Windsurf, and OpenCode
+  formats (previously Claude-only).
+- Advisory warning when SKILL.md exceeds the ~5,000-token budget.
+- reST/Sphinx markup (`:role:` roles, double-backtick literals) is converted
+  to plain text in all formats instead of leaking through.
+- Eval matcher resolves local-variable bindings
+  (`client = pkg.X(); client.m()` → `pkg.X.m`), unblocking SDK-style eval sets.
+
 ## [0.1.0] - 2026-05-24
 
 Initial public release. PyPI publish gated on manual approval of the
